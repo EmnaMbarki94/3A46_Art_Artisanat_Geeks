@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Login</h1>
+
+    {% if error %}
+        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+    {% endif %}
+
+    <form method="post">
+        <input type="hidden" name="_csrf_token" data-controller="csrf-protection" value="{{ csrf_token('authenticate') }}">
+        <label for="username">Username</label>
+        <input type="text" id="username" name="_username" value="{{ last_username }}" required>
+
+        <label for="password">Password</label>
+        <input type="password" id="password" name="_password" required>
+
+        <button type="submit">Login</button>
+    </form>
+{% endblock %}

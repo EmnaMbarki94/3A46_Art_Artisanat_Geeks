@@ -1,0 +1,32 @@
+<h1>Liste des Auteurs:</h1>
+
+<table border="1"  class="table">
+    <thead>
+        <tr>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Actions</th> {# Colonne pour les actions #}
+        </tr>
+    </thead>
+    <tbody>
+        {% for user in users %}
+            <tr>
+                <td>{{ user.firstName }}</td>
+                <td>{{ user.email }}</td>
+                <td>
+                    <a >Edit</a> | 
+                    <a >Delete</a>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<br>
+      <a href="{{ path('add_user') }}">Ajouter un nouvel utilisateur</a>
+
+     <!-- <br>
+    <a > Listes des livres </a>
+
+     <br>
+    <a > DQL1: (Order by EMAIL) </a>-->
+              

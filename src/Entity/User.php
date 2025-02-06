@@ -4,44 +4,66 @@ namespace App\Entity;
 
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
+#[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
 #[ORM\InheritanceType('JOINED')]
-class User
+class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 180, unique: true)]
     private ?string $email = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $role = null;
+    /**
+     * @var list<string> The user roles
+     */
+    #[ORM\Column]
+    private array $roles = [];
 
-    #[ORM\Column(length: 255)]
+    /**
+     * @var string The hashed password
+     */
+    #[ORM\Column]
     private ?string $password = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $first_name = null;
+    #[ORM\Column(type: "string", length: 255)]
+    private ?string $firstName = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $last_name = null;
+    #[ORM\Column(type: "string", length: 255)]
+    private ?string $lastName = null;
 
-    #[ORM\Column(length: 8)]
-    private ?string $num_tel = null;
+    #[ORM\Column(type: "string", length: 8)]
+    private ?string $numTel = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(type: "text")]
     private ?string $address = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $verification_code = null;
+    #[ORM\Column(type: "string", length: 255, nullable: true)]
+    private ?string $verificationCode = null;
 
-    #[ORM\Column]
-    private ?bool $is_verified = null;
+    #[ORM\Column(type: 'boolean', nullable: true)]
+    private ?bool $isVerified = false;
+    
+    public function isVerified(): ?bool
+    {
+        return $this->isVerified;
+    }
+    
+    public function setIsVerified(?bool $isVerified): self
+    {
+        $this->isVerified = $isVerified;
+    
+        return $this;
+    }
+    
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $user_agent = null;
 
     public function getId(): ?int
@@ -57,22 +79,43 @@ class User
     public function setEmail(string $email): static
     {
         $this->email = $email;
-
         return $this;
     }
 
-    public function getRole(): ?string
+    /**
+     * A visual identifier that represents this user.
+     *
+     * @see UserInterface
+     */
+    public function getUserIdentifier(): string
     {
-        return $this->role;
+        return (string) $this->email;
     }
 
-    public function setRole(string $role): static
+    /**
+     * @see UserInterface
+     *
+     * @return list<string>
+     */
+    public function getRoles(): array
     {
-        $this->role = $role;
+        $roles = $this->roles;
+        $roles[] = 'ROLE_USER'; // Garantir que chaque utilisateur a ce rôle
+        return array_unique($roles);
+    }
 
+    /**
+     * @param list<string> $roles
+     */
+    public function setRoles(array $roles): static
+    {
+        $this->roles = $roles;
         return $this;
     }
 
+    /**
+     * @see PasswordAuthenticatedUserInterface
+     */
     public function getPassword(): ?string
     {
         return $this->password;
@@ -81,80 +124,76 @@ class User
     public function setPassword(string $password): static
     {
         $this->password = $password;
-
         return $this;
     }
 
-    public function getFirstName(): ?string
-    {
-        return $this->first_name;
+    public function getFirstName(): ?string 
+    { 
+        return $this->firstName; 
     }
 
-    public function setFirstName(string $first_name): static
-    {
-        $this->first_name = $first_name;
-
+    public function setFirstName(string $firstName): self
+    { 
+        $this->firstName = $firstName; 
         return $this;
     }
 
-    public function getLastName(): ?string
-    {
-        return $this->last_name;
+    public function getLastName(): ?string 
+    { 
+        return $this->lastName; 
     }
 
-    public function setLastName(string $last_name): static
-    {
-        $this->last_name = $last_name;
-
+    public function setLastName(string $lastName): self 
+    { 
+        $this->lastName = $lastName; 
         return $this;
     }
 
-    public function getNumTel(): ?string
-    {
-        return $this->num_tel;
+    public function getNumTel(): ?string 
+    { 
+        return $this->numTel; 
     }
 
-    public function setNumTel(string $num_tel): static
-    {
-        $this->num_tel = $num_tel;
-
-        return $this;
+    public function setNumTel(string $numTel): self 
+    { 
+        $this->numTel = $numTel; 
+        return $this; 
     }
 
-    public function getAddress(): ?string
-    {
-        return $this->address;
+    public function getAddress(): ?string 
+    { 
+        return $this->address; 
     }
 
-    public function setAddress(string $address): static
-    {
-        $this->address = $address;
-
-        return $this;
+    public function setAddress(string $address): self 
+    { 
+        $this->address = $address; 
+        return $this; 
     }
 
     public function getVerificationCode(): ?string
     {
-        return $this->verification_code;
+        return $this->verificationCode;
     }
 
-    public function setVerificationCode(string $verification_code): static
+    public function setVerificationCode(?string $verificationCode): self
     {
-        $this->verification_code = $verification_code;
-
+        $this->verificationCode = $verificationCode;
         return $this;
     }
+ 
 
-    public function isVerified(): ?bool
+    /**
+     * @see UserInterface
+     */
+    public function eraseCredentials(): void
     {
-        return $this->is_verified;
+        // Nettoyage des données sensibles (si nécessaire)
     }
 
-    public function setIsVerified(bool $is_verified): static
+    public function getSalt(): ?string
     {
-        $this->is_verified = $is_verified;
-
-        return $this;
+        return null; // Pas besoin de salage supplémentaire
     }
 
     public function getUserAgent(): ?string
@@ -162,10 +201,9 @@ class User
         return $this->user_agent;
     }
 
-    public function setUserAgent(string $user_agent): static
+    public function setUserAgent(?string $user_agent): static
     {
         $this->user_agent = $user_agent;
-
         return $this;
     }
 }
