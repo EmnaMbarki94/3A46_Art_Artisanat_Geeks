@@ -1,9 +1,19 @@
-{% extends 'base.html.twig' %}
+{% extends 'authBase.html.twig' %}
 
-{% block body %}
-    <h1>Register</h1>
-    {{ form_start(form) }}
-        {{ form_widget(form) }}
-        <button class="btn">Register</button>
-    {{ form_end(form) }}
+{% block content %}
+	<h1>Register</h1>
+	{{ form_start(form) }}
+	{% for field in form %}
+		{% if 'hidden' not in field.vars.block_prefixes %}
+			<div class="form-group">
+				{{ form_label(field) }}
+				{{ form_widget(field, {'attr': {'class': 'form-control form-control-lg'}}) }}
+				{{ form_errors(field) }}
+			</div>
+		{% else %}
+			{{ form_widget(field) }}
+		{% endif %}
+	{% endfor %}
+	<button class="btn btn-block btn-gradient-primary btn-lg font-weight-medium auth-form-btn">Register</button>
+	{{ form_end(form) }}
 {% endblock %}
