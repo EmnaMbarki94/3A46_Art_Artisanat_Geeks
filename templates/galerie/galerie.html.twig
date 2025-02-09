@@ -18,6 +18,15 @@
       <ul class="navbar-nav mb-0 ms-auto">
         <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
         <li class="nav-item"><a class="nav-link" href="#">About</a></li>
+         <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Product
+                </a>
+                <ul class="dropdown-menu drop_1" aria-labelledby="navbarDropdown">
+                    <li><a class="dropdown-item" href="{{ path('app_article_list') }}"> Articles</a></li>
+                    <li><a class="dropdown-item border-0" href="#"> Product Detail</a></li>
+                </ul>
+                </li>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle active" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Galeries</a>
           <ul class="dropdown-menu drop_1" aria-labelledby="navbarDropdown">
@@ -26,6 +35,14 @@
 
           </ul>
         </li>
+        <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Events
+                </a>
+                <ul class="dropdown-menu drop_1" aria-labelledby="navbarDropdown">
+                    <li><a class="dropdown-item" href="{{ path('app_evenement_listeF') }}"> Evenements</a></li>
+                </ul>
+                </li>
         <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
       </ul>
     </div>
