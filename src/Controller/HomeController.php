@@ -51,4 +51,5 @@ final class HomeController extends AbstractController{
             'piece_arts' => $piece_arts,
         ]);
     }
+
 }

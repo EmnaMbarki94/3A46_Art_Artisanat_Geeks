@@ -1,0 +1,93 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Créer votre galerie - Artis{% endblock %}
+
+{% block body %}
+<section id="header">
+<nav class="navbar navbar-expand-md navbar-light" id="navbar_sticky">
+  <div class="container-xl">
+    <a class="navbar-brand fs-2 p-0 fw-bold text-white" href="index.html">
+      <i class="fa fa-pencil col_pink me-1 align-middle"></i> Artis <span class="col_pink span_1">WEB</span>
+      <br> <span class="font_12 span_2">Galerie d'art</span>
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mb-0 ms-auto">
+        <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">About</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ path('app_galerie') }}">Galeries</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+</section>
+<div class="container mt-5">
+    <h1 class="text-center">Créer Votre Galerie</h1>
+    <form method="post" action="{{ path('ajoutGalerie') }}" enctype="multipart/form-data">
+        <div class="mb-3">
+            <label for="galleryTitle" class="form-label">Titre de la Galerie</label>
+            <input type="text" class="form-control" id="galleryTitle" name="galleryTitle" required>
+        </div>
+        <div class="mb-3">
+            <label for="galleryDescription" class="form-label">Description de la Galerie</label>
+            <textarea id="galleryDescription" name="galleryDescription" rows="5" required></textarea>
+        </div>
+
+        <h4>Ajouter des Articles</h4>
+        <div id="articleContainer">
+            <div class="mb-3 article-item">
+                <label for="articleTitle" class="form-label">Titre de l'Article</label>
+                <input type="text" class="form-control" name="articleTitle[]" required>
+                <label for="articleImage" class="form-label">Image de l'Article</label>
+                <input type="file" class="form-control" name="articleImage[]" required>
+                <label for="articleDescription" class="form-label">Description de l'Article</label>
+                <textarea class="form-control" name="articleDescription[]" rows="2" required></textarea>
+            </div>
+        </div>
+        <button type="button" class="btn btn-secondary" id="addArticleButton">Ajouter un Article</button>
+
+        <div class="mb-3 mt-4">
+            <button type="submit" class="btn btn-primary">Créer la Galerie</button>
+        </div>
+    </form>
+</div>
+
+<!-- Inclusion de TinyMCE -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.tiny.cloud/1/rdr6isrrjsa3fde5430s0h47wtdhg1d3dhdvcwog5gzsbj2e/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+<script>
+    function initializeTinyMCE(selector) {
+        tinymce.init({
+            selector: selector,
+            plugins: 'lists link image preview',
+            toolbar: 'undo redo | styleselect | bold italic | alignleft aligncenter alignright | bullist numlist outdent indent | link image',
+            menubar: false,
+            height: 300,
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        initializeTinyMCE('#galleryDescription');
+    });
+
+    // Ajouter dynamiquement des articles
+    document.getElementById('addArticleButton').addEventListener('click', function() {
+        const container = document.getElementById('articleContainer');
+        const newArticle = document.createElement('div');
+        newArticle.classList.add('article-item', 'mb-3');
+        newArticle.innerHTML = `
+            <label for="articleTitle" class="form-label">Titre de l'Article</label>
+            <input type="text" class="form-control" name="articleTitle[]" required>
+            <label for="articleImage" class="form-label">Image de l'Article</label>
+            <input type="file" class="form-control" name="articleImage[]" required>
+            <label for="articleDescription" class="form-label">Description de l'Article</label>
+            <textarea class="form-control" name="articleDescription[]" rows="2" required></textarea>
+        `;
+        container.appendChild(newArticle);
+
+    });
+</script>
+{% endblock %}

@@ -3,7 +3,9 @@
 namespace App\Entity;
 
 use App\Repository\GalerieRepository;
+
 use Symfony\Component\Validator\Constraints as Assert;
+
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -17,13 +19,16 @@ class Galerie
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+
     #[Assert\NotBlank(message: "Le nom de la galerie ne peut pas être vide.")]
+
     private ?string $nomG = null;
 
     #[ORM\Column(length: 255)]
     private ?string $photoG = null;
 
     #[ORM\Column(length: 255)]
+
     #[Assert\NotBlank(message: "La description de la galerie ne peut pas être vide.")]
     private ?string $descG = null;
 
@@ -33,6 +38,7 @@ class Galerie
         pattern: '/^[^\d]*$/',
         message: "Le type de galerie ne doit pas contenir de chiffres."
     )]
+
     private ?string $typeG = null;
 
     /**

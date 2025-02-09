@@ -24,6 +24,7 @@ bottom:0;
  }
 .center_home .carousel-indicators [data-bs-target] {
  background-color: #8b008b;
+
 }
 
 /*********************center_home_end****************/
@@ -49,6 +50,7 @@ border:1px solid #8b008b;
 background:#8b008b;
 color:#fff; 
 border:1px solid #8b008b;
+
  }
  
 #folio {
@@ -94,7 +96,6 @@ border:15px solid #fff;
 padding:65px 100px 0px 100px; 
  }
 
-
 .text-danger {
     color: red; 
         
@@ -104,6 +105,7 @@ padding:65px 100px 0px 100px;
 .frame_1r .nav-tabs .nav-link{
 color:#fff;
 border:1px solid #8b008b;
+
 display:block;
 margin-left:5px;
 margin-right:5px;
@@ -111,6 +113,7 @@ border-radius:0;
 padding: 8px 16px;
 text-transform:uppercase;
 font-size:14px;
+
 background:#8b008b;
  }
 .frame_1r .nav-tabs .nav-link:hover{
@@ -120,6 +123,7 @@ border:1px solid #fff;
  }
 .frame_1r .nav-tabs .nav-link.active{
 background:#fff;
+
 color:#8b008b; 
 border:1px solid #fff;
  }
