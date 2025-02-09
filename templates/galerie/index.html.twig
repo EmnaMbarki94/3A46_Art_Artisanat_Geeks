@@ -1,0 +1,47 @@
+{% extends 'baseBack.html.twig' %}
+
+{% block title %}Galerie index{% endblock %}
+
+{% block body %}
+
+    <h1>Galerie index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>NomG</th>
+                <th>PhotoG</th>
+                <th>DescG</th>
+                <th>TypeG</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for galerie in galeries %}
+            <tr>
+                <td>{{ galerie.id }}</td>
+                <td>{{ galerie.nomG }}</td>
+                <td>
+                    {% if galerie.photoG %}
+                        <img src="{{ asset('uploads/photos/' ~ galerie.photoG) }}" alt="{{ galerie.nomG }}" style="width: 100px; height: auto;">
+                    {% else %}
+                        Pas de photo
+                    {% endif %}
+                </td>
+                <td>{{ galerie.descG }}</td>
+                <td>{{ galerie.typeG }}</td>
+                <td>
+                    <a href="{{ path('app_galerie_show', {'id': galerie.id}) }}">Afficher</a>
+                    <a href="{{ path('app_galerie_pieces_art', {'id': galerie.id}) }}" class="btn btn-info">Voir Pièces d'Art</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">Aucun enregistrement trouvé</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

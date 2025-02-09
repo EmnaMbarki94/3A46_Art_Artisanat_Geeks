@@ -1,0 +1,46 @@
+{% extends 'baseBack.html.twig' %}
+
+{% block title %}Gestion des Œuvres d'Art{% endblock %}
+
+{% block body %}
+    <h1>Liste des Œuvres d'Art</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nom</th>
+                <th>Date de Création</th>
+                <th>Photo</th>
+                <th>Description</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for piece_art in piece_arts %}
+            <tr>
+                <td>{{ piece_art.id }}</td>
+                <td>{{ piece_art.nomP }}</td>
+                <td>{{ piece_art.dateCrea ? piece_art.dateCrea|date('Y-m-d') : '' }}</td>
+                <td>
+                    {% if piece_art.photoP %}
+                        <img src="{{ asset('uploads/photos/' ~ piece_art.photoP) }}" alt="{{ piece_art.nomP }}" style="width: 100px; height: auto;">
+                    {% else %}
+                        Pas de photo
+                    {% endif %}
+                </td>
+                <td>{{ piece_art.descP }}</td>
+                <td>
+                    <a href="{{ path('app_piece_art_edit', {'id': piece_art.id}) }}" class="btn btn-warning">Éditer</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">Aucun enregistrement trouvé</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_piece_art_new', {'galerieId': galerie.id}) }}" class="btn btn-success">Créer une nouvelle œuvre</a>
+{% endblock %}

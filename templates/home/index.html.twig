@@ -8,7 +8,9 @@
     <section id="header">
         <nav class="navbar navbar-expand-md navbar-light" id="navbar_sticky">
         <div class="container-xl">
-            <a class="navbar-brand fs-2 p-0 fw-bold text-white" href="/"><i class="fa fa-pencil col_pink me-1 align-middle"></i> art <span class="col_pink span_1">WEB</span> <br> <span class="font_12 span_2">DIGITAL ART</span></a>
+
+            <a class="navbar-brand fs-2 p-0 fw-bold text-white" href="/"><i class="fa fa-pencil col_pink me-1 align-middle"></i> Artis <br> <span class="font_12 span_2">Galerie d'art</span></a>
+
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
             </button>
@@ -29,6 +31,12 @@
                 <ul class="dropdown-menu drop_1" aria-labelledby="navbarDropdown">
                     <li><a class="dropdown-item" href="{{ path('app_article_list') }}"> Articles</a></li>
                     <li><a class="dropdown-item border-0" href="#"> Product Detail</a></li>
+
+                    events
+                </a>
+                <ul class="dropdown-menu drop_1" aria-labelledby="navbarDropdown">
+                    <li><a class="dropdown-item" href="{{path('app_evenement_listeF')}}"> events</a></li>
+                    <li><a class="dropdown-item border-0" href="#"> events reservations</a></li>
                 </ul>
                 </li>
                 
@@ -38,7 +46,8 @@
                 </a>
                 <ul class="dropdown-menu drop_1" aria-labelledby="navbarDropdown">
                     <li><a class="dropdown-item" href="{{ path('app_galerie') }}"> Galeries</a></li>
-                    <li><a class="dropdown-item border-0" href="{{ path('ajoutGalerie') }}"> Créer une galerie</a></li>
+                    <li><a class="dropdown-item border-0" href="{{ path('app_galerie_new') }}"> Créer une galerie</a></li>
+
                 </ul>
                 </li>
                 

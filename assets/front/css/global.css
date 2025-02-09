@@ -26,16 +26,23 @@ color:#ddd;
  }
 a:hover{
 text-decoration:none;
-color: #a81c51;
+
+color: #8b008b;
  }
 a:focus{
 text-decoration:none;
-color: #a81c51;
+color: #8b008b;
  }
 
 
+.text-danger {
+     color: red; 
+     
+ }
+
 .button{
-background: #a81c51;
+background: #8b008b;
+
 color:#fff;
 display: inline-block;
 transition: 0.3s;
@@ -43,10 +50,11 @@ text-transform:uppercase;
  }
 .button:hover{
 background:#fff;
-color:#a81c51;
+
+color:#8b008b;
  }
 .button:hover i{
-background:#a81c51!important;
+background:#8b008b!important;
 color:#fff!important;
  }
  
@@ -58,7 +66,8 @@ transition: 0.3s;
 text-transform:uppercase;
  }
 .button_1:hover{
-background:#a81c51;
+
+background:#8b008b;
 color:#fff;
  }
 
@@ -85,7 +94,9 @@ transform: scale3d(1.05,1.05,1);
 }
 
 .col_pink{
-color: #a81c51; 
+
+color: #8b008b; 
+
  }
 .col_light{
 color: rgba( 255,255,255,0.3); 
@@ -100,7 +111,9 @@ color: #333;
 color: rgba( 207,161,179,1);
  }
 .bg_pink{
-background: #a81c51; 
+
+background: #8b008b; 
+
  }
 .bg_gray{
 background-color: #252525; 
@@ -129,12 +142,14 @@ font-size:50px;
 .line {
 height: 3px!important;
 width: 80px;
-background-color: #a81c51;
+
+background-color: #8b008b;
 }
 .line_1 {
 height: 2px!important;
 width: 40px;
-background-color: #a81c51;
+
+background-color: #8b008b;
 }
 .hover_white:hover{
 color:#fff!important; 
@@ -186,13 +201,14 @@ padding-left:15px;
 text-transform:uppercase;
  }
 #header .nav-link:hover{
-color:#a81c51; 
+
+color:#8b008b; 
  }
 #header .nav-link:focus{
-color:#a81c51;
+color:#8b008b;
  }
 #header .active{
-color:#a81c51;
+color:#8b008b;
 font-weight:bold;
  }
 
@@ -212,7 +228,9 @@ color:#000;
  }
 .drop_1 a:hover{
 background:none;
-color:#a81c51;
+
+color:#8b008b;
+
  }
 
 .sticky {
@@ -255,15 +273,18 @@ color: #fff;
  border:1px solid #323131;
  }
 .pages ul li a:hover{
- background: #a81c51;
- border:1px solid #a81c51;
+
+ background: #8b008b;
+ border:1px solid #8b008b;
+
  }
 .pages ul li a:hover{
  color: #fff!important;
  }
 .act{
-background:#a81c51!important;
-border:1px solid #a81c51!important;
+
+background:#8b008b!important;
+border:1px solid #8b008b!important;
 color:#fff;
  }
 
@@ -377,7 +398,9 @@ background:#252525;
 margin: 0px 5px 10px 0px;
  }
 .footer_1i ul li a:hover{
-background:#a81c51; 
+
+background:#8b008b; 
+
 color:#fff;
  }
 /*********************footer_end****************/
@@ -404,13 +427,16 @@ border-color: #252525;
 height:53px;
  }
 .about_h1r .btn{
-border-color: #a81c51; 
+
+border-color: #8b008b; 
 padding:15px 20px;
  }
 .about_h1r .btn:hover{
 border-color: #fff; 
 background:#fff;
-color: #a81c51; 
+
+color: #8b008b; 
+
  }
 /*********************about_h_end****************/
 
