@@ -7,6 +7,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
+
 #[ORM\Entity(repositoryClass: EventRepository::class)]
 class Event
 {
@@ -29,6 +30,7 @@ class Event
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank(message: "Les informations sur l'événement ne peuvent pas être vides.")]
     #[Assert\Length(min: 10, max: 255, minMessage: "Les informations doivent comporter au moins 10 caractères.", maxMessage: "Les informations ne peuvent pas dépasser 255 caractères.")]
+
     private ?string $infoE = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]

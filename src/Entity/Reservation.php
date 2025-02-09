@@ -4,7 +4,9 @@ namespace App\Entity;
 
 use App\Repository\ReservationRepository;
 use Doctrine\ORM\Mapping as ORM;
+
 use Symfony\Component\Validator\Constraints as Assert;
+
 
 #[ORM\Entity(repositoryClass: ReservationRepository::class)]
 class Reservation
@@ -21,20 +23,24 @@ class Reservation
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank(message: "L'état ne doit pas être vide.")]
+
     private ?string $etatE = null;
 
     #[ORM\ManyToOne]
     private ?Event $relation = null;
+
 
     #[ORM\Column]
     #[Assert\NotBlank(message: "Le nombre de places ne doit pas être vide.")]
     #[Assert\GreaterThan(0, message: "Le nombre de places doit être supérieur à 0.")]
     private ?int $nb_place = null;
 
+
     public function getId(): ?int
     {
         return $this->id;
     }
+
 
     public function getLibelle(): ?string
     {
@@ -44,6 +50,7 @@ class Reservation
     public function setLibelle(string $libelle): static
     {
         $this->libelle = $libelle;
+
         return $this;
     }
 
@@ -55,6 +62,7 @@ class Reservation
     public function setEtatE(string $etatE): static
     {
         $this->etatE = $etatE;
+
         return $this;
     }
 
@@ -66,6 +74,7 @@ class Reservation
     public function setRelation(?Event $relation): static
     {
         $this->relation = $relation;
+
         return $this;
     }
 
@@ -77,6 +86,7 @@ class Reservation
     public function setNbPlace(?int $nb_place): static
     {
         $this->nb_place = $nb_place;
+
         return $this;
     }
 }

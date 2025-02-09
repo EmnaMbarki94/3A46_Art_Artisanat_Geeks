@@ -1,0 +1,44 @@
+<div class="container">
+    {{ form_start(form, { 'attr': {'enctype': 'multipart/form-data', 'id': 'pieceArtForm', 'novalidate': 'novalidate'} }) }}
+
+    <div class="mb-3">
+        {{ form_label(form.nomP, 'Nom de la pièce', { 'label_attr': {'class': 'form-label'} }) }}
+        {{ form_widget(form.nomP, { 'attr': {'class': 'form-control'} }) }}
+        <div class="text-danger">{{ form_errors(form.nomP) }}</div>
+    </div>
+
+    <div class="mb-3">
+        {{ form_label(form.dateCrea, 'Date de création', { 'label_attr': {'class': 'form-label'} }) }}
+        {{ form_widget(form.dateCrea, { 'attr': {'class': 'form-control'} }) }}
+        <div class="text-danger">{{ form_errors(form.dateCrea) }}</div>
+    </div>
+
+    <div class="mb-3">
+        {{ form_label(form.photoP, 'Photo de la Pièce', { 'label_attr': {'class': 'form-label'} }) }}
+        {{ form_widget(form.photoP, { 'attr': {'class': 'form-control', 'accept': 'image/*'} }) }}
+        <div class="text-danger">{{ form_errors(form.photoP) }}</div>
+
+        {% if piece_art.photoP %}
+            <div class="mt-2">
+                <img src="{{ asset('uploads/photos/' ~ piece_art.photoP) }}" class="img-thumbnail" width="150">
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="mb-3">
+        {{ form_label(form.descP, 'Description de la pièce', { 'label_attr': {'class': 'form-label'} }) }}
+        {{ form_widget(form.descP, { 'attr': {'class': 'form-control tinymce', 'rows': '5'} }) }}
+        <div class="text-danger">{{ form_errors(form.descP) }}</div>
+    </div>
+
+    <div class="mb-3">
+        {{ form_label(form.galerie, 'Galerie', { 'label_attr': {'class': 'form-label'} }) }}
+        {{ form_widget(form.galerie, { 'attr': {'class': 'form-select'} }) }}
+    </div>
+
+    <div class="mb-3 mt-4">
+        <button type="submit" class="btn btn-primary">{{ button_label|default('Valider') }}</button>
+    </div>
+
+    {{ form_end(form) }}
+</div>
