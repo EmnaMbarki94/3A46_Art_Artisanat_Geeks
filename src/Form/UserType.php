@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
@@ -26,6 +27,7 @@ class UserType extends AbstractType
             ->add('numTel')
             ->add('address')
         ;
+        
         $builder->add('role', ChoiceType::class, [
             'choices'  => [
                 'Abonné' => 'ROLE_USER',
@@ -36,6 +38,17 @@ class UserType extends AbstractType
             'multiple' => false,
             'required' => true,
             'mapped' => false, // Empêche Symfony d'essayer de l'utiliser dans l'entité
+            
+        ])
+        ->add('cin', TextType::class, [
+            'label' => 'CIN',
+            'required' => false,
+
+         ])
+        ->add('specialite', TextType::class, [
+            'label' => 'Specialité',
+            'required' => false,
+ 
         ]);
 
         // Convertir `role` en `roles`

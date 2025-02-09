@@ -21,7 +21,8 @@ use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Component\Security\Http\Authenticator\AuthenticatorInterface;
 use Symfony\Component\Security\Core\Security;
 use App\Service\TwilioService;
-
+use Symfony\UX\Chartjs\Builder\ChartBuilderInterface;
+use Symfony\UX\Chartjs\Model\Chart;
 
 final class UserController extends AbstractController
 {
@@ -64,11 +65,42 @@ final class UserController extends AbstractController
             'users' => $users,
         ]);
     }
+    #[Route(path: "/admin/user/stats", name:"admin_stat_user")]
+
+    public function stats(UserRepository $userRepository): Response
+    {
+        $roleCounts = [
+            'ROLE_ARTISTE' => 0,
+            'ROLE_ENSEIGNANT' => 0,
+            'ROLE_USER' => 0,
+        ];
+        $users = $userRepository->findAll();
+
+        foreach ($users as $user) {
+            $roles = $user->getRoles(); // Assuming getRoles() returns an array of roles
+
+            // Count the roles
+            foreach ($roles as $role) {
+                if (isset($roleCounts[$role])) {
+                    $roleCounts[$role]++;
+                }
+            }
+        }
+        $labels = ["Artistes :  ".$roleCounts["ROLE_ARTISTE"],"Enseignants : ".$roleCounts["ROLE_ENSEIGNANT"],"Abonnes: ".$roleCounts["ROLE_USER"]];
+        $data = array_values($roleCounts);
+
+        return $this->render('user/stat.html.twig', [
+            'labels' => $labels,
+            'data' => $data,
+        ]);
+    }
 
     #[Route('/admin/user/add', name: 'admin_add_user')]
     public function addUser(
         Request $request,
-        EntityManagerInterface $entityManager
+        EntityManagerInterface $entityManager,
+        UserPasswordHasherInterface $passwordHasher, 
+
     ): Response
     {
         // Créer une nouvelle instance de user
@@ -81,6 +113,11 @@ final class UserController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $user->setPassword(password: $passwordHasher->hashPassword($user, $form->get('password')->getData()));
+
+            if (in_array("ROLE_USER", $user->getRoles())) {
+                $user->setPoint(0);
+            }
             // Persist (sauvegarder) l'auteur dans la base de données
             $entityManager->persist($user);
             $entityManager->flush(); // Envoie les changements à la base de données
@@ -111,7 +148,7 @@ public function editUser(
 
     if ($form->isSubmitted() && $form->isValid()) {
         // Enregistrer les modifications dans la base de données
-        $user->setPassword($passwordHasher->hashPassword($user, $form->get('password')->getData()));
+        $user->setPassword(password: $passwordHasher->hashPassword($user, $form->get('password')->getData()));
 
         $entityManager->flush();
 
@@ -157,6 +194,9 @@ public function deleteUser(User $user, EntityManagerInterface $entityManager, Re
         if ($form->isSubmitted() && $form->isValid()) {
             $user->setPassword($passwordHasher->hashPassword($user, $form->get('password')->getData()));
             $user->setNumTel(20460927);
+            if (in_array("ROLE_USER", $user->getRoles())) {
+                $user->setPoint(0);
+            }
             $em->persist($user);
             $em->flush();
 
@@ -219,7 +259,7 @@ public function deleteUser(User $user, EntityManagerInterface $entityManager, Re
 
             // Envoyer le code par SMS
             try {
-               // $twilioService->sendSms($userFromDataBase->getNumTel(), "Votre code de vérification est : $verificationCode");
+                $twilioService->sendSms($userFromDataBase->getNumTel(), "Votre code de vérification est : $verificationCode");
             } catch (\Twilio\Exceptions\RestException $e) {
                 // Erreur liée à l'API Twilio, par exemple si les informations d'identification sont incorrectes ou un problème avec la demande
                 $this->addFlash('error', 'Erreur de communication avec Twilio : ' . $e->getMessage());

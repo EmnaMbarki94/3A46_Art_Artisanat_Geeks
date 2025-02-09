@@ -10,6 +10,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
  use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+ use Symfony\Component\Form\Extension\Core\Type\TextType;
+
 class UserForAdminType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -36,8 +38,17 @@ class UserForAdminType extends AbstractType
             'multiple' => false,
             'required' => true,
             'mapped' => false, // Empêche Symfony d'essayer de l'utiliser dans l'entité
-        ]);
+        ])
+        ->add('cin', TextType::class, [
+            'label' => 'CIN',
+            'required' => false,
 
+         ])
+        ->add('specialite', TextType::class, [
+            'label' => 'Specialité',
+            'required' => false,
+ 
+        ]);
         // Convertir `role` en `roles`
         $builder->addEventListener(FormEvents::SUBMIT, function (FormEvent $event) {
             $user = $event->getData();
