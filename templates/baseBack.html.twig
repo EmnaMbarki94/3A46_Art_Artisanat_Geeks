@@ -23,9 +23,8 @@
 			<!-- Navbar -->
 			<nav class="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
 				<div class="navbar-brand-wrapper d-flex align-items-center justify-content-start">
-
-					<a class="navbar-brand brand-logo" href="#"><img src="{{ asset('back/images/logo.svg') }}" alt="logo"/></a>
-					<a class="navbar-brand brand-logo-mini" href="#"><img src="{{ asset('back/images/logo-mini.svg') }}" alt="logo"/></a>
+					<a class="navbar-brand brand-logo" href="{{ path('app_magasin_new') }}"><img src="{{ asset('back/images/logo.svg') }}" alt="logo"/></a>
+					<a class="navbar-brand brand-logo-mini" href="{{ path('app_magasin_new') }}"><img src="{{ asset('back/images/logo-mini.svg') }}" alt="logo"/></a>
 
 				</div>
 				<div class="navbar-menu-wrapper d-flex align-items-stretch">
@@ -125,9 +124,14 @@
 							<div class="collapse" id="forms">
 								<ul class="nav flex-column sub-menu">
 									<li class="nav-item">
-
-										<a class="nav-link" href="#">Ajout Magasin</a>
+										<a class="nav-link" href="{{ path('app_magasin_new') }}">Ajout Magasin</a>
 									</li>
+									<li class="nav-item">
+										<a class="nav-link" href="{{ path('app_article_new') }}">Ajout Article</a>
+									</li>
+									
+
+									
 									<li class="nav-item">
 										<a class="nav-link" href="{{ path('app_galerie_indexA') }}">Galeries</a>
 									</li>
@@ -162,11 +166,25 @@
 							<div class="collapse" id="tables">
 								<ul class="nav flex-column sub-menu">
 									<li class="nav-item">
-										<a class="nav-link" href="pages/tables/basic-table.html">Basic table</a>
+										<a class="nav-link" href="{{ path('app_magasin_index') }}">Table Magasin</a>
+									</li>
+									<li class="nav-item">
+										<a class="nav-link" href="{{ path('app_article_index') }}">Table Produit</a>
+									</li>
+									<li class="nav-item">
+										<a class="nav-link" href="pages/tables/data-table.html">Data Table</a>
+									</li>
+									<li class="nav-item">
+										<a class="nav-link" href="pages/tables/responsive-table.html">Responsive Table</a>
+									</li>
+									<li class="nav-item">
+										<a class="nav-link" href="pages/tables/custom-table.html">Custom Table</a>
+
 									</li>
 								</ul>
 							</div>
 						</li>
+
 						<li class="nav-item">
 							<a class="nav-link" data-bs-toggle="collapse" href="#auth" aria-expanded="false" aria-controls="auth">
 								<span class="menu-title">User Pages</span>
@@ -217,6 +235,7 @@
 					<div class="content-wrapper"> {% block body %}{% endblock %}
 						</div>
 					</div>
+
 					<!-- Footer -->
 					<footer class="footer">
 						<div class="d-sm-flex justify-content-center justify-content-sm-between">
@@ -239,4 +258,5 @@
 			<script src="{{ asset('back/js/todolist.js') }}"></script>
 			<script src="{{ asset('back/js/dashboard.js') }}"></script>
 		</body>
+
 	</html>
