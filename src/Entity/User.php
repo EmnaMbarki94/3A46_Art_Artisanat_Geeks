@@ -6,63 +6,91 @@ use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-#[ORM\InheritanceType('JOINED')]
-class User
+#[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
+class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 180, unique: true)]
+    #[Assert\NotBlank(message: 'Email cannot be blank')]
+    #[Assert\Email(message: 'Invalid email format, must be : email@service.com')]
     private ?string $email = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $role = null;
+    /**
+     * @var list<string> The user roles
+     */
+    #[ORM\Column]
+    private array $roles = [];
 
-    #[ORM\Column(length: 255)]
+    /**
+     * @var string The hashed password
+     */
+    #[ORM\Column]
+    #[Assert\NotBlank(message: 'Password cannot be blank')]
+    #[Assert\Length(min: 1, max: 10, exactMessage: 'Password must be exactly {{ limit }} characters long')]
     private ?string $password = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $first_name = null;
+    #[ORM\Column(type: "string", length: 255)]
+    #[Assert\NotBlank(message: 'firstname cannot be blank')]
+    #[Assert\Type(type: 'string', message: 'firstname must be a string')]
+    #[Assert\Regex(pattern: '/^[a-zA-Z]+$/', message: 'firstname must contain only letters')]
+    private ?string $firstName = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $last_name = null;
+    #[ORM\Column(type: "string", length: 255)]
+    #[Assert\NotBlank(message: 'lastname cannot be blank')]
+    #[Assert\Type(type: 'string', message: 'lastname must be a string')]
+    #[Assert\Regex(pattern: '/^[a-zA-Z]+$/', message: 'lastname must contain only letters')]
+    private ?string $lastName = null;
 
-    #[ORM\Column(length: 8)]
-    private ?string $num_tel = null;
+    #[ORM\Column(type: "string", length: 8)]
+    #[Assert\NotBlank(message: 'NumTel cannot be blank')]
+    #[Assert\Regex(pattern: '/^\d+$/', message: 'NumTel must contain only numbers')]
+    #[Assert\Length(min: 8, max: 8, exactMessage: 'NumTel must be exactly composed by {{ limit }} numbers')]
 
-    #[ORM\Column(length: 255)]
+    private ?string $numTel = null;
+
+    #[ORM\Column(type: "text")]
     private ?string $address = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $verification_code = null;
+    #[ORM\Column(type: "string", length: 255, nullable: true)]
+    private ?string $verificationCode = null;
 
-    #[ORM\Column]
-    private ?bool $is_verified = null;
+    #[ORM\Column(type: 'boolean', nullable: true)]
+    private ?bool $isVerified = false;
+    
+    public function isVerified(): ?bool
+    {
+        return $this->isVerified;
+    }
+    
+    public function setIsVerified(?bool $isVerified): self
+    {
+        $this->isVerified = $isVerified;
+    
+        return $this;
+    }
+    
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $user_agent = null;
 
-    /**
-     * @var Collection<int, Cours>
-     */
-    #[ORM\OneToMany(targetEntity: Cours::class, mappedBy: 'user')]
-    private Collection $cours;
 
-    /**
-     * @var Collection<int, QuizAttempt>
-     */
-    #[ORM\OneToMany(targetEntity: QuizAttempt::class, mappedBy: 'user')]
-    private Collection $quizAttempts;
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $specialite = null;
 
-    public function __construct()
-    {
-        $this->cours = new ArrayCollection();
-        $this->quizAttempts = new ArrayCollection();
-    }
+    #[ORM\Column(nullable: true)]
+    private ?int $point = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $cin = null;
 
     public function getId(): ?int
     {
@@ -77,22 +105,43 @@ class User
     public function setEmail(string $email): static
     {
         $this->email = $email;
-
         return $this;
     }
 
-    public function getRole(): ?string
+    /**
+     * A visual identifier that represents this user.
+     *
+     * @see UserInterface
+     */
+    public function getUserIdentifier(): string
     {
-        return $this->role;
+        return (string) $this->email;
     }
 
-    public function setRole(string $role): static
+    /**
+     * @see UserInterface
+     *
+     * @return list<string>
+     */
+    public function getRoles(): array
     {
-        $this->role = $role;
+        $roles = $this->roles;
+        $roles[] = 'ROLE_USER'; // Garantir que chaque utilisateur a ce rôle
+        return array_unique($roles);
+    }
 
+    /**
+     * @param list<string> $roles
+     */
+    public function setRoles(array $roles): static
+    {
+        $this->roles = $roles;
         return $this;
     }
 
+    /**
+     * @see PasswordAuthenticatedUserInterface
+     */
     public function getPassword(): ?string
     {
         return $this->password;
@@ -101,80 +150,76 @@ class User
     public function setPassword(string $password): static
     {
         $this->password = $password;
-
         return $this;
     }
 
-    public function getFirstName(): ?string
-    {
-        return $this->first_name;
+    public function getFirstName(): ?string 
+    { 
+        return $this->firstName; 
     }
 
-    public function setFirstName(string $first_name): static
-    {
-        $this->first_name = $first_name;
-
+    public function setFirstName(string $firstName): self
+    { 
+        $this->firstName = $firstName; 
         return $this;
     }
 
-    public function getLastName(): ?string
-    {
-        return $this->last_name;
+    public function getLastName(): ?string 
+    { 
+        return $this->lastName; 
     }
 
-    public function setLastName(string $last_name): static
-    {
-        $this->last_name = $last_name;
-
+    public function setLastName(string $lastName): self 
+    { 
+        $this->lastName = $lastName; 
         return $this;
     }
 
-    public function getNumTel(): ?string
-    {
-        return $this->num_tel;
+    public function getNumTel(): ?string 
+    { 
+        return $this->numTel; 
     }
 
-    public function setNumTel(string $num_tel): static
-    {
-        $this->num_tel = $num_tel;
-
-        return $this;
+    public function setNumTel(string $numTel): self 
+    { 
+        $this->numTel = $numTel; 
+        return $this; 
     }
 
-    public function getAddress(): ?string
-    {
-        return $this->address;
+    public function getAddress(): ?string 
+    { 
+        return $this->address; 
     }
 
-    public function setAddress(string $address): static
-    {
-        $this->address = $address;
-
-        return $this;
+    public function setAddress(string $address): self 
+    { 
+        $this->address = $address; 
+        return $this; 
     }
 
     public function getVerificationCode(): ?string
     {
-        return $this->verification_code;
+        return $this->verificationCode;
     }
 
-    public function setVerificationCode(string $verification_code): static
+    public function setVerificationCode(?string $verificationCode): self
     {
-        $this->verification_code = $verification_code;
-
+        $this->verificationCode = $verificationCode;
         return $this;
     }
+ 
 
-    public function isVerified(): ?bool
+    /**
+     * @see UserInterface
+     */
+    public function eraseCredentials(): void
     {
-        return $this->is_verified;
+        // Nettoyage des données sensibles (si nécessaire)
     }
 
-    public function setIsVerified(bool $is_verified): static
+    public function getSalt(): ?string
     {
-        $this->is_verified = $is_verified;
-
-        return $this;
+        return null; // Pas besoin de salage supplémentaire
     }
 
     public function getUserAgent(): ?string
@@ -182,68 +227,47 @@ class User
         return $this->user_agent;
     }
 
-    public function setUserAgent(string $user_agent): static
+    public function setUserAgent(?string $user_agent): static
     {
         $this->user_agent = $user_agent;
+        return $this;
+    }
+
+    public function getSpecialite(): ?string
+    {
+        return $this->specialite;
+    }
+
+    public function setSpecialite(?string $specialite): static
+    {
+        $this->specialite = $specialite;
 
         return $this;
     }
 
-    /**
-     * @return Collection<int, Cours>
-     */
-    public function getCours(): Collection
+    public function getPoint(): ?int
     {
-        return $this->cours;
+        return $this->point;
     }
 
-    public function addCour(Cours $cour): static
+    public function setPoint(?int $point): static
     {
-        if (!$this->cours->contains($cour)) {
-            $this->cours->add($cour);
-            $cour->setUser($this);
-        }
+        $this->point = $point;
 
         return $this;
     }
 
-    public function removeCour(Cours $cour): static
+    public function getCin(): ?string
     {
-        if ($this->cours->removeElement($cour)) {
-            if ($cour->getUser() === $this) {
-                $cour->setUser(null);
-            }
-        }
+        return $this->cin;
+    }
+
+    public function setCin(?string $cin): static
+    {
+        $this->cin = $cin;
 
         return $this;
     }
 
-    /**
-     * @return Collection<int, QuizAttempt>
-     */
-    public function getQuizAttempts(): Collection
-    {
-        return $this->quizAttempts;
-    }
-
-    public function addQuizAttempt(QuizAttempt $quizAttempt): static
-    {
-        if (!$this->quizAttempts->contains($quizAttempt)) {
-            $this->quizAttempts->add($quizAttempt);
-            $quizAttempt->setUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removeQuizAttempt(QuizAttempt $quizAttempt): static
-    {
-        if ($this->quizAttempts->removeElement($quizAttempt)) {
-            if ($quizAttempt->getUser() === $this) {
-                $quizAttempt->setUser(null);
-            }
-        }
-
-        return $this;
-    }
+    
 }

@@ -1,0 +1,34 @@
+<div class="container">
+{{ form_start(form, { 'attr': {'enctype': 'multipart/form-data', 'id': 'galerieForm', 'novalidate': 'novalidate'} }) }}
+
+<div class="mb-3">
+    {{ form_label(form.nomG, 'Titre de la Galerie', { 'label_attr': {'class': 'form-label'} }) }}
+    {{ form_widget(form.nomG, { 'attr': {'class': 'form-control', 'oninput': 'validateField(this)'} }) }}
+    <div class="text-danger">{{ form_errors(form.nomG) }}</div>
+</div>
+
+<div class="mb-3">
+    {{ form_label(form.descG, 'Description de la Galerie', { 'label_attr': {'class': 'form-label'} }) }}
+    {{ form_widget(form.descG, { 'attr': {'class': 'form-control tinymce', 'rows': '5', 'oninput': 'validateField(this)'} }) }}
+    <div class="text-danger">{{ form_errors(form.descG) }}</div>
+</div>
+
+<div class="mb-3">
+    {{ form_label(form.photoG, 'Photo de la Galerie', { 'label_attr': {'class': 'form-label'} }) }}
+    {{ form_widget(form.photoG, { 'attr': {'class': 'form-control', 'accept': 'image/*', 'oninput': 'validateField(this)'} }) }}
+    <div class="text-danger">{{ form_errors(form.photoG) }}</div>
+</div>
+
+<div class="mb-3">
+    {{ form_label(form.typeG, 'Type de la Galerie', { 'label_attr': {'class': 'form-label'} }) }}
+    {{ form_widget(form.typeG, { 'attr': {'class': 'form-control', 'oninput': 'validateField(this)'} }) }}
+    <div class="text-danger">{{ form_errors(form.typeG) }}</div>
+</div>
+
+<div class="mb-3 mt-4">
+    <button type="submit" class="btn btn-primary">{{ button_label|default('Créer la Galerie') }}</button>
+</div>
+
+{{ form_end(form) }}
+
+</div>
