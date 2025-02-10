@@ -4,6 +4,7 @@
 {% endblock %}
 
 {% block body %}
+<<<<<<< HEAD
 	{% block content %}
 		<div class="container-fluid page-body-wrapper">
 			<nav class="sidebar sidebar-offcanvas" id="sidebar">
@@ -57,6 +58,46 @@
 				</div>
 			</div>
 		</div>
+=======
+{% block content %}
+<div class="container-fluid page-body-wrapper">
+ 
+<div class="main-panel d-flex justify-content-center align-items-center" style="min-height: 100vh; width: 100%;">
+  <div class="row w-100">
+    <div class="col-12">
+      <div class="card shadow-lg">
+        <div class="card-body p-5">
+          <h3 class="card-title text-center mb-4">Détails de la Réponse</h3>
+          <div class="table-responsive w-100">
+            <table class="table table-bordered text-center table-hover table-striped table-lg w-100">
+              <tbody>
+                <tr>
+                  <th class="table-dark">ID</th>
+                  <td class="fw-bold">{{ reponse.id }}</td>
+                </tr>
+                <tr>
+                  <th class="table-dark">Description</th>
+                  <td class="fw-bold">{{ reponse.descRep }}</td>
+                </tr>
+                <tr>
+                  <th class="table-dark">Date</th>
+                  <td class="fw-bold">{{ reponse.dateRep ? reponse.dateRep|date('Y-m-d') : '' }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="text-center mt-4">
+            <a href="{{ path('app_reponse_index') }}" class="btn btn-primary btn-lg">Retour à la liste</a>
+            <a href="{{ path('app_reponse_edit', {'id': reponse.id}) }}" class="btn btn-warning btn-lg">Modifier</a>
+            {{ include('reponse/_delete_form.html.twig') }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+>>>>>>> 4df36eff2bc97aa07002853c4b56d516ec638d7b
 
 	{% endblock %}
 {% endblock %}
