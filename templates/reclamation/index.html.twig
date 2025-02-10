@@ -1,0 +1,85 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Reclamation Affichage{% endblock %}
+
+{% block body %}
+        <section id="header">
+            <nav class="navbar navbar-expand-md navbar-light" id="navbar_sticky">
+                <div class="container-xl">
+                    <a class="navbar-brand fs-2 p-0 fw-bold text-white" href="{{ path('app_home') }}">
+                        <i class="fa fa-pencil col_pink me-1 align-middle"></i> art 
+                        <span class="col_pink span_1">WEB</span> <br> 
+                        <span class="font_12 span_2">DIGITAL ART</span>
+                    </a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav mb-0 ms-auto">
+                            <li class="nav-item">
+                                <a class="nav-link {% if app.request.pathInfo == '/' %}active{% endif %}" href="/">Home</a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Reclamation
+                                </a>
+                                <ul class="dropdown-menu drop_1" aria-labelledby="navbarDropdown">
+                                    <li><a class="dropdown-item" href="{{path('app_reclamation_new')}}">creer</a></li>
+                                    <li><a class="dropdown-item border-0" href="{{path('app_reclamation_index')}}">afficher</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </section>
+
+    <section class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="card shadow-lg rounded">
+                <div class="card-header text-center bg-primary text-white">
+                    <h2>Liste des Réclamations</h2>
+                </div>
+                <div class="card-body">
+                    <table class="table table-hover table-bordered text-center">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>ID</th>
+                                <th>Description</th>
+                                <th>Date de soumission</th>
+                                <th>Status</th>
+                                <th>Type</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for reclamation in reclamations %}
+                            <tr>
+                                <td>{{ reclamation.id }}</td>
+                                <td>{{ reclamation.descR }}</td>
+                                <td>{{ reclamation.dateR ? reclamation.dateR|date('Y-m-d') : '' }}</td>
+                                <td>{{ reclamation.statusR }}</td>
+                                <td>{{ reclamation.typeR }}</td>
+                                <td>
+                                    <a href="{{ path('app_reclamation_show', {'id': reclamation.id}) }}" class="btn btn-info btn-sm">Voir</a>
+                                    <a href="{{ path('app_reclamation_edit', {'id': reclamation.id}) }}" class="btn btn-warning btn-sm">Modifier</a>
+                                </td>
+                            </tr>
+                        {% else %}
+                            <tr>
+                                <td colspan="6" class="text-center text-muted">Aucune réclamation trouvée</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card-footer text-center">
+                    <a href="{{ path('app_reclamation_new') }}" class="btn btn-success">Créer une nouvelle réclamation</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

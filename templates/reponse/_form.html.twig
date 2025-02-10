@@ -1,0 +1,25 @@
+{{ form_start(form, {'attr': {'class': 'needs-validation h-100', 'novalidate': 'novalidate'}}) }}
+    <div class="mb-4">
+        {{ form_label(form.descRep, 'Description de la réponse', {'label_attr': {'class': 'form-label'}}) }}
+        {{ form_widget(form.descRep, {'attr': {'class': 'form-control form-control-lg', 'placeholder': 'Entrez la réponse'}}) }}
+        <div class="invalid-feedback">
+            {{ form_errors(form.descRep) }}
+        </div>
+    </div>
+
+    <div class="mb-4">
+        {{ form_label(form.dateRep, 'Date de la réponse', {'label_attr': {'class': 'form-label'}}) }}
+        {{ form_widget(form.dateRep, {'attr': {'class': 'form-control form-control-lg'}}) }}
+        <div class="invalid-feedback">
+            {{ form_errors(form.dateRep) }}
+        </div>
+    </div>
+
+    <div class="mb-4">
+       <div class="invalid-feedback">
+            {{ form_errors(form.reclamation) }}
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary btn-lg w-100">{{ button_label|default('Enregistrer') }}</button>
+{{ form_end(form) }}

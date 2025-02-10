@@ -1,0 +1,82 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}View Reclamation{% endblock %}
+
+{% block body %}
+<section id="header">
+    <nav class="navbar navbar-expand-md navbar-light" id="navbar_sticky">
+        <div class="container-xl">
+            <a class="navbar-brand fs-2 p-0 fw-bold text-white" href="{{ path('app_home') }}">
+                <i class="fa fa-pencil col_pink me-1 align-middle"></i> art 
+                <span class="col_pink span_1">WEB</span> <br> 
+                <span class="font_12 span_2">DIGITAL ART</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mb-0 ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link {% if app.request.pathInfo == '/' %}active{% endif %}" href="/">Home</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Reclamation
+                        </a>
+                        <ul class="dropdown-menu drop_1" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="{{path('app_reclamation_new')}}">Creer</a></li>
+                            <li><a class="dropdown-item border-0" href="{{path('app_reclamation_index')}}">Afficher</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</section>
+                    <h2 class="text-center mb-4">Reclamation Details</h2>
+
+<section id="reclamation-view" class="p-5 d-flex justify-content-center align-items-center">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card p-4">
+                    <table class="table table-bordered table-striped">
+                        <tbody>
+                            <tr>
+                                <th>Id</th>
+                                <td>{{ reclamation.id }}</td>
+                            </tr>
+                            <tr>
+                                <th>Description</th>
+                                <td>{{ reclamation.descR }}</td>
+                            </tr>
+                            <tr>
+                                <th>Date de soummission</th>
+                                <td>{{ reclamation.dateR ? reclamation.dateR|date('Y-m-d') : '' }}</td>
+                            </tr>
+                            <tr>
+                                <th>Status de la reclamation</th>
+                                <td>{{ reclamation.statusR }}</td>
+                            </tr>
+                            <tr>
+                                <th>Type de la reclamation</th>
+                                <td>{{ reclamation.typeR }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="d-flex justify-content-center gap-3">
+                        <a href="{{ path('app_reclamation_edit', {'id': reclamation.id}) }}" class="btn btn-warning">Edit</a>
+                    </div>
+                    
+                    <div class="d-flex justify-content-center mt-3">
+                        <!-- Delete Form -->
+                        {{ include('reclamation/_delete_form.html.twig') }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
