@@ -259,7 +259,7 @@ public function deleteUser(User $user, EntityManagerInterface $entityManager, Re
 
             // Envoyer le code par SMS
             try {
-                $twilioService->sendSms($userFromDataBase->getNumTel(), "Votre code de vérification est : $verificationCode");
+               // $twilioService->sendSms($userFromDataBase->getNumTel(), "Votre code de vérification est : $verificationCode");
             } catch (\Twilio\Exceptions\RestException $e) {
                 // Erreur liée à l'API Twilio, par exemple si les informations d'identification sont incorrectes ou un problème avec la demande
                 $this->addFlash('error', 'Erreur de communication avec Twilio : ' . $e->getMessage());
