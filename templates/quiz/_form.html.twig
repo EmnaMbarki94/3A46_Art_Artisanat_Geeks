@@ -1,0 +1,22 @@
+<div class="container d-flex justify-content-center align-items-center vh-100">
+    <div class="card p-4 shadow-lg" style="width: 60%;">
+        {{ form_start(form,{'attr': {'novalidate': 'novalidate'}}) }}
+
+        <table class="table">
+            <tr>
+                <th>Titre du Quiz</th>
+                <td>{{ form_widget(form.titreC, {'attr': {'class': 'form-control'}}) }}</td>
+                <td>{{ form_errors(form.titreC) }}</td>
+            </tr>
+            <tr>
+                <th>Cours associé</th>
+                <td>{{ form_widget(form.cours, {'attr': {'class': 'form-select'}}) }}</td>
+                <td>{{ form_errors(form.cours) }}</td>
+            </tr>
+        </table>
+
+        <button class="btn">{{ button_label|default('Sauvegarder') }}</button>
+        {{ form_end(form) }}
+</div>
+</div>
+
