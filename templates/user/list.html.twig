@@ -1,0 +1,45 @@
+{% extends 'baseBack.html.twig' %}
+
+{% block body %}
+
+	<h1>Liste des Auteurs:</h1>
+
+	<table border="1" class="table">
+		<thead>
+			<tr>
+				<th>Username</th>
+				<th>Email</th>
+				<th>First Name</th>
+				<th>Last Name</th>
+				<th>Phone Number</th>
+				<th>Address</th>
+				<th>Roles</th>
+				<th colspan="2">Actions</th>
+				{# Colonne pour les actions #}
+			</tr>
+		</thead>
+		<tbody>
+			{% for user in users %}
+				<tr>
+					<td>{{ user.id }}</td>
+					<td>{{ user.email }}</td>
+					<td>{{ user.firstName }}</td>
+					<td>{{ user.lastName }}</td>
+					<td>{{ user.numTel }}</td>
+					<td>{{ user.address }}</td>
+					<td>{{ user.roles | join(', ') }}</td>
+					<td>
+						<a href="{{ path('admin_edit_user', {'id': user.id}) }}" class="">Modifier</a>
+					</td>
+					<td>
+						{% include 'user/delete.html.twig' with {'user': user} %}
+					</td>
+
+
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+	<br>
+	<a href="{{ path('admin_add_user') }}">Ajouter un nouvel utilisateur</a>
+{% endblock %}

@@ -1,0 +1,30 @@
+{% block body %}
+    <h1>Réservation</h1>
+
+    {# Affichage du message flash de succès #}
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success">
+            {{ message }}
+        </div>
+    {% endfor %}
+
+    {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+
+    {% for field in form %}
+        <div class="mb-3">
+            {{ form_label(field, null, {'label_attr': {'class': 'form-label'}}) }}
+            {{ form_widget(field, {'attr': {'class': field.vars.errors|length > 0 ? 'form-control is-invalid' : 'form-control'}}) }}
+
+            {% if field.vars.errors|length > 0 %}
+                <div class="invalid-feedback">
+                    {{ form_errors(field) }}
+                </div>
+            {% endif %}
+        </div>
+    {% endfor %}
+
+    <button type="submit" class="btn btn-primary">{{ button_label|default('Réserver') }}</button>
+
+    {{ form_end(form) }}
+
+{% endblock %}

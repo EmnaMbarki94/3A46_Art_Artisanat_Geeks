@@ -5,6 +5,8 @@ namespace App\Entity;
 use App\Repository\EventRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 #[ORM\Entity(repositoryClass: EventRepository::class)]
 class Event
@@ -15,12 +17,20 @@ class Event
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "Le nom de l'événement ne peut pas être vide.")]
+    #[Assert\Length(min: 3, max: 255, minMessage: "Le nom doit comporter au moins 3 caractères.", maxMessage: "Le nom ne peut pas dépasser 255 caractères.")]
+    #[Assert\Regex(pattern: "/^[a-zA-ZéèàêôïùÉÈÀÊÔÏÙ]+$/", message: "Le nom ne doit contenir que des lettres.")]
     private ?string $nom = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "Le type d'événement ne peut pas être vide.")]
+    #[Assert\Regex(pattern: "/^[a-zA-ZéèàêôïùÉÈÀÊÔÏÙ]+$/", message: "Le type ne doit contenir que des lettres.")]
     private ?string $typeE = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "Les informations sur l'événement ne peuvent pas être vides.")]
+    #[Assert\Length(min: 10, max: 255, minMessage: "Les informations doivent comporter au moins 10 caractères.", maxMessage: "Les informations ne peuvent pas dépasser 255 caractères.")]
+
     private ?string $infoE = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
@@ -28,6 +38,7 @@ class Event
 
     #[ORM\Column(length: 255)]
     private ?string $photoE = null;
+
 
     public function getId(): ?int
     {

@@ -1,0 +1,21 @@
+{% extends 'authBase.html.twig' %}
+
+
+{% block content %}
+
+	{% if error %}
+		<div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+	{% endif %}
+
+	<h6 class="font-weight-light">Sign in to continue.</h6>
+	<form method="post">
+		<input type="hidden" name="_csrf_token" data-controller="csrf-protection" value="{{ csrf_token('authenticate') }}">
+		<label for="username">Username</label>
+		<input type="text" id="username" name="_username" value="{{ last_username }}" required class="form-control form-control-lg">
+
+		<label for="password">Password</label>
+		<input type="password" id="password" name="_password" required class="form-control form-control-lg">
+
+		<button type="submit" class="btn btn-block btn-gradient-primary btn-lg font-weight-medium auth-form-btn">Login</button>
+	</form>
+{% endblock %}

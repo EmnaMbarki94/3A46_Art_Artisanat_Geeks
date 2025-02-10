@@ -1,0 +1,88 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Galerie{% endblock %}
+
+{% block body %}
+
+    <section id="header">
+<nav class="navbar navbar-expand-md navbar-light" id="navbar_sticky">
+  <div class="container-xl">
+    <a class="navbar-brand fs-2 p-0 fw-bold text-white" href="index.html">
+      <i class="fa fa-pencil col_pink me-1 align-middle"></i> Artis 
+      <br> <span class="font_12 span_2">Galerie d'art</span>
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mb-0 ms-auto">
+        <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">About</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ path('app_galerie_index') }}">Galeries</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+</section>
+
+    <div class="container mt-4">
+        <h1 class="text-center">Détails de la Galerie</h1>
+
+        <div class="row mt-4">
+            <div class="col-md-6">
+                <h4>ID</h4>
+                <p>{{ galerie.id }}</p>
+
+                <h4>Nom de la Galerie</h4>
+                <p>{{ galerie.nomG }}</p>
+
+                <h4>Description</h4>
+                <p>{{ galerie.descG }}</p>
+            </div>
+            <div class="col-md-6 text-center">
+                <h4>Photo de la Galerie</h4>
+                <img src="{{ asset('uploads/photos/' ~ galerie.photoG) }}" alt="{{ galerie.nomG }}" class="img-fluid" style="max-width: 100%; height: auto;">
+            </div>
+        </div>
+
+        <div class="row mt-4">
+            <div class="col-md-6">
+                <h4>Type de Galerie</h4>
+                <p>{{ galerie.typeG }}</p>
+            </div>
+        </div>
+
+        <div class="mt-4">
+            <h3>Pièces d'Art Associées</h3>
+            {% if pieceArts is not empty %}
+                <div class="row">
+                    {% for piece in pieceArts %}
+                        <div class="col-md-4 mb-4">
+                            <a href="{{ path('app_piece_art_edit', {'id': piece.id}) }}" style="text-decoration: none; color: inherit;">
+                                <div class="card" style="height: 100%;">
+                                    <img src="{{ asset('uploads/photos/' ~ piece.photoP) }}" alt="{{ piece.nomP }}" class="card-img-top img-fluid" style="max-height: 300px; object-fit: cover;">
+                                    <div class="card-body">
+                                        <h5 class="card-title" style="color: black;">{{ piece.nomP }}</h5>
+                                        <p class="card-text" style="color: black;">Date de Création : {{ piece.dateCrea|date('Y-m-d') }}</p>
+                                        <p class="card-text" style="color: black;">Description : {{ piece.descP }}</p>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p>Aucune pièce d'art associée à cette galerie.</p>
+            {% endif %}
+        </div>
+
+        <div class="mt-4 text-center">
+            <a href="{{ path('app_galerie_index') }}" class="btn btn-secondary">Retour à la liste</a>
+            <a href="{{ path('app_galerie_edit', {'id': galerie.id}) }}" class="btn btn-primary">Éditer</a>
+            <a href="{{ path('app_piece_art_new', {'galerieId': galerie.id}) }}" class="btn btn-success">Créer une Pièce d'Art</a>
+        </div>
+
+        {{ include('galerie/_delete_form.html.twig') }}
+    </div>
+{% endblock %}
