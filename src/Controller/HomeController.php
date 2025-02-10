@@ -7,6 +7,7 @@ use App\Repository\PieceArtRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use App\Repository\ReclamationRepository; // Ajoute cette ligne
 
 final class HomeController extends AbstractController{
     #[Route('/', name: 'app_home')]
@@ -33,6 +34,16 @@ final class HomeController extends AbstractController{
         ]);
     }
 
+    #[Route('/reclamation2', name: 'app_admin2')]
+public function Reclamation(ReclamationRepository $reclamationRepository): Response
+{
+    return $this->render('reclamation/index2.html.twig', [
+        'controller_name' => 'ReclamationController',
+        'reclamations' => $reclamationRepository->findAll(), // Ajoute cette ligne
+    ]);
+}
+
+
     #[Route('/admin/galeries', name: 'app_galerie_indexA')]
     public function galerieIndex(GalerieRepository $galerieRepository): Response
     {
@@ -51,5 +62,6 @@ final class HomeController extends AbstractController{
             'piece_arts' => $piece_arts,
         ]);
     }
+
 
 }

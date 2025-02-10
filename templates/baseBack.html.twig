@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 	<head>
 
 		<!-- Required meta tags -->
@@ -24,6 +25,7 @@
 		<div
 			class="container-fluid page-body-wrapper">
 			<!-- Navbar -->
+      
 			<nav class="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
 				<div class="navbar-brand-wrapper d-flex align-items-center justify-content-start">
 					<a class="navbar-brand brand-logo" href="{{ path('app_magasin_new') }}"><img src="{{ asset('back/images/logo.svg') }}" alt="logo"/></a>
@@ -65,6 +67,23 @@
 			<div class="container-fluid page-body-wrapper">
 
 				<nav class="sidebar sidebar-offcanvas" id="sidebar">
+      
+        <ul class="nav">
+            <li class="nav-item">
+              <a class="nav-link" href="{{ path('app_admin2') }}">
+                <span class="menu-title">Reclamation</span>
+                <i class="mdi mdi-format-list-bulleted menu-icon"></i>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ path('app_reponse_index') }}">
+                <span class="menu-title">Reponse</span>
+                <i class="mdi mdi-format-list-bulleted menu-icon"></i>
+              </a>
+            </li>
+        </ul>
+        
+  
 					<ul class="nav">
             
 						<li class="nav-item nav-profile">
@@ -270,4 +289,5 @@
 		</body>
 
 	</html>
+
 

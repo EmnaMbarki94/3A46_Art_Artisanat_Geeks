@@ -1,0 +1,120 @@
+{% extends 'baseBack.html.twig' %}
+{% block title %}Liste Des Réclamations{% endblock %}
+{% block body %}
+{% block content %}
+<div class="container-fluid page-body-wrapper">
+  <nav class="sidebar sidebar-offcanvas" id="sidebar">
+        <ul class="nav">
+            <li class="nav-item">
+              <a class="nav-link" href="{{ path('app_admin2') }}">
+                <span class="menu-title">Reclamation</span>
+                <i class="mdi mdi-format-list-bulleted menu-icon"></i>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ path('app_reponse_index') }}">
+                <span class="menu-title">Reponse</span>
+                <i class="mdi mdi-format-list-bulleted menu-icon"></i>
+              </a>
+            </li>
+        </ul>
+        
+  </nav>
+
+  <div class="main-panel">
+    <div class="content-wrapper">
+      <section class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-12">
+                <div class="card shadow-lg rounded">
+                    <div class="card-header text-center bg-primary text-white">
+                        <h2>📋 Liste des Réclamations</h2>
+                    </div>
+                    <div class="card-body">
+                        
+                        <!-- 🔍 Barre de recherche -->
+                        <div class="mb-3">
+                            <input type="text" id="searchInput" class="form-control" placeholder="🔍 Rechercher une réclamation...">
+                        </div>
+
+                        <div class="table-responsive">
+                            <table class="table table-hover table-bordered text-center" id="reclamationTable">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th onclick="sortTable(0)">ID 🔽</th>
+                                        <th onclick="sortTable(1)">Description 🔽</th>
+                                        <th onclick="sortTable(2)">Date 🔽</th>
+                                        <th onclick="sortTable(3)">Status 🔽</th>
+                                        <th onclick="sortTable(4)">Type 🔽</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                {% for reclamation in reclamations %}
+                                    <tr>
+                                        <td>{{ reclamation.id }}</td>
+                                        <td>{{ reclamation.descR }}</td>
+                                        <td>{{ reclamation.dateR ? reclamation.dateR|date('Y-m-d') : '-' }}</td>
+                                        <td>
+                                            <span class="badge {% if reclamation.statusR == 'Ouvert' %}bg-success{% else %}bg-danger{% endif %}">
+                                                {{ reclamation.statusR }}
+                                            </span>
+                                        </td>
+                                        <td>{{ reclamation.typeR }}</td>
+                                        <td>
+                                            <a href="{{ path('app_reponse_new', {'id': reclamation.id}) }}" class="btn btn-info btn-sm">
+                                                ✉ Répondre
+                                            </a>
+
+
+                                        </td>
+                                    </tr>
+                                {% else %}
+                                    <tr>
+                                        <td colspan="6" class="text-center text-muted">🚫 Aucune réclamation trouvée</td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>
+
+<!-- ✅ Script pour la recherche et le tri -->
+<script>
+document.getElementById("searchInput").addEventListener("keyup", function() {
+    let filter = this.value.toLowerCase();
+    let rows = document.querySelectorAll("#reclamationTable tbody tr");
+    
+    rows.forEach(row => {
+        let cell = row.cells[0]; // Colonne ID (Index 0)
+        let text = cell.textContent || cell.innerText;
+        row.style.display = text.includes(filter) ? "" : "none";
+    });
+});
+
+function sortTable(n) {
+    let table = document.getElementById("reclamationTable");
+    let rows = Array.from(table.querySelectorAll("tbody tr"));
+    let ascending = table.getAttribute("data-sort-order") !== "asc";
+    
+    rows.sort((rowA, rowB) => {
+        let cellA = rowA.cells[n].innerText.trim().toLowerCase();
+        let cellB = rowB.cells[n].innerText.trim().toLowerCase();
+        
+        return ascending ? cellA.localeCompare(cellB) : cellB.localeCompare(cellA);
+    });
+
+    rows.forEach(row => table.querySelector("tbody").appendChild(row));
+    table.setAttribute("data-sort-order", ascending ? "asc" : "desc");
+}
+</script>
+
+{% endblock %}  
+{% endblock %}
