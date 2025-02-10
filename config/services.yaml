@@ -2,14 +2,14 @@ parameters:
 
     uploads_directory: '%kernel.project_dir%/public/uploads/cours'
 
-  twilio.sid: "%env(TWILIO_SID)%"
-  twilio.auth_token: "%env(TWILIO_AUTH_TOKEN)%"
-  twilio.phone_number: "%env(TWILIO_PHONE_NUMBER)%"
-  
-  magasin_directory: '%kernel.project_dir%/public/uploads/magasin'
-  produits_directory: '%kernel.project_dir%/public/uploads/produits'
-  photos_directory: '%kernel.project_dir%/public/uploads/photos'
-  photos_events_directory: '%kernel.project_dir%/public/uploads/photosevents'
+    twilio.sid: "%env(TWILIO_SID)%"
+    twilio.auth_token: "%env(TWILIO_AUTH_TOKEN)%"
+    twilio.phone_number: "%env(TWILIO_PHONE_NUMBER)%"
+    
+    magasin_directory: '%kernel.project_dir%/public/uploads/magasin'
+    produits_directory: '%kernel.project_dir%/public/uploads/produits'
+    photos_directory: '%kernel.project_dir%/public/uploads/photos'
+    photos_events_directory: '%kernel.project_dir%/public/uploads/photosevents'
 
 
 services:
