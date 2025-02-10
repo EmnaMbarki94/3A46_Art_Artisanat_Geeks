@@ -4,30 +4,22 @@ parameters:
   twilio.phone_number: "%env(TWILIO_PHONE_NUMBER)%"
   
   magasin_directory: '%kernel.project_dir%/public/uploads/magasin'
-    produits_directory: '%kernel.project_dir%/public/uploads/produits'
-
-
-    photos_directory: '%kernel.project_dir%/public/uploads/photos'
-    photos_events_directory: '%kernel.project_dir%/public/uploads/photosevents'
+  produits_directory: '%kernel.project_dir%/public/uploads/produits'
+  photos_directory: '%kernel.project_dir%/public/uploads/photos'
+  photos_events_directory: '%kernel.project_dir%/public/uploads/photosevents'
 
 services:
   _defaults:
     autowire: true
     autoconfigure: true
 
- 
-    
-       
-    # makes classes in src/ available to be used as services
-    # this creates a service per class whose id is the fully-qualified class name
-    App\:
-    
-        resource: '../src/'
-        exclude:
-            - '../src/DependencyInjection/'
-            - '../src/Entity/'
-            - '../src/Kernel.php'
-
+  # Defines the App services
+  App\:
+    resource: '../src/'
+    exclude:
+      - '../src/DependencyInjection/'
+      - '../src/Entity/'
+      - '../src/Kernel.php'
 
   App\Service\TwilioService:
     arguments:

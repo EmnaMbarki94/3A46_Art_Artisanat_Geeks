@@ -11,6 +11,7 @@
 		</title>
 		<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
 		{% block stylesheets %}
+            {{ encore_entry_link_tags('app') }}
 			<link href="{{asset('front/css/bootstrap.min.css')}}" rel="stylesheet">
 			<link href="{{asset('front/css/font-awesome.min.css')}}" rel="stylesheet">
 			<link href="{{asset('front/css/global.css')}}" rel="stylesheet">
@@ -19,6 +20,7 @@
 		{% endblock %}
 
 		{% block javascripts %}
+            {{ encore_entry_script_tags('app') }}
 			{% block importmap %}
 				{{ importmap('app') }}
 			{% endblock %}
@@ -42,96 +44,71 @@
 	</head>
 	<body>
 		<div class="main clearfix position-relative">
-			<div
-				class="main_1 clearfix position-absolute top-0 w-100">
-				<!--section header-->
-				<section
-					id="header">
-					<!--nav-->
-					<nav class="navbar navbar-expand-md navbar-light" id="navbar_sticky" style="background-color: #8b008b;">
-						<div class="container-xl">
-							<a class="navbar-brand fs-2 p-0 fw-bold text-white" href="index.html">
-								<img
-								src={{asset('front/img/logo.png')}} alt="Logo" style="max-height: 50px;">
-							<!-- Remplacez 'path/to/your-image.jpg' par le chemin de votre image -->
-							</a>
-							<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-								<span class="navbar-toggler-icon"></span>
-							</button>
-							<div class="collapse navbar-collapse" id="navbarSupportedContent">
-								<ul class="navbar-nav mb-0 ms-auto">
-									<li class="nav-item">
-										<a class="nav-link active" aria-current="page" href="index.html">Home</a>
-									</li>
-									<li class="nav-item">
-										<a class="nav-link" href="about.html">About
-										</a>
-									</li>
-
-									<li class="nav-item dropdown">
-										<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-											Product
-										</a>
-										<ul class="dropdown-menu drop_1" aria-labelledby="navbarDropdown">
-											<li>
-												<a class="dropdown-item" href="product.html">
-													Product</a>
-											</li>
-											<li>
-												<a class="dropdown-item border-0" href="detail.html">
-													Product Detail</a>
-											</li>
-										</ul>
-									</li>
-
-									<li class="nav-item dropdown">
-										<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-											Blog
-										</a>
-										<ul class="dropdown-menu drop_1" aria-labelledby="navbarDropdown">
-											<li>
-												<a class="dropdown-item" href="blog.html">
-													Blog</a>
-											</li>
-											<li>
-												<a class="dropdown-item border-0" href="blog_detail.html">
-													Blog Detail</a>
-											</li>
-										</ul>
-									</li>
-
-									<li class="nav-item dropdown">
-										<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-											Pages
-										</a>
-										<ul class="dropdown-menu drop_1" aria-labelledby="navbarDropdown">
-											<li>
-												<a class="dropdown-item" href="cart.html">
-													Shopping Cart</a>
-											</li>
-											<li>
-												<a class="dropdown-item border-0" href="checkout.html">
-													Checkout</a>
-											</li>
-										</ul>
-									</li>
-
-									<li class="nav-item">
+    <div class="main_1 clearfix position-absolute top-0 w-100">
+    <section id="header">
+        <nav class="navbar navbar-expand-md navbar-light" id="navbar_sticky">
+        <div class="container-xl">
+            <a class="navbar-brand fs-2 p-0 fw-bold text-white" href="/"><i class="fa fa-pencil col_pink me-1 align-middle"></i> Artis <br> <span class="font_12 span_2">Galerie d'art</span></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mb-0 ms-auto">
+                
+                <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="/">Home</a>
+                </li>
+                <li class="nav-item">
+                <a class="nav-link" href="#">About </a>
+                </li>
+                
+                <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Product
+                </a>
+                <ul class="dropdown-menu drop_1" aria-labelledby="navbarDropdown">
+                    <li><a class="dropdown-item" href="{{ path('app_article_list') }}"> Articles</a></li>
+                    <li><a class="dropdown-item border-0" href="#"> Product Detail</a></li>
+                </ul>
+                </li>
+                
+                <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Galeries
+                </a>
+                <ul class="dropdown-menu drop_1" aria-labelledby="navbarDropdown">
+                    <li><a class="dropdown-item" href="{{ path('app_galerie') }}"> Galeries</a></li>
+                    <li><a class="dropdown-item border-0" href="{{ path('app_galerie_new') }}"> Créer une galerie</a></li>
+                </ul>
+                </li>
+                
+                <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Events
+                </a>
+                <ul class="dropdown-menu drop_1" aria-labelledby="navbarDropdown">
+                    <li><a class="dropdown-item" href="{{ path('app_evenement_listeF') }}"> Evenements</a></li>
+                </ul>
+                </li>
+                        
+                <li class="nav-item">
+                <a class="nav-link" href="#">Contact</a>
+                </li>
+				<li class="nav-item">
 										<a class="nav-link" href="{{ path('app_login') }}">Se Connecter
 										</a>
 									</li>
 
 									<li class="nav-item">
-										<a class="nav-link" href="{{ path('user_register') }}">S'inscrir</a>
+										<a class="nav-link" href="{{ path('user_register') }}">S'inscrire</a>
 									</li>
-								</ul>
-							</div>
-						</div>
-					</nav>
-					<!--finnav-->
-				</section>
-				<!--fin section header-->
-			</div>
+                
+            </ul>
+            </div>
+        </div>
+        </nav>
+    </section>
+</div>
 			{% block body %}{% endblock %}
 		</div>
 		<script>
