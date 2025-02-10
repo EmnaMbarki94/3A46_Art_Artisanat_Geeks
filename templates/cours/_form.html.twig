@@ -1,0 +1,62 @@
+<div class="container d-flex justify-content-center align-items-center min-vh-100 margin:auto">
+    <div class="card d-flex p-4 shadow-lg" style="width: 60%;">
+        <form method="post" enctype="multipart/form-data">
+            {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+            <table class="table">
+                <tr>
+                    <th>Titre du cours</th>
+                    <td>{{ form_widget(form.nomC, {'attr': {'class': 'form-control'}}) }}</td>
+                    <td>{{ form_errors(form.nomC) }}</td>
+                </tr>
+                <tr>
+                    <th>Catégorie de cours</th>
+                    <td>{{ form_widget(form.categC, {'attr': {'class': 'form-control'}}) }}</td>
+                    <td>{{ form_errors(form.categC) }}</td>
+                </tr>
+                <tr>
+                    <th>Contenu du cours</th>
+                    <td>{{ form_widget(form.contenuC, {'attr': {'class': 'form-control', 'rows': 5}}) }}</td>
+                    <td>{{ form_errors(form.contenuC) }}</td>
+                </tr>
+                <tr>
+                    <th>Date de création du cours</th>
+                    <td>{{ form_widget(form.dateC, {'attr': {'class': 'form-control', 'readonly': 'readonly'}}) }}</td>
+                </tr>
+                <tr>
+                    <th>Heure de création du cours</th>
+                    <td>{{ form_widget(form.heureC, {'attr': {'class': 'form-control', 'readonly': 'readonly'}}) }}</td>
+                </tr>
+                <tr>
+                    <th>Image du cours</th>
+                    <td>
+                        {% if form.vars.value.image %}
+                            <img id="imagePreview" src="{{ asset('uploads/cours/' ~ form.vars.value.image) }}" alt="Course Image" style="max-width: 200px; max-height: 200px; display: block; margin-bottom: 10px;">
+                        {% else %}
+                            <img id="imagePreview" src="{{ asset('uploads/cours/default2.png') }}" alt="Course Image" style="max-width: 200px; max-height: 200px; display: none; margin-bottom: 10px;">
+                        {% endif %}
+                        {{ form_widget(form.image, {'attr': {'class': 'form-control', 'onchange': 'previewImage(event)'}}) }}
+                    </td>
+                    <td>{{ form_errors(form.image) }}</td>
+                </tr>
+            </table>
+
+            <button class="btn">{{ button_label|default('Sauvegarder') }}</button>
+            {{ form_end(form) }}
+        </form>
+    </div>
+</div>
+
+<script>
+    function previewImage(event) {
+        const input = event.target;
+        const reader = new FileReader();
+        const imgElement = document.getElementById('imagePreview');
+        reader.onload = function(){
+            imgElement.src = reader.result;
+            imgElement.style.display = "block";
+        };
+        if (input.files && input.files[0]) {
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+</script>

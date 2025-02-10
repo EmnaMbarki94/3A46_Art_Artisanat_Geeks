@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\QuestionRepository;
 use Doctrine\DBAL\Types\Types;
+use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: QuestionRepository::class)]
@@ -15,12 +16,18 @@ class Question
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "La question ne peut pas être vide.")]
     private ?string $contenuQ = null;
 
     #[ORM\Column(type: Types::ARRAY)]
+    #[Assert\All([
+        new Assert\NotBlank(message: "Chaque réponse ne doit pas être vide.")
+    ])]
     private array $reponses = [];
 
-    #[ORM\ManyToOne]
+    #[ORM\ManyToOne(targetEntity: Quiz::class, inversedBy: 'questions', cascade: ['remove'])]
+    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
+    
     private ?Quiz $quiz = null;
 
     public function getId(): ?int

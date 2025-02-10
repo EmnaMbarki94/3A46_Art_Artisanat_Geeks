@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\QuizRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: QuizRepository::class)]
 class Quiz
@@ -14,9 +15,11 @@ class Quiz
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "La question ne peut pas être vide.")]
     private ?string $titreC = null;
 
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    #[Assert\NotNull(message:"tu doit choisir le cours associé")]
     private ?Cours $cours = null;
 
     public function getId(): ?int

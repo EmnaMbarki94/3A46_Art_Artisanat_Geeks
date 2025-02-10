@@ -1,0 +1,127 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Cours index{% endblock %}
+
+{% block body %}
+    <section id="header">
+<nav class="navbar navbar-expand-md navbar-light" id="navbar_sticky">
+  <div class="container-xl">
+    <a class="navbar-brand fs-2 p-0 fw-bold text-white" href="index.html">
+      <i class="fa fa-pencil col_pink me-1 align-middle"></i> Artis <span class="col_pink span_1">WEB</span>
+      <br> <span class="font_12 span_2">Galerie d'art</span>
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mb-0 ms-auto">
+        <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">About</a></li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Galeries</a>
+          <ul class="dropdown-menu drop_1" aria-labelledby="navbarDropdown">
+            <li><a class="dropdown-item border-0" href="{{ path('ajoutGalerie') }}">Créer une galerie</a></li>
+          </ul>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle active" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Cours</a>
+          <ul class="dropdown-menu drop_1" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item border-0" href="{{ path('app_cours_new') }}">Créer un cours</a></li>
+          </ul>
+        </li>
+        <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+</section>
+<section id="center" class="center_o bg_gray pt-2 pb-2">
+        <div class="container-xl">
+        <div class="row center_o1">
+        <div class="col-md-5">
+            <div class="center_o1l">
+            <h2 class="mb-0">Cours</h2>
+            </div>
+        </div>
+        <div class="col-md-7">
+            <div class="center_o1r text-end">
+            <h6 class="mb-0"><a href="{{ path('app_home') }}">Home</a> <span class="me-2 ms-2"><i class="fa fa-caret-right"></i></span> Cours</h6>
+            </div>
+        </div>
+        </div>
+        </div>
+</section>
+
+<section id="blog" class="p_4">
+{% for c in cours %}
+    <div class="container-xl">
+        <div class="blog_1 row">
+            <div class="col-md-9">
+                <div class="blog_1r">
+                    <div class="blog_1ri row">
+                    <div class="col-md-7">
+                        <div class="blog_1ril clearfix position-relative">
+                            <div class="blog_1ril1 clearfix">
+                            <div class="grid clearfix">
+                                    <figure class="effect-jazz mb-0">
+                                        <a><img src="{{ c.image ? asset('uploads/cours/' ~ c.image) : asset('uploads/cours/default2.png') }}" class="w-100" alt="Course Image"></a>
+                                    </figure>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="blog_1rir ps-4 pe-3">
+                            <h5 class="mb-4"><a href="{{ path('app_cours_show',{'id': c.id}) }}">{{c.nomC}}</a></h5>
+                            <p class="mb-4">{{c.categC}}</p>
+                            <p class="font_14">{{c.contenuC|slice(0, 80) ~ '...'}}</p>
+                            <h6 class="font_14 mb-0 mt-4"><a class="button p-3 pt-2 pb-2" href="{{ path('app_cours_show',{'id': c.id}) }}">READ MORE</a></h6>
+                        </div>
+	                </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr>
+    {% endfor %}
+</section>
+
+    
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nom du cours</th>
+                <th>Categorie C</th>
+                <th>Contenu du cours</th>
+                <th>Date d'ajout des cours</th>
+                <th>Heure d'ajout des cours</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for cour in cours %}
+            <tr>
+                <td>{{ cour.id }}</td>
+                <td>{{ cour.nomC }}</td>
+                <td>{{ cour.categC }}</td>
+                <td>{{ cour.contenuC }}</td>
+                <td>{{ cour.dateC ? cour.dateC|date('Y-m-d') : '' }}</td>
+                <td>{{ cour.heureC ? cour.heureC|date('H:i') : '' }}</td>
+                <td>
+                    <a href="{{ path('app_cours_show', {'id': cour.id}) }}">show</a>
+                    <a href="{{ path('app_cours_edit', {'id': cour.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="7">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_cours_new') }}">Create new</a>
+{% endblock %}
