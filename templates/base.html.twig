@@ -1,25 +1,29 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8">
-	    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-	    <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
-        {% block stylesheets %}
-        <link href="{{asset ('front/css/bootstrap.min.css')}}" rel="stylesheet" >
-	    <link href="{{asset ('front/css/font-awesome.min.css')}}" rel="stylesheet" >
-	    <link href="{{asset ('front/css/global.css')}}" rel="stylesheet">
-	    <link href="{{asset ('front/css/index.css')}}" rel="stylesheet">
-	    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz@9..144&display=swap" rel="stylesheet">
-        {% endblock %}
-        
-        {% block javascripts %}
-            {% block importmap %}{{ importmap('app') }}{% endblock %}
-           
-            <script src="{{asset('front/js/bootstrap.bundle.min.js')}}"></script>
 
-            <!-- Include TinyMCE scripts -->
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>
+			{% block title %}Welcome!
+			{% endblock %}
+		</title>
+		<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
+		{% block stylesheets %}
+			<link href="{{asset('front/css/bootstrap.min.css')}}" rel="stylesheet">
+			<link href="{{asset('front/css/font-awesome.min.css')}}" rel="stylesheet">
+			<link href="{{asset('front/css/global.css')}}" rel="stylesheet">
+			<link href="{{asset('front/css/index.css')}}" rel="stylesheet">
+			<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz@9..144&display=swap" rel="stylesheet">
+		{% endblock %}
+
+		{% block javascripts %}
+			{% block importmap %}
+				{{ importmap('app') }}
+			{% endblock %}
+			<script src="{{asset('front/js/bootstrap.bundle.min.js')}}"></script>
+       <!-- Include TinyMCE scripts -->
             <script src="https://cdn.tiny.cloud/1/rdr6isrrjsa3fde5430s0h47wtdhg1d3dhdvcwog5gzsbj2e/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
             <script>
                function initTinyMCE() {
@@ -34,31 +38,121 @@
                 document.addEventListener('DOMContentLoaded', initTinyMCE);
                 document.addEventListener('turbo:load', initTinyMCE);
             </script>
+		{% endblock %}
+	</head>
+	<body>
+		<div class="main clearfix position-relative">
+			<div
+				class="main_1 clearfix position-absolute top-0 w-100">
+				<!--section header-->
+				<section
+					id="header">
+					<!--nav-->
+					<nav class="navbar navbar-expand-md navbar-light" id="navbar_sticky" style="background-color: #8b008b;">
+						<div class="container-xl">
+							<a class="navbar-brand fs-2 p-0 fw-bold text-white" href="index.html">
+								<img
+								src={{asset('front/img/logo.png')}} alt="Logo" style="max-height: 50px;">
+							<!-- Remplacez 'path/to/your-image.jpg' par le chemin de votre image -->
+							</a>
+							<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+								<span class="navbar-toggler-icon"></span>
+							</button>
+							<div class="collapse navbar-collapse" id="navbarSupportedContent">
+								<ul class="navbar-nav mb-0 ms-auto">
+									<li class="nav-item">
+										<a class="nav-link active" aria-current="page" href="index.html">Home</a>
+									</li>
+									<li class="nav-item">
+										<a class="nav-link" href="about.html">About
+										</a>
+									</li>
 
-        {% endblock %}
-    </head>
-    <body>
-        
-        {% block body %}{% endblock %}
+									<li class="nav-item dropdown">
+										<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+											Product
+										</a>
+										<ul class="dropdown-menu drop_1" aria-labelledby="navbarDropdown">
+											<li>
+												<a class="dropdown-item" href="product.html">
+													Product</a>
+											</li>
+											<li>
+												<a class="dropdown-item border-0" href="detail.html">
+													Product Detail</a>
+											</li>
+										</ul>
+									</li>
 
-        <script>
-            window.onscroll = function() {myFunction()};
+									<li class="nav-item dropdown">
+										<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+											Blog
+										</a>
+										<ul class="dropdown-menu drop_1" aria-labelledby="navbarDropdown">
+											<li>
+												<a class="dropdown-item" href="blog.html">
+													Blog</a>
+											</li>
+											<li>
+												<a class="dropdown-item border-0" href="blog_detail.html">
+													Blog Detail</a>
+											</li>
+										</ul>
+									</li>
 
-            var navbar_sticky = document.getElementById("navbar_sticky");
-            var sticky = navbar_sticky.offsetTop;
-            var navbar_height = document.querySelector('.navbar').offsetHeight;
+									<li class="nav-item dropdown">
+										<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+											Pages
+										</a>
+										<ul class="dropdown-menu drop_1" aria-labelledby="navbarDropdown">
+											<li>
+												<a class="dropdown-item" href="cart.html">
+													Shopping Cart</a>
+											</li>
+											<li>
+												<a class="dropdown-item border-0" href="checkout.html">
+													Checkout</a>
+											</li>
+										</ul>
+									</li>
 
-            function myFunction() {
-            if (window.pageYOffset >= sticky + navbar_height) {
-                navbar_sticky.classList.add("sticky")
-                document.body.style.paddingTop = navbar_height + 'px';
-            } else {
-                navbar_sticky.classList.remove("sticky");
-                document.body.style.paddingTop = '0'
-            }
-            }
-        </script>
+									<li class="nav-item">
+										<a class="nav-link" href="{{ path('app_login') }}">Se Connecter
+										</a>
+									</li>
 
+									<li class="nav-item">
+										<a class="nav-link" href="{{ path('user_register') }}">S'inscrir</a>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</nav>
+					<!--finnav-->
+				</section>
+				<!--fin section header-->
+			</div>
+			{% block body %}{% endblock %}
+		</div>
+		<script>
+			window.onscroll = function () {
+myFunction()
+};
 
-    </body>
+var navbar_sticky = document.getElementById("navbar_sticky");
+var sticky = navbar_sticky.offsetTop;
+var navbar_height = document.querySelector('.navbar').offsetHeight;
+
+function myFunction() {
+if (window.pageYOffset >= sticky + navbar_height) {
+navbar_sticky.classList.add("sticky")
+document.body.style.paddingTop = navbar_height + 'px';
+} else {
+navbar_sticky.classList.remove("sticky");
+document.body.style.paddingTop = '0'
+}
+}
+		</script>
+	</body>
 </html>
+

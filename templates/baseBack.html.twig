@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
+
+		<!-- Required meta tags -->
+
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 		<title>
@@ -63,6 +66,7 @@
 
 				<nav class="sidebar sidebar-offcanvas" id="sidebar">
 					<ul class="nav">
+            
 						<li class="nav-item nav-profile">
 							<a href="#" class="nav-link">
 								<div class="nav-profile-image">
@@ -83,6 +87,18 @@
 								<i class="mdi mdi-home menu-icon"></i>
 							</a>
 						</li>
+            <li class="nav-item">
+						<a class="nav-link" href="{{ path('admin_user') }}">
+							<span class="menu-title">Gestion des utilisateurs</span>
+							<i class="mdi mdi-home menu-icon"></i>
+						</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="{{ path('admin_stat_user') }}">
+							<span class="menu-title">Stats</span>
+							<i class="mdi mdi-home menu-icon"></i>
+						</a>
+					</li>
 						<li class="nav-item">
 							<a class="nav-link" data-bs-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
 								<span class="menu-title">Basic UI Elements</span>
@@ -260,3 +276,4 @@
 		</body>
 
 	</html>
+
