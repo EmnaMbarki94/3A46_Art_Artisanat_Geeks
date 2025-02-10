@@ -1,6 +1,6 @@
 parameters:
 
-    uploads_directory: '%kernel.project_dir%/public/uploads/cours'
+  uploads_directory: '%kernel.project_dir%/public/uploads/cours'
 
   twilio.sid: "%env(TWILIO_SID)%"
   twilio.auth_token: "%env(TWILIO_AUTH_TOKEN)%"
