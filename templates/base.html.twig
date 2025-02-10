@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 	<head>
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -22,6 +23,21 @@
 				{{ importmap('app') }}
 			{% endblock %}
 			<script src="{{asset('front/js/bootstrap.bundle.min.js')}}"></script>
+       <!-- Include TinyMCE scripts -->
+            <script src="https://cdn.tiny.cloud/1/rdr6isrrjsa3fde5430s0h47wtdhg1d3dhdvcwog5gzsbj2e/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+            <script>
+               function initTinyMCE() {
+                    tinymce.init({
+                        selector: '.tinymce',
+                        plugins: 'lists link image preview',
+                        toolbar: 'undo redo | styleselect | bold italic | alignleft aligncenter alignright | bullist numlist outdent indent | link image',
+                        menubar: false,
+                        height: 300
+                    });
+                };
+                document.addEventListener('DOMContentLoaded', initTinyMCE);
+                document.addEventListener('turbo:load', initTinyMCE);
+            </script>
 		{% endblock %}
 	</head>
 	<body>
@@ -138,4 +154,5 @@ document.body.style.paddingTop = '0'
 }
 		</script>
 	</body>
-</html></body></html>
+</html>
+

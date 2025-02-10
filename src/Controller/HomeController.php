@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Repository\GalerieRepository;
+use App\Repository\PieceArtRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -30,4 +32,24 @@ final class HomeController extends AbstractController{
             'controller_name' => 'HomeController',
         ]);
     }
+
+    #[Route('/admin/galeries', name: 'app_galerie_indexA')]
+    public function galerieIndex(GalerieRepository $galerieRepository): Response
+    {
+        $galeries = $galerieRepository->findAll();
+
+        return $this->render('galerie/index.html.twig', [
+            'galeries' => $galeries,
+        ]);
+    }
+    #[Route('/admin/piece-art', name: 'app_piece_art_index', methods: ['GET'])]
+    public function piecesIndex(PieceArtRepository $pieceArtRepository): Response
+    {
+        $piece_arts = $pieceArtRepository->findAll();
+
+        return $this->render('piece_art/index.html.twig', [
+            'piece_arts' => $piece_arts,
+        ]);
+    }
+
 }

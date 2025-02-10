@@ -1,0 +1,132 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des Événements{% endblock %}
+
+{% block body %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Art Web</title>
+	<link href="css/bootstrap.min.css" rel="stylesheet" >
+	<link href="css/font-awesome.min.css" rel="stylesheet" >
+	<link href="css/global.css" rel="stylesheet">
+	<link href="css/product.css" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz@9..144&display=swap" rel="stylesheet">
+	<script src="js/bootstrap.bundle.min.js"></script>
+
+</head>
+<body>
+<section id="header">
+<nav class="navbar navbar-expand-md navbar-light" id="navbar_sticky">
+  <div class="container-xl">
+    <a class="navbar-brand fs-2 p-0 fw-bold text-white" href="/"><i class="fa fa-pencil col_pink me-1 align-middle"></i> art <span class="col_pink span_1">WEB</span> <br> <span class="font_12 span_2">DIGITAL ART</span></a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mb-0 ms-auto">
+	    
+        <li class="nav-item">
+          <a class="nav-link" aria-current="page" href="{{path('app_home')}}">Home</a>
+        </li>
+		<li class="nav-item">
+          <a class="nav-link" href="about.html">About </a>
+        </li>
+		
+		<li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle active" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Events
+          </a>
+          <ul class="dropdown-menu drop_1" aria-labelledby="navbarDropdown">
+            <li><a class="dropdown-item" href="{{path('app_evenement_listeF')}}"> Events</a></li>
+            <li><a class="dropdown-item border-0" href="#"> events reservations</a></li>
+          </ul>
+        </li>
+		
+		<li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Blog
+          </a>
+          <ul class="dropdown-menu drop_1" aria-labelledby="navbarDropdown">
+            <li><a class="dropdown-item" href="blog.html"> Blog</a></li>
+            <li><a class="dropdown-item border-0" href="blog_detail.html"> Blog Detail</a></li>
+          </ul>
+        </li>
+		
+		<li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Pages
+          </a>
+          <ul class="dropdown-menu drop_1" aria-labelledby="navbarDropdown">
+            <li><a class="dropdown-item" href="cart.html"> Shopping Cart</a></li>
+            <li><a class="dropdown-item border-0" href="checkout.html"> Checkout</a></li>
+          </ul>
+        </li>
+				
+		<li class="nav-item">
+          <a class="nav-link" href="contact.html">Contact</a>
+        </li>
+		
+      </ul>
+    </div>
+  </div>
+</nav>
+<section id="events" class="p-4">
+  <div class="container-xl">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h2 class="text-white">Liste des Événements</h2>
+      <select class="form-select w-auto">
+        <option value="default">Tri par défaut</option>
+        <option value="date">Date</option>
+       
+      </select>
+    </div>
+
+    <div class="row">
+    {% for event in events %}
+        <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+            <div class="product_2im1 position-relative clearfix shadow-sm text-center">
+                <div class="clearfix product_2im1i pt-3 pb-4">
+                    <!-- Lien vers la page de détail -->
+                    <a href="{{ path('app_evenement_showdetail', {'id': event.id}) }}">
+                    
+                    {% if event.photoE is not empty %}
+                        <img src="{{ asset('uploads/photosevents/' ~ event.photoE) }}" width="600" height="400" alt="event Image" class="img-fluid rounded">
+                    {% else %}
+                    <img src="{{ asset('img/default-event.jpg') }}" class="card-img-top" alt="Aucune image disponible">
+                    {% endif %}
+               
+
+                    </a>
+                </div>
+
+                <!-- Détails -->
+                <h5 class="font_14 text-uppercase">
+                    <a class="col_dark" href="{{ path('app_evenement_showdetail', {'id': event.id}) }}">{{ event.nom }}</a>
+                </h5>
+                <h6 class="col_dark mt-2 mb-0">{{ event.dateE ? event.dateE|date('d M Y') : 'Non définie' }}</h6>
+                <p class="card-text"><strong>Type :</strong> {{ event.typeE }}</p>
+                <p class="card-text text-muted">{{ event.infoE|slice(0, 80) }}...</p>
+
+                <!-- Boutons -->
+                <div class="d-flex justify-content-between mt-2">
+                    <a href="{{ path('app_evenement_showdetail', {'id': event.id}) }}" class="btn btn-primary btn-sm">
+                        <i class="fa fa-eye"></i> Voir
+                    </a>
+                    
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <div class="col-md-12 text-center">
+            <p class="alert alert-info">Aucun événement trouvé.</p>
+        </div>
+    {% endfor %}
+</div>
+
+
+
+{% endblock %}
