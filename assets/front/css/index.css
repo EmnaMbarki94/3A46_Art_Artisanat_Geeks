@@ -8,7 +8,7 @@ Licence: <a href="https://www.templateonweb.com/license">Website Template Licenc
 /*********************center_home****************/
 .carousel-caption{
 text-align:left;
-background-color: rgba(0, 0, 0, 0.7);
+background-color: rgba(149, 109, 189, 0.7);
 padding:200px 150px;
 bottom:0;
 left:0;
@@ -23,7 +23,8 @@ width:45%;
 bottom:0; 
  }
 .center_home .carousel-indicators [data-bs-target] {
- background-color: #a81c51;
+ background-color: #8b008b;
+
 }
 
 /*********************center_home_end****************/
@@ -41,14 +42,15 @@ text-transform:uppercase;
 font-size:15px;
  }
 .port_2 .nav-tabs .nav-link:hover{
-background:#a81c51;
+background:#8b008b;
 color:#fff; 
-border:1px solid #a81c51;
+border:1px solid #8b008b;
  }
 .port_2 .nav-tabs .nav-link.active{
-background:#a81c51;
+background:#8b008b;
 color:#fff; 
-border:1px solid #a81c51;
+border:1px solid #8b008b;
+
  }
  
 #folio {
@@ -68,14 +70,14 @@ display:block;
  }
 .folio_1im2 ul  a:hover{
 background:#fff;
-color:#a81c51; 
+color:#8b008b; 
  }
 .folio_1im2{
-background:#a81c51c4;
+background:#8b008b;
 display:none;
  }
 .folio_1im3{
-background:#a81c51c4;
+background:#8b008b;
 display:none; 
  }
 .folio_1im:hover .folio_1im2{
@@ -93,10 +95,17 @@ border:15px solid #fff;
 .bloh_h1r{
 padding:65px 100px 0px 100px; 
  }
+
+.text-danger {
+    color: red; 
+        
+}
+
  
 .frame_1r .nav-tabs .nav-link{
 color:#fff;
-border:1px solid #a81c51;
+border:1px solid #8b008b;
+
 display:block;
 margin-left:5px;
 margin-right:5px;
@@ -104,16 +113,18 @@ border-radius:0;
 padding: 8px 16px;
 text-transform:uppercase;
 font-size:14px;
-background:#a81c51;
+
+background:#8b008b;
  }
 .frame_1r .nav-tabs .nav-link:hover{
 background:#fff;
-color:#a81c51; 
+color:#8b008b; 
 border:1px solid #fff;
  }
 .frame_1r .nav-tabs .nav-link.active{
 background:#fff;
-color:#a81c51; 
+
+color:#8b008b; 
 border:1px solid #fff;
  }
 .frame_1r{

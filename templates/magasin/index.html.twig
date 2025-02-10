@@ -1,0 +1,48 @@
+{% extends 'baseBack.html.twig' %}
+
+{% block title %}Magasin{% endblock %}
+
+{% block body %}
+    <h1 class="mb-4">Magasin</h1>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>NomM</th>
+                <th>TypeM</th>
+                <th>PhotoM</th>
+                <th>Actions</th> <!-- Modifié pour correspondre à la structure Articles -->
+            </tr>
+        </thead>
+        <tbody>
+            {% for magasin in magasins %}
+                <tr>
+                    <td>{{ magasin.id }}</td>
+                    <td>{{ magasin.nomM }}</td>
+                    <td>{{ magasin.typeM }}</td>
+                    <td>
+                        {% if magasin.photoM %}
+                            <img src="{{ asset('uploads/magasin/' ~ magasin.photoM) }}" alt="Photo du magasin" width="100">
+                        {% else %}
+                            <span>Aucune image</span>
+                        {% endif %}
+                    </td>
+                    <td> <!-- Colonne Actions -->
+                        <a href="{{ path('app_magasin_show', {'id': magasin.id}) }}" class="btn btn-info btn-sm">Show</a>
+                        <a href="{{ path('app_magasin_edit', {'id': magasin.id}) }}" class="btn btn-warning btn-sm">Edit</a>
+                        {{ include('magasin/_delete_form.html.twig', {'magasin': magasin}) }}
+                    </td> 
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="5">No records found</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="text-center mt-4">
+        <a href="{{ path('app_magasin_new') }}" class="btn btn-primary rounded-pill">Create new</a>
+    </div>
+{% endblock %}

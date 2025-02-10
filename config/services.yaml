@@ -1,12 +1,20 @@
-# This file is the entry point to configure your own services.
-# Files in the packages/ subdirectory configure your dependencies.
-
-# Put parameters here that don't need to change on each machine where the app is deployed
-# https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
     photos_directory: '%kernel.project_dir%/public/uploads/photosevents'
 
+    uploads_directory: '%kernel.project_dir%/public/uploads/cours'
+
+    twilio.sid: "%env(TWILIO_SID)%"
+    twilio.auth_token: "%env(TWILIO_AUTH_TOKEN)%"
+    twilio.phone_number: "%env(TWILIO_PHONE_NUMBER)%"
+    
+    magasin_directory: '%kernel.project_dir%/public/uploads/magasin'
+    produits_directory: '%kernel.project_dir%/public/uploads/produits'
+    photos_directory: '%kernel.project_dir%/public/uploads/photos'
+    photos_events_directory: '%kernel.project_dir%/public/uploads/photosevents'
+
+
 services:
+<<<<<<< HEAD
     # default configuration for services in *this* file
     
 
@@ -23,6 +31,22 @@ services:
             - '../src/DependencyInjection/'
             - '../src/Entity/'
             - '../src/Kernel.php'
+=======
+  _defaults:
+    autowire: true
+    autoconfigure: true
 
-    # add more service definitions when explicit configuration is needed
-    # please note that last definitions always *replace* previous ones
+  # Defines the App services
+  App\:
+    resource: '../src/'
+    exclude:
+      - '../src/DependencyInjection/'
+      - '../src/Entity/'
+      - '../src/Kernel.php'
+>>>>>>> 67ede58c13395a5f2206417896f7661b70eb0dd6
+
+  App\Service\TwilioService:
+    arguments:
+      $sid: "%twilio.sid%"
+      $token: "%twilio.auth_token%"
+      $twilioNumber: "%twilio.phone_number%"

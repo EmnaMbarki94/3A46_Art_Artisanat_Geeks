@@ -40,7 +40,11 @@ final class EvenementController extends AbstractController
 
             if ($file) {
                 $filename = uniqid() . '.' . $file->guessExtension();
+<<<<<<< HEAD
                 $file->move($this->getParameter('photos_directory'), $filename);
+=======
+                $file->move($this->getParameter('photos_events_directory'), $filename);
+>>>>>>> 67ede58c13395a5f2206417896f7661b70eb0dd6
                 $event->setPhotoE($filename);
             }
             $entityManager->persist($event);
@@ -83,7 +87,11 @@ final class EvenementController extends AbstractController
 
             if ($file) {
                 $filename = uniqid() . '.' . $file->guessExtension();
+<<<<<<< HEAD
                 $file->move($this->getParameter('photos_directory'), $filename);
+=======
+                $file->move($this->getParameter('photos_events_directory'), $filename);
+>>>>>>> 67ede58c13395a5f2206417896f7661b70eb0dd6
                 $event->setPhotoE($filename);
             }
             $entityManager->persist($event);

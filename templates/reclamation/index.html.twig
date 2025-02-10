@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Reclamation Affichage{% endblock %}
+
+{% block body %}
+
+    <section class="container mt-5 pt-5">
+    <div class="row justify-content-center pt-5">
+        <div class="col-md-10">
+            <div class="card shadow-lg rounded">
+                <div class="card-header text-center bg-primary text-white">
+                    <h2>Liste des Réclamations</h2>
+                </div>
+                <div class="card-body">
+                    <table class="table table-hover table-bordered text-center">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>ID</th>
+                                <th>Description</th>
+                                <th>Date de soumission</th>
+                                <th>Status</th>
+                                <th>Type</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for reclamation in reclamations %}
+                            <tr>
+                                <td>{{ reclamation.id }}</td>
+                                <td>{{ reclamation.descR }}</td>
+                                <td>{{ reclamation.dateR ? reclamation.dateR|date('Y-m-d') : '' }}</td>
+                                <td>{{ reclamation.statusR }}</td>
+                                <td>{{ reclamation.typeR }}</td>
+                                <td>
+                                    <a href="{{ path('app_reclamation_show', {'id': reclamation.id}) }}" class="btn btn-info btn-sm">Voir</a>
+                                    <a href="{{ path('app_reclamation_edit', {'id': reclamation.id}) }}" class="btn btn-warning btn-sm">Modifier</a>
+                                </td>
+                            </tr>
+                        {% else %}
+                            <tr>
+                                <td colspan="6" class="text-center text-muted">Aucune réclamation trouvée</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card-footer text-center">
+                    <a href="{{ path('app_reclamation_new') }}" class="btn btn-success">Créer une nouvelle réclamation</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

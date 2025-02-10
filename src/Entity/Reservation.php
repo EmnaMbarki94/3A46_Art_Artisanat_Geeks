@@ -6,6 +6,9 @@ use App\Repository\ReservationRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
+use Symfony\Component\Validator\Constraints as Assert;
+
+
 #[ORM\Entity(repositoryClass: ReservationRepository::class)]
 class Reservation
 {
@@ -21,21 +24,37 @@ class Reservation
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank(message: "L'état ne doit pas être vide.")]
+<<<<<<< HEAD
+=======
+
+>>>>>>> 67ede58c13395a5f2206417896f7661b70eb0dd6
     private ?string $etatE = null;
 
     #[ORM\ManyToOne]
     private ?Event $relation = null;
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 67ede58c13395a5f2206417896f7661b70eb0dd6
     #[ORM\Column]
     #[Assert\NotBlank(message: "Le nombre de places ne doit pas être vide.")]
     #[Assert\GreaterThan(0, message: "Le nombre de places doit être supérieur à 0.")]
     private ?int $nb_place = null;
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 67ede58c13395a5f2206417896f7661b70eb0dd6
     public function getId(): ?int
     {
         return $this->id;
     }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 67ede58c13395a5f2206417896f7661b70eb0dd6
     public function getLibelle(): ?string
     {
         return $this->libelle;
@@ -77,6 +96,18 @@ class Reservation
     public function setNbPlace(?int $nb_place): static
     {
         $this->nb_place = $nb_place;
+        return $this;
+    }
+
+    public function getNbPlace(): ?int
+    {
+        return $this->nb_place;
+    }
+
+    public function setNbPlace(?int $nb_place): static
+    {
+        $this->nb_place = $nb_place;
+
         return $this;
     }
 }
