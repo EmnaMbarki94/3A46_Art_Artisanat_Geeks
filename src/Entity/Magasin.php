@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\MagasinRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: MagasinRepository::class)]
 class Magasin
@@ -13,13 +14,23 @@ class Magasin
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(name: "nom_m", length: 255)] // Correspond au nom de la colonne dans la base de données
+    #[Assert\NotBlank(message: "Le nom du magasin est obligatoire.")]
+    #[Assert\Length(
+        min: 3,
+        max: 255,
+        minMessage: "Le nom doit contenir au moins {{ limit }} caractères.",
+        maxMessage: "Le nom ne peut pas dépasser {{ limit }} caractères."
+    )]
     private ?string $nomM = null;
 
-    #[ORM\Column(length: 255)]
+
+    #[ORM\Column(type: "string")]
+    #[Assert\NotNull(message: "Le type est requis.")]
+    #[Assert\Length(min: 3, max: 100, minMessage: "Le type doit avoir au moins {{ limit }} caractères.")]
     private ?string $typeM = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255)]    
     private ?string $photoM = null;
 
     public function getId(): ?int
@@ -35,7 +46,6 @@ class Magasin
     public function setNomM(string $nomM): static
     {
         $this->nomM = $nomM;
-
         return $this;
     }
 
@@ -47,7 +57,6 @@ class Magasin
     public function setTypeM(string $typeM): static
     {
         $this->typeM = $typeM;
-
         return $this;
     }
 
@@ -59,7 +68,6 @@ class Magasin
     public function setPhotoM(string $photoM): static
     {
         $this->photoM = $photoM;
-
         return $this;
     }
 }

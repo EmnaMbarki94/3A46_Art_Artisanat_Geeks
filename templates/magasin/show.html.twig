@@ -1,0 +1,55 @@
+{% extends 'baseBack.html.twig' %}
+
+{% block title %}Magasin{% endblock %}
+
+{% block body %}
+    <div class="container mt-4">
+        <h1 class="mb-4">Magasin Details</h1>
+
+        <div class="row">
+            <!-- Magasin Details Table -->
+            <div class="col-md-8">
+                <div class="card shadow-sm p-4 rounded-4 border-0">
+                    <table class="table table-bordered">
+                        <tbody>
+                            <tr>
+                                <th>Id</th>
+                                <td>{{ magasin.id }}</td>
+                            </tr>
+                            <tr>
+                                <th>Nom du Magasin</th>
+                                <td>{{ magasin.nomM }}</td>
+                            </tr>
+                            <tr>
+                                <th>Type du Magasin</th>
+                                <td>{{ magasin.typeM }}</td>
+                            </tr>
+                           
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Magasin Image -->
+            <div class="col-md-4">
+                <div class="card shadow-sm p-4 rounded-4 border-0">
+                    <h5>Magasin Photo</h5>
+                    {% if magasin.photoM %}
+                        <img src="{{ asset('uploads/magasin/' ~ magasin.photoM) }}" class="img-fluid rounded shadow-sm" alt="Magasin Photo">
+                    {% else %}
+                        <span class="text-muted">No image available</span>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-4 d-flex justify-content-between">
+            <a href="{{ path('app_magasin_index') }}" class="btn btn-outline-secondary rounded-pill">Back to list</a>
+            <a href="{{ path('app_magasin_edit', {'id': magasin.id}) }}" class="btn btn-warning rounded-pill">Edit</a>
+        </div>
+
+        <div class="mt-3">
+            {{ include('magasin/_delete_form.html.twig') }}
+        </div>
+    </div>
+{% endblock %}
