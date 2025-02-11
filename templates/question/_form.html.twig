@@ -1,0 +1,31 @@
+<div class="container d-flex justify-content-center align-items-center vh-100">
+    <div class="card p-4 shadow-lg" style="width: 60%;">
+
+        {{ form_start(form,{'attr': {'novalidate': 'novalidate'}}) }}
+
+        <table class="table">
+            <tr>
+                <th>La question </th>
+                <td>{{ form_widget(form.contenuQ, {'attr': {'class': 'form-control'}}) }}</td>
+                <td>{{ form_errors(form.contenuQ) }}</td>
+            </tr>
+            <tr>
+                <th>Réponses</th>
+                <td>
+                    {% for i in 0..3 %}
+                        {{ form_row(attribute(form, 'response_' ~ i)) }}
+                    {% endfor %}
+                    
+                </td>
+            </tr>
+            <tr>
+                <th>Quiz associé</th>
+                <td>{{ form_widget(form.quiz, {'attr': {'class': 'form-select'}}) }}</td>
+                <td>{{ form_errors(form.quiz) }}</td>
+            </tr>
+        </table>
+        <button class="btn">{{ button_label|default('Sauvegarder') }}</button>
+
+        {{ form_end(form) }}
+    </div>
+</div>

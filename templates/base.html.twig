@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+<<<<<<< HEAD
     <head>
         <meta charset="utf-8">
 	    <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -24,22 +25,143 @@
         {% block body %}{% endblock %}
         <script>
             window.onscroll = function() {myFunction()};
+=======
 
-            var navbar_sticky = document.getElementById("navbar_sticky");
-            var sticky = navbar_sticky.offsetTop;
-            var navbar_height = document.querySelector('.navbar').offsetHeight;
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>
+			{% block title %}Welcome!
+			{% endblock %}
+		</title>
+		<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
+		{% block stylesheets %}
+            {{ encore_entry_link_tags('app') }}
+			<link href="{{asset('front/css/bootstrap.min.css')}}" rel="stylesheet">
+			<link href="{{asset('front/css/font-awesome.min.css')}}" rel="stylesheet">
+			<link href="{{asset('front/css/global.css')}}" rel="stylesheet">
+			<link href="{{asset('front/css/index.css')}}" rel="stylesheet">
+			<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz@9..144&display=swap" rel="stylesheet">
+		{% endblock %}
+>>>>>>> 4df36eff2bc97aa07002853c4b56d516ec638d7b
 
-            function myFunction() {
-            if (window.pageYOffset >= sticky + navbar_height) {
-                navbar_sticky.classList.add("sticky")
-                document.body.style.paddingTop = navbar_height + 'px';
-            } else {
-                navbar_sticky.classList.remove("sticky");
-                document.body.style.paddingTop = '0'
-            }
-            }
-        </script>
+		{% block javascripts %}
+            {{ encore_entry_script_tags('app') }}
+			{% block importmap %}
+				{{ importmap('app') }}
+			{% endblock %}
+			<script src="{{asset('front/js/bootstrap.bundle.min.js')}}"></script>
+       <!-- Include TinyMCE scripts -->
+            <script src="https://cdn.tiny.cloud/1/rdr6isrrjsa3fde5430s0h47wtdhg1d3dhdvcwog5gzsbj2e/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+            <script>
+               function initTinyMCE() {
+                    tinymce.init({
+                        selector: '.tinymce',
+                        plugins: 'lists link image preview',
+                        toolbar: 'undo redo | styleselect | bold italic | alignleft aligncenter alignright | bullist numlist outdent indent | link image',
+                        menubar: false,
+                        height: 300
+                    });
+                };
+                document.addEventListener('DOMContentLoaded', initTinyMCE);
+                document.addEventListener('turbo:load', initTinyMCE);
+            </script>
+		{% endblock %}
+	</head>
+	<body>
+		
+    <section id="header">
+        <nav class="navbar navbar-expand-md navbar-light" id="navbar_sticky">
+        <div class="container-xl">
+            <a class="navbar-brand fs-2 p-0 fw-bold text-white" href="/"><i class="fa fa-pencil col_pink me-1 align-middle"></i> Artis <br> <span class="font_12 span_2">Galerie d'art</span></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mb-0 ms-auto">
+                
+                <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="/">Home</a>
+                </li>
+                
+                <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Cours
+                </a>
+                <ul class="dropdown-menu drop_1" aria-labelledby="navbarDropdown">
+                    <li><a class="dropdown-item" href="{{ path('app_cours_index') }}"> Cours</a></li>
+                    <li><a class="dropdown-item border-0" href="{{ path('app_cours_new') }}"> Créer un cours</a></li>
+                </ul>
+                </li>
+                <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Product
+                </a>
+                <ul class="dropdown-menu drop_1" aria-labelledby="navbarDropdown">
+                    <li><a class="dropdown-item" href="{{ path('app_article_list') }}"> Articles</a></li>
+                    <li><a class="dropdown-item border-0" href="#"> Product Detail</a></li>
+                </ul>
+                </li>
+                
+                <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Galeries
+                </a>
+                <ul class="dropdown-menu drop_1" aria-labelledby="navbarDropdown">
+                    <li><a class="dropdown-item" href="{{ path('app_galerie') }}"> Galeries</a></li>
+                    <li><a class="dropdown-item border-0" href="{{ path('app_galerie_new') }}"> Créer une galerie</a></li>
+                </ul>
+                </li>
+                
+                <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Events
+                </a>
+                <ul class="dropdown-menu drop_1" aria-labelledby="navbarDropdown">
+                    <li><a class="dropdown-item" href="{{ path('app_evenement_listeF') }}"> Evenements</a></li>
+                </ul>
+                </li>
+                        
+                <li class="nav-item">
+                <a class="nav-link" href="{{ path('app_reclamation_index') }}">Reclamations</a>
+                </li>
+				<li class="nav-item">
+										<a class="nav-link" href="{{ path('app_login') }}">Se Connecter
+										</a>
+									</li>
 
+									<li class="nav-item">
+										<a class="nav-link" href="{{ path('user_register') }}">S'inscrire</a>
+									</li>
+                
+            </ul>
+            </div>
+        </div>
+        </nav>
+    </section>
 
-    </body>
+			{% block body %}{% endblock %}
+		
+		<script>
+			window.onscroll = function () {
+myFunction()
+};
+
+var navbar_sticky = document.getElementById("navbar_sticky");
+var sticky = navbar_sticky.offsetTop;
+var navbar_height = document.querySelector('.navbar').offsetHeight;
+
+function myFunction() {
+if (window.pageYOffset >= sticky + navbar_height) {
+navbar_sticky.classList.add("sticky")
+document.body.style.paddingTop = navbar_height + 'px';
+} else {
+navbar_sticky.classList.remove("sticky");
+document.body.style.paddingTop = '0'
+}
+}
+		</script>
+	</body>
 </html>
+

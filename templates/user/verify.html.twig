@@ -1,0 +1,27 @@
+{% extends 'authBase.html.twig' %}
+
+{% block content %}
+	<h1>Verify your account</h1>
+
+	{# Afficher les messages flash #}
+	{% for label, messages in app.flashes %}
+		{% for message in messages %}
+			<div class="alert alert-{{ label }}">
+				{{ message }}
+			</div>
+		{% endfor %}
+	{% endfor %}
+	<a href="{{ path('app_logout') }}">Logout</a>
+	<form method="post">
+		<label for="verification_code">Code de vérification</label>
+		<input type="text" id="verification_code" name="verification_code" required class="form-control form-control-lg">
+		<button type="submit" class="btn btn-block btn-gradient-primary btn-lg font-weight-medium auth-form-btn">Vérifier</button>
+		{# Ajouter le token CSRF #}
+		<input type="hidden" name="token" value="{{ csrf_token }}">
+	</form>
+
+	<!-- Afficher le numéro de téléphone et le user-agent -->
+	<p>
+		<!--<strong>Numéro de téléphone:</strong>
+		{{ numTel }}</p>-->
+{% endblock %}

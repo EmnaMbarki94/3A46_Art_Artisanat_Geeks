@@ -97,6 +97,7 @@ public function new(Request $request, EntityManagerInterface $entityManager): Re
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+<<<<<<< HEAD
             $file = $form->get('photoM')->getData();
 
             if ($file) {
@@ -108,6 +109,38 @@ public function new(Request $request, EntityManagerInterface $entityManager): Re
             $entityManager->flush();
             
             return $this->redirectToRoute('app_article_index', [], Response::HTTP_SEE_OTHER);
+=======
+            // Gestion de l'upload de fichier
+            /** @var UploadedFile $file */
+            $file = $form->get('photoM')->getData();
+
+            if ($file) {
+                // Générer un nom unique pour le fichier
+                $fileName = uniqid() . '.' . $file->guessExtension();
+
+                // Déplacer le fichier vers le dossier configuré
+                $file->move(
+                    $this->getParameter('magasin_directory'), // Assurez-vous que ce paramètre est défini dans services.yaml
+                    $fileName
+                );
+
+                // Supprimer l'ancienne image si nécessaire (optionnel)
+                if ($magasin->getPhotoM()) {
+                    $oldFilePath = $this->getParameter('magasin_directory') . '/' . $magasin->getPhotoM();
+                    if (file_exists($oldFilePath)) {
+                        unlink($oldFilePath);
+                    }
+                }
+
+                // Mettre à jour la propriété `photoM`
+                $magasin->setPhotoM($fileName);
+            }
+
+            // Sauvegarder les modifications en base de données
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_magasin_index', [], Response::HTTP_SEE_OTHER);
+>>>>>>> 4df36eff2bc97aa07002853c4b56d516ec638d7b
         }
 
         return $this->render('magasin/edit.html.twig', [

@@ -1,0 +1,103 @@
+{% extends 'baseBack.html.twig' %}
+
+{% block title %}Listes Réponses{% endblock %}
+
+{% block body %}
+{% block content %}
+  
+  <div class="main-panel">
+    <div class="content-wrapper">
+      <section class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-12">
+                <div class="card shadow-lg rounded">
+                    <div class="card-header text-center bg-primary text-white">
+                        <h2>📝 Liste des Réponses</h2>
+                    </div>
+                    <div class="card-body">
+
+                        <!-- 🔍 Barre de recherche -->
+                        <div class="mb-3">
+                            <input type="text" id="searchInput" class="form-control" placeholder="🔍 Rechercher une réponse...">
+                        </div>
+
+                        <div class="table-responsive">
+                            <table class="table table-hover table-bordered text-center" id="reponseTable">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th onclick="sortTable(0)">ID 🔽</th>
+                                        <th onclick="sortTable(1)">Description 🔽</th>
+                                        <th onclick="sortTable(2)">Date 🔽</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                {% for reponse in reponses %}
+                                    <tr>
+                                        <td>{{ reponse.id }}</td>
+                                        <td>{{ reponse.descRep }}</td>
+                                        <td>
+                                            <span class="badge bg-secondary">
+                                                {{ reponse.dateRep ? reponse.dateRep|date('Y-m-d') : '-' }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <a href="{{ path('app_reponse_show', {'id': reponse.id}) }}" class="btn btn-info btn-sm">
+                                                👁 Afficher
+                                            </a>
+                                            <a href="{{ path('app_reponse_edit', {'id': reponse.id}) }}" class="btn btn-warning btn-sm">
+                                                ✏ Modifier
+                                            </a>
+                                        </td>
+                                    </tr>
+                                {% else %}
+                                    <tr>
+                                        <td colspan="4" class="text-center text-muted">🚫 Aucune réponse trouvée</td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    
+                </div>
+            </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+
+<!-- ✅ Script pour la recherche (Uniquement sur l'ID) -->
+<script>
+document.getElementById("searchInput").addEventListener("keyup", function() {
+    let filter = this.value.toLowerCase();
+    let rows = document.querySelectorAll("#reponseTable tbody tr");
+    
+    rows.forEach(row => {
+        let cell = row.cells[0]; // Colonne ID (Index 0)
+        let text = cell.textContent || cell.innerText;
+        row.style.display = text.includes(filter) ? "" : "none";
+    });
+});
+
+function sortTable(n) {
+    let table = document.getElementById("reponseTable");
+    let rows = Array.from(table.querySelectorAll("tbody tr"));
+    let ascending = table.getAttribute("data-sort-order") !== "asc";
+    
+    rows.sort((rowA, rowB) => {
+        let cellA = rowA.cells[n].innerText.trim().toLowerCase();
+        let cellB = rowB.cells[n].innerText.trim().toLowerCase();
+        
+        return ascending ? cellA.localeCompare(cellB) : cellB.localeCompare(cellA);
+    });
+
+    rows.forEach(row => table.querySelector("tbody").appendChild(row));
+    table.setAttribute("data-sort-order", ascending ? "asc" : "desc");
+}
+</script>
+
+{% endblock %}  
+{% endblock %}

@@ -1,0 +1,57 @@
+{% extends 'authBase.html.twig' %}
+
+{% block content %}
+	<h1>Register</h1>
+	{{ form_start(form) }}
+	{% for field in form %}
+		{% if 'hidden' not in field.vars.block_prefixes %}
+			<div class="form-group">
+				{{ form_label(field) }}
+				{{ form_widget(field, {'attr': {'class': 'form-control form-control-lg',                   'required': false}}) }}
+				{{ form_errors(field) }}
+			</div>
+		{% else %}
+			{{ form_widget(field) }}
+		{% endif %}
+	{% endfor %}
+	<button class="btn btn-block btn-gradient-primary btn-lg font-weight-medium auth-form-btn">Register</button>
+	{{ form_end(form) }}
+
+	<script>
+		document.addEventListener("DOMContentLoaded", function () {
+const roleSelect = document.getElementById("user_role");
+const cinField = document.getElementById("user_cin");
+const specialiteField = document.getElementById("user_specialite");
+
+specialiteField.value = "";
+cinField.value = "";
+// Masquer le champ CIN au chargement
+cinField.closest(".form-group").style.display = "none";
+specialiteField.closest(".form-group").style.display = "none";
+
+roleSelect.addEventListener("change", function () {
+
+if (roleSelect.value === "ROLE_ARTISTE") {
+console.log("IM ROLE ARISTE")
+cinField.closest(".form-group").style.display = "block";
+specialiteField.value = "";
+
+specialiteField.closest(".form-group").style.display = "none";
+
+} else if (roleSelect.value === "ROLE_ENSEIGNANT") {
+console.log("")
+specialiteField.closest(".form-group").style.display = "block";
+cinField.closest(".form-group").style.display = "none";
+cinField.value = "";
+
+} else {
+cinField.closest(".form-group").style.display = "none";
+cinField.value = ""; // Nettoyer la valeur si on cache le champ
+specialiteField.closest(".form-group").style.display = "none";
+specialiteField.value = "";
+}
+})
+});
+	</script>
+
+{% endblock %}

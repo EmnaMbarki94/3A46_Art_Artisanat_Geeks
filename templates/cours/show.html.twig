@@ -1,0 +1,72 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Cours{% endblock %}
+
+{% block body %}
+    <section id="center" class="center_o bg_gray pt-2 pb-2">
+        <div class="container-xl">
+        <div class="row center_o1">
+        <div class="col-md-5">
+            <div class="center_o1l">
+            <h2 class="mb-0">Cours</h2>
+            </div>
+        </div>
+        <div class="col-md-7">
+            <div class="center_o1r text-end">
+            <h6 class="mb-0"><a href="{{ path('app_home') }}">Home</a> <span class="me-2 ms-2"><i class="fa fa-caret-right"></i></span> Cours</h6>
+            </div>
+        </div>
+        </div>
+        </div>
+    </section>
+    
+
+<section id="blog" class="p_4">
+ <div class="container-xl">
+   <div class="blog_1 row">
+	<div class="col-md-9">
+	 <div class="blog_1dt">
+	  <div class="blog_1dt1">
+	    <div class="blog_1ril clearfix position-relative">
+		 <div class="blog_1ril1 clearfix">
+		   <div class="grid clearfix">
+				  <figure class="effect-jazz mb-0">
+					<a><img src="{{ cour.image ? asset('uploads/cours/' ~ cour.image) : asset('uploads/default.jpg') }}" class="w-100" alt="Course Image"></a>
+				  </figure>
+			</div>
+		 </div>
+		</div>
+	  </div>
+	  <div class="blog_1dt2 row mt-4">
+	   <div class="col-md-2">
+	    <div class="blog_1dt2l text-center">
+		 <h4>{{ cour.dateC|date('d-M') }} <br><hr class="line m-auto mt-2 mb-2"> {{ cour.dateC|date('Y') }} <hr class="line m-auto mt-2"> </h4>
+		</div>
+	   </div>
+	   <div class="col-md-10">
+	    <div class="blog_1dt2r">
+		 <h4>{{cour.nomC}}</h4>
+         <h6>{{cour.categC}}</h6>
+		 <p>{{cour.contenuC}}</p>
+		</div>
+	   </div>
+     </div>
+    </div>
+   </div>
+ </div>
+</section>
+
+    {% if cour.quiz is not null %}
+        <h6 class="font_14 mb-0 mt-4">
+            <a class="button p-3 pt-2 pb-2" href="{{ path('app_quiz_show',{'id': cour.quiz.id}) }}">GO TO QUIZ</a>
+        </h6>
+    {% else %}
+        <p>No quiz available for this course.</p>
+    {% endif %}
+
+    <a href="{{ path('app_cours_index') }}">back to list</a></br>
+
+    {#<a href="{{ path('app_cours_edit', {'id': cour.id}) }}">edit</a>#}
+
+    {#{{ include('cours/_delete_form.html.twig') }}#}
+{% endblock %}

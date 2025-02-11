@@ -3,8 +3,11 @@
 namespace App\Entity;
 
 use App\Repository\PieceArtRepository;
+use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+
+
 
 #[ORM\Entity(repositoryClass: PieceArtRepository::class)]
 class PieceArt
@@ -15,15 +18,23 @@ class PieceArt
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+
+    #[Assert\NotBlank(message: 'Le nom de la pièce ne peut pas être vide.')]
     private ?string $nomP = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[Assert\NotNull(message: 'La date de création ne peut pas être vide.')]
+
     private ?\DateTimeInterface $dateCrea = null;
 
     #[ORM\Column(length: 255)]
     private ?string $photoP = null;
 
     #[ORM\Column(length: 255)]
+
+    #[Assert\NotBlank(message: 'La description ne peut pas être vide.')]
+    #[Assert\Length(max: 255, maxMessage: 'La description ne peut pas dépasser {{ limit }} caractères.')]
+
     private ?string $descP = null;
 
     #[ORM\ManyToOne(inversedBy: 'pieceArt')]

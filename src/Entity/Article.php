@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Entity;
 
 use App\Repository\ArticleRepository;
@@ -39,10 +38,17 @@ class Article
     )]
     private ?string $descA = null;
 
+<<<<<<< HEAD
     #[ORM\Column(length: 255)]    
     private ?string $imagePath = null;
 
+=======
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\Url(message: "Le chemin de l'image doit être une URL valide.")]
+    private ?string $imagePath = null;
+>>>>>>> 4df36eff2bc97aa07002853c4b56d516ec638d7b
 
+    
     #[ORM\ManyToOne(inversedBy: 'article')]
     private ?Commande $commande = null;
 
@@ -95,10 +101,14 @@ class Article
 
     public function setImagePath(?string $imagePath): self
     {
+<<<<<<< HEAD
         if ($imagePath !== null) { // Ne met à jour que si une nouvelle image est envoyée
             $this->imagePath = $imagePath;
         }
     
+=======
+        $this->imagePath = $imagePath;
+>>>>>>> 4df36eff2bc97aa07002853c4b56d516ec638d7b
         return $this;
     }
 

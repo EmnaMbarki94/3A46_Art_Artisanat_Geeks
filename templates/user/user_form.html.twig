@@ -1,0 +1,65 @@
+{% extends 'baseBack.html.twig' %}
+
+
+{% block body %}
+	<div class="row b-4">
+		<div class="col-8 mx-auto p-4 border shadow-lg bg-white rounded">
+			<h1>{{action}}</h1>
+
+			{{ form_start(form) }}
+			{% for field in form %}
+				{% if 'hidden' not in field.vars.block_prefixes %}
+					<div class="form-group">
+						{{ form_label(field) }}
+						{{ form_widget(field, {'attr': {'class': 'form-control'},                    'required': false }) }}
+						{{ form_errors(field) }}
+					</div>
+				{% else %}
+					{{ form_widget(field) }}
+				{% endif %}
+			{% endfor %}
+			{# Affiche tous les champs du formulaire #}
+			<button type="submit" class="btn btn-primary">{{action }}</button>
+			{# Bouton de soumission #}
+			{{ form_end(form) }}
+		</div>
+	</div>
+	<script>
+		document.addEventListener("DOMContentLoaded", function () {
+const roleSelect = document.getElementById("user_for_admin_role");
+const cinField = document.getElementById("user_for_admin_cin");
+const specialiteField = document.getElementById("user_for_admin_specialite");
+specialiteField.value = "";
+cinField.value = "";
+// Masquer le champ CIN au chargement
+cinField.closest(".form-group").style.display = "none";
+specialiteField.closest(".form-group").style.display = "none";
+
+roleSelect.addEventListener("change", function () {
+
+if (roleSelect.value === "ROLE_ARTISTE") {
+console.log("IM ROLE ARISTE")
+cinField.closest(".form-group").style.display = "block";
+specialiteField.value = "";
+
+specialiteField.closest(".form-group").style.display = "none";
+
+} else if (roleSelect.value === "ROLE_ENSEIGNANT") {
+console.log("")
+specialiteField.closest(".form-group").style.display = "block";
+cinField.closest(".form-group").style.display = "none";
+cinField.value = "";
+
+} else {
+cinField.closest(".form-group").style.display = "none";
+cinField.value = ""; // Nettoyer la valeur si on cache le champ
+specialiteField.closest(".form-group").style.display = "none";
+specialiteField.value = "";
+}
+})
+});
+	</script>
+
+{% endblock %}
+
+{# Termine le formulaire #}

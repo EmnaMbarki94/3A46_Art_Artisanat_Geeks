@@ -1,0 +1,81 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Cours index{% endblock %}
+
+{% block body %}
+
+       
+
+<section id="blog" class="p_4 pt-5">
+{% for c in cours %}
+    <div class="container-xl">
+        <div class="blog_1 row">
+            <div class="col-md-9">
+                <div class="blog_1r">
+                    <div class="blog_1ri row">
+                    <div class="col-md-7">
+                        <div class="blog_1ril clearfix position-relative">
+                            <div class="blog_1ril1 clearfix">
+                            <div class="grid clearfix">
+                                    <figure class="effect-jazz mb-0">
+                                        <a><img src="{{ c.image ? asset('uploads/cours/' ~ c.image) : asset('uploads/cours/default2.png') }}" class="w-100" alt="Course Image"></a>
+                                    </figure>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="blog_1rir ps-4 pe-3">
+                            <h5 class="mb-4"><a href="{{ path('app_cours_show',{'id': c.id}) }}">{{c.nomC}}</a></h5>
+                            <p class="mb-4">{{c.categC}}</p>
+                            <p class="font_14">{{c.contenuC|slice(0, 80) ~ '...'}}</p>
+                            <h6 class="font_14 mb-0 mt-4"><a class="button p-3 pt-2 pb-2" href="{{ path('app_cours_show',{'id': c.id}) }}">READ MORE</a></h6>
+                        </div>
+	                </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr>
+    {% endfor %}
+</section>
+
+    
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nom du cours</th>
+                <th>Categorie C</th>
+                <th>Contenu du cours</th>
+                <th>Date d'ajout des cours</th>
+                <th>Heure d'ajout des cours</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for cour in cours %}
+            <tr>
+                <td>{{ cour.id }}</td>
+                <td>{{ cour.nomC }}</td>
+                <td>{{ cour.categC }}</td>
+                <td>{{ cour.contenuC }}</td>
+                <td>{{ cour.dateC ? cour.dateC|date('Y-m-d') : '' }}</td>
+                <td>{{ cour.heureC ? cour.heureC|date('H:i') : '' }}</td>
+                <td>
+                    <a href="{{ path('app_cours_show', {'id': cour.id}) }}">show</a>
+                    <a href="{{ path('app_cours_edit', {'id': cour.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="7">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_cours_new') }}">Create new</a>
+{% endblock %}

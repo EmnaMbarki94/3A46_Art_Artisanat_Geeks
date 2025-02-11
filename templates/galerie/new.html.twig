@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Créer votre galerie - Artis{% endblock %}
+
+{% block body %}
+
+
+<div class="container mt-5 pt-5">
+    <h1 class="text-center">Créer Votre Galerie</h1>
+    
+    {{ include('galerie/_form.html.twig', { form: form, button_label: 'Créer la Galerie' }) }}
+    <a href="{{ path('app_galerie_index') }}">back to list</a>
+</div>
+
+{% endblock %}

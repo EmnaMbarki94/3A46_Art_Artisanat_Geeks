@@ -99,6 +99,7 @@ final class ArticleController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+<<<<<<< HEAD
             $file = $form->get('imagePath')->getData();
 
             if ($file) {
@@ -110,6 +111,43 @@ final class ArticleController extends AbstractController
             $entityManager->flush();
             
             return $this->redirectToRoute('app_article_index', [], Response::HTTP_SEE_OTHER);
+=======
+            // Gestion de l'upload de l'image
+            /** @var UploadedFile $imageFile */
+            $imageFile = $form->get('imagePath')->getData();
+
+            if ($imageFile) {
+                // Générer un nom unique pour le fichier
+                $fileName = uniqid() . '.' . $imageFile->guessExtension();
+
+                // Déplacer l'image vers le dossier configuré
+                try {
+                    $imageFile->move(
+                        $this->getParameter('produits_directory'), // Dossier d'upload pour les produits
+                        $fileName
+                    );
+                } catch (FileException $e) {
+                    throw new \Exception('Impossible de télécharger l\'image.');
+                }
+
+                // Supprimer l'ancienne image si elle existe
+                if ($article->getImagePath()) {
+                    $oldFilePath = $this->getParameter('produits_directory') . '/' . $article->getImagePath();
+                    if (file_exists($oldFilePath)) {
+                        unlink($oldFilePath);
+                    }
+                }
+
+                // Mettre à jour le chemin de l'image
+                $article->setImagePath($fileName);
+            }
+
+            // Sauvegarder les modifications de l'article dans la base de données
+            $entityManager->flush();
+
+            // Rediriger après l'édition
+            return $this->redirectToRoute('app_article_show', ['id' => $article->getId()]);
+>>>>>>> 4df36eff2bc97aa07002853c4b56d516ec638d7b
         }
 
         return $this->render('article/edit.html.twig', [

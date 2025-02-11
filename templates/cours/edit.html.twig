@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier Cours{% endblock %}
+
+{% block body %}
+    <h1 class="text-center bold my-4">Modifier Cours</h1>
+
+    {{ include('cours/_form.html.twig', {'button_label': 'Sauvegarder'}) }}
+
+
+    <a href="{{ path('app_cours_index') }}">back to list</a>
+
+    {{ include('cours/_delete_form.html.twig') }}
+    
+{% endblock %}

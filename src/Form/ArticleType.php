@@ -23,10 +23,17 @@ class ArticleType extends AbstractType
         $magasins = $options['magasins'];
 
         $builder
+<<<<<<< HEAD
             ->add('nomA', null, [
                 'label' => 'Nom du produit',
             ])
 
+=======
+        ->add('nomA', null, [
+            'label' => 'Nom du produit',
+        ])
+        
+>>>>>>> 4df36eff2bc97aa07002853c4b56d516ec638d7b
             ->add('prixA', NumberType::class, [  // Utilisez NumberType pour un champ numérique
                 'label' => 'Prix du produit',
                 'required' => true,
@@ -37,7 +44,11 @@ class ArticleType extends AbstractType
                 'required' => true,
             ])
             ->add('magasin', EntityType::class, [
+<<<<<<< HEAD
                 'label' => 'Choix du Magasin',
+=======
+                'label' => 'Du Magasin',
+>>>>>>> 4df36eff2bc97aa07002853c4b56d516ec638d7b
                 'class' => Magasin::class,
                 'choices' => $magasins, // Utilise la liste des magasins récupérés par le repository
                 'choice_label' => function ($magasin) {
@@ -49,9 +60,20 @@ class ArticleType extends AbstractType
                 'label' => 'Image (PNG, JPG, JPEG)',
                 'mapped' => false,  // Ne pas lier directement à la propriété imagePath
                 'required' => false,
+<<<<<<< HEAD
                 
         
             ]);
+=======
+                'constraints' => [
+                    new File([
+                        'mimeTypes' => ['image/jpeg', 'image/png', 'image/jpg'],
+                        'mimeTypesMessage' => 'Veuillez télécharger une image valide (JPEG, PNG)',
+                    ])
+                ],
+            ]);
+             
+>>>>>>> 4df36eff2bc97aa07002853c4b56d516ec638d7b
     }
 
     public function configureOptions(OptionsResolver $resolver): void
