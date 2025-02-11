@@ -99,6 +99,19 @@ final class ArticleController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+<<<<<<< HEAD
+            $file = $form->get('imagePath')->getData();
+
+            if ($file) {
+                $filename = uniqid() . '.' . $file->guessExtension();
+                $file->move($this->getParameter('produits_directory'), $filename);
+                $article->setImagePath($filename);
+            }
+            $entityManager->persist($article);
+            $entityManager->flush();
+            
+            return $this->redirectToRoute('app_article_index', [], Response::HTTP_SEE_OTHER);
+=======
             // Gestion de l'upload de l'image
             /** @var UploadedFile $imageFile */
             $imageFile = $form->get('imagePath')->getData();
@@ -134,6 +147,7 @@ final class ArticleController extends AbstractController
 
             // Rediriger après l'édition
             return $this->redirectToRoute('app_article_show', ['id' => $article->getId()]);
+>>>>>>> 4df36eff2bc97aa07002853c4b56d516ec638d7b
         }
 
         return $this->render('article/edit.html.twig', [
