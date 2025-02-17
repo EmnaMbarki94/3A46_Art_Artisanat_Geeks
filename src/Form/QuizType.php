@@ -37,6 +37,7 @@ class QuizType extends AbstractType
                 },
                 'data' => $options['selected_course']?? null,
                 'required' => true,
+                'disabled' => true,
                 
             ]);
         ;

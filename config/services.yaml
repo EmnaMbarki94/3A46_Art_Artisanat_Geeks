@@ -2,34 +2,34 @@ parameters:
    
 
 
-    uploads_directory: '%kernel.project_dir%/public/uploads/cours'
+  uploads_directory: '%kernel.project_dir%/public/uploads/cours'
 
-    twilio.sid: "%env(TWILIO_SID)%"
-    twilio.auth_token: "%env(TWILIO_AUTH_TOKEN)%"
-    twilio.phone_number: "%env(TWILIO_PHONE_NUMBER)%"
+  twilio.sid: "%env(TWILIO_SID)%"
+  twilio.auth_token: "%env(TWILIO_AUTH_TOKEN)%"
+  twilio.phone_number: "%env(TWILIO_PHONE_NUMBER)%"
 
   
 
     
 
-    magasin_directory: '%kernel.project_dir%/public/uploads/magasin'
-    produits_directory: '%kernel.project_dir%/public/uploads/produits'
-    photos_directory: '%kernel.project_dir%/public/uploads/photos'
-    photos_events_directory: '%kernel.project_dir%/public/uploads/photosevents'
+  magasin_directory: '%kernel.project_dir%/public/uploads/magasin'
+  produits_directory: '%kernel.project_dir%/public/uploads/produits'
+  photos_directory: '%kernel.project_dir%/public/uploads/photos'
+  photos_events_directory: '%kernel.project_dir%/public/uploads/photosevents'
 
 
 services:
 
     # default configuration for services in *this* file
-    _defaults:
-        autowire: true      # Automatically injects dependencies in your services.
-        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+  _defaults:
+    autowire: true      # Automatically injects dependencies in your services.
+    autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
 
 
 
   App\Service\CartService:
-      arguments:
-          $session: '@session'
+    arguments:
+      $session: '@session'
 
 
 

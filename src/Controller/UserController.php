@@ -61,6 +61,19 @@ final class UserController extends AbstractController
         ]);
     }
     
+    #[Route('/user/profile_user', name: 'profile_user_front')]
+    public function profilef(): Response
+    {
+        $user = $this->getUser();
+        
+        // je remplace le mot de passe par des etoile pour l'affichage
+        $userClone = clone $user;
+        $userClone->setPassword('********');
+    
+        return $this->render('user/profilef.html.twig', [
+            'user' => $userClone,
+        ]);
+    }
 
     #[Route('/acceuil', name: 'acceuil')]
     public function acceuil(): Response
@@ -374,6 +387,7 @@ public function deleteUser(User $user, EntityManagerInterface $entityManager, Re
 
             // Redirect to /user if the user agent is valid
             //redirect depends on role : 
+            
             if (in_array("ROLE_ARTISTE", $this->getUser()->getRoles())) {
                 // Rediriger vers la page Abonné
                
@@ -382,11 +396,17 @@ public function deleteUser(User $user, EntityManagerInterface $entityManager, Re
             if (in_array("ROLE_ADMIN", $this->getUser()->getRoles())) {
                 // Rediriger vers la page Abonné
                 return $this->redirectToRoute('admin_user');
-            } 
+            }
+            
             if (in_array("ROLE_ENSEIGNANT", $this->getUser()->getRoles())) {
                 // Rediriger vers la page ENSEIGNANT
                 return $this->redirectToRoute('app_cours_index');
-            }           
+            }     
+            if (in_array("ROLE_USER", $this->getUser()->getRoles())) {
+                // Rediriger vers la page Abonné
+               
+                return $this->redirectToRoute('app_home');
+            }      
             
             return $this->redirectToRoute('app_user');
         }

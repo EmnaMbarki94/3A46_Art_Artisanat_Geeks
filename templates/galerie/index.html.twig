@@ -34,14 +34,11 @@
                 <td>
                     <a href="{{ path('app_galerie_show', {'id': galerie.id}) }}" class="btn btn-gradient-primary font-weight-bold">Afficher</a>
                     <a href="{{ path('app_galerie_pieces_art', {'id': galerie.id}) }}" class="btn btn-gradient-primary font-weight-bold">Voir Pièces d'Art</a>
-<<<<<<< HEAD
-=======
                     <form action="{{ path('app_galerie_delete', {'id': galerie.id}) }}" method="post" style="display:inline;">
                         <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ galerie.id) }}">
                         <button type="submit" class="btn btn-gradient-primary font-weight-bold">Supprimer</button>
                     </form>
                     
->>>>>>> origin/GestionGaleries
                 </td>
             </tr>
         {% else %}

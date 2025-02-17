@@ -46,7 +46,7 @@ final class CommandeController extends AbstractController
 
     // Protège la route pour que seuls les utilisateurs connectés puissent accéder à cette méthode
     #[Route('/new', name: 'app_commande_new', methods: ['GET', 'POST'])]
-    #[IsGranted('ROLE_USER')] // Vérifie que l'utilisateur a le rôle ROLE_USER
+    #[IsGranted('IS_AUTHENTICATED_FULLY')] // Vérifie que l'utilisateur a le rôle ROLE_USER
     public function new(Request $request, EntityManagerInterface $entityManager, CartService $cartService): Response
     {
         $commande = new Commande();
@@ -84,7 +84,7 @@ final class CommandeController extends AbstractController
             $cartService->clearCart();
 
             // Rediriger vers la page de confirmation ou la liste des commandes
-            return $this->redirectToRoute('app_commande_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_article_list', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('commande/new.html.twig', [

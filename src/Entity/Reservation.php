@@ -88,18 +88,6 @@ class Reservation
         return $this;
     }
 
-    public function getNbPlace(): ?int
-    {
-        return $this->nb_place;
-    }
-
-    public function setNbPlace(?int $nb_place): static
-    {
-        $this->nb_place = $nb_place;
-
-        return $this;
-    }
-
     public function getUserId(): ?User
     {
         return $this->user_id;

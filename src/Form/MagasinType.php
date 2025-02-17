@@ -20,17 +20,12 @@ class MagasinType extends AbstractType
                 'label' => 'Image (PNG, JPG, JPEG)',
                 'mapped' => false,  // Ne pas lier directement à la propriété imagePath
                 'required' => false,
-<<<<<<< HEAD
-                'data_class' => null, // Évite l'erreur de type
-                
-=======
                 'constraints' => [
                     new File([
                         'mimeTypes' => ['image/jpeg', 'image/png', 'image/jpg'],
                         'mimeTypesMessage' => 'Veuillez télécharger une image valide (JPEG, PNG)',
                     ])
                 ],
->>>>>>> 4df36eff2bc97aa07002853c4b56d516ec638d7b
             ]);
             
     }

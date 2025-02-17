@@ -69,9 +69,7 @@ final class QuizController extends AbstractController
     #[Route('/{id}', name: 'app_quiz_show', methods: ['GET'])]
     public function show(Quiz $quiz,EntityManagerInterface $entityManager): Response
     {
-        if (!$this->isGranted('ROLE_USER')) {
-            throw new AccessDeniedException("Vous n'avez pas la permission d'accéder à cette page.");
-        }
+        
         $questions=$entityManager->getRepository(Question::class)->findBy(['quiz'=>$quiz]);
         return $this->render('quiz/show.html.twig', [
             'quiz' => $quiz,

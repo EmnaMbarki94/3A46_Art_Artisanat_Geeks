@@ -27,7 +27,7 @@ security:
 
   access_control:
     - { path: ^/admin, roles: ROLE_ADMIN }
-    - { path: ^/user, roles: [ROLE_USER, ROLE_ARTISTE] }
+    - { path: ^/user, roles: [ROLE_USER, ROLE_ARTISTE,ROLE_ADMIN] }
 
     - { path: ^/cours2, roles: ROLE_ADMIN }
     - { path: ^/cours/new, roles: [ROLE_ENSEIGNANT,ROLE_ADMIN] }
