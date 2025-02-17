@@ -47,7 +47,20 @@ final class UserController extends AbstractController
     }
     
    
-
+    #[Route('/user/profile', name: 'profile_user')]
+    public function profile(): Response
+    {
+        $user = $this->getUser();
+        
+        // je remplace le mot de passe par des etoile pour l'affichage
+        $userClone = clone $user;
+        $userClone->setPassword('********');
+    
+        return $this->render('user/profile.html.twig', [
+            'user' => $userClone,
+        ]);
+    }
+    
 
     #[Route('/acceuil', name: 'acceuil')]
     public function acceuil(): Response
@@ -163,6 +176,40 @@ public function editUser(
 
     ]);
 }
+
+#[Route('user/edit/{id}', name: 'edit_user_profile')]
+public function editprofile(
+    User $user,
+    Request $request,
+    EntityManagerInterface $entityManager,
+    UserPasswordHasherInterface $passwordHasher, 
+
+): Response {
+    // Créer le formulaire en passant l'utilisateur existant
+    $form = $this->createForm(UserForAdminType::class, $user);
+
+    // Gérer la soumission du formulaire
+    $form->handleRequest($request);
+
+    if ($form->isSubmitted() && $form->isValid()) {
+        // Enregistrer les modifications dans la base de données
+        $user->setPassword(password: $passwordHasher->hashPassword($user, $form->get('password')->getData()));
+
+        $entityManager->flush();
+
+        // Rediriger vers la liste des utilisateurs ou autre page
+        return $this->redirectToRoute('profile_user');
+    }
+
+    // Afficher la vue du formulaire
+    return $this->render('user/user_form.html.twig', [
+        'form' => $form->createView(),
+        'action'=>"Modifier User"
+
+    ]);
+}
+
+
 #[Route('/admin/user/delete/{id}', name: 'admin_delete_user', methods: ['POST'])]
 public function deleteUser(User $user, EntityManagerInterface $entityManager, Request $request): Response
 {

@@ -1,0 +1,54 @@
+{% extends 'baseBack.html.twig' %}
+{% block body %}
+
+
+<div class="container mt-5">
+	<h2 class="mb-4">Mon Profil</h2>
+
+	<div class="card p-4 shadow-lg">
+		<div class="row mb-3">
+			<label class="col-sm-3 font-weight-bold">firstName :</label>
+			<div class="col-sm-6">{{ user.firstName }}</div>
+
+		</div>
+
+		<div class="row mb-3">
+			<label class="col-sm-3 font-weight-bold">lastName :</label>
+			<div class="col-sm-6">{{ user.lastName }}</div>
+
+		</div>
+
+		<div class="row mb-3">
+			<label class="col-sm-3 font-weight-bold">Email :</label>
+			<div class="col-sm-6">{{ user.email }}</div>
+
+		</div>
+
+		<div class="row mb-3">
+			<label class="col-sm-3 font-weight-bold">Adresse :</label>
+			<div class="col-sm-6">{{ user.address }}</div>
+
+		</div>
+
+		<div class="row mb-3">
+			<label class="col-sm-3 font-weight-bold">NumTel :</label>
+			<div class="col-sm-6">{{ user.numTel }}</div>
+
+		</div>
+		<div class="row mb-3">
+			<label class="col-sm-3 font-weight-bold">Rôle :</label>
+			<div class="col-sm-6">
+				{{ user.roles|join(', ') }}
+			</div>
+		</div>
+		<div class="row mb-3">
+			<label class="col-sm-3 font-weight-bold">password :</label>
+			<div class="col-sm-6">{{ user.password }}</div>
+
+		</div>
+
+		<div>
+			<a href="{{ path('edit_user_profile', {'id': user.id}) }}">modifier profile</a>
+
+		</div>
+		{%endblock%}
