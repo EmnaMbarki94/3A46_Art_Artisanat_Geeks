@@ -4,59 +4,75 @@
 
 {% block body %}
 
-<section id="events" class="p-4">
-  <div class="container-xl pt-5">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-      <h2 class="text-white">Liste des Événements</h2>
-      <select class="form-select w-auto">
-        <option value="default">Tri par défaut</option>
-        <option value="date">Date</option>
-       
-      </select>
-    </div>
-
-    <div class="row">
-    {% for event in events %}
-        <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
-            <div class="product_2im1 position-relative clearfix shadow-sm text-center">
-                <div class="clearfix product_2im1i pt-3 pb-4">
-                    <!-- Lien vers la page de détail -->
-                    <a href="{{ path('app_evenement_showdetail', {'id': event.id}) }}">
-                    
-                    {% if event.photoE is not empty %}
-                        <img src="{{ asset('uploads/photosevents/' ~ event.photoE) }}" width="600" height="400" alt="event Image" class="img-fluid rounded">
-                    {% else %}
-                    <img src="{{ asset('img/default-event.jpg') }}" class="card-img-top" alt="Aucune image disponible">
-                    {% endif %}
-               
-
-                    </a>
-                </div>
-
-                <!-- Détails -->
-                <h5 class="font_14 text-uppercase">
-                    <a class="col_dark" href="{{ path('app_evenement_showdetail', {'id': event.id}) }}">{{ event.nom }}</a>
-                </h5>
-                <h6 class="col_dark mt-2 mb-0">{{ event.dateE ? event.dateE|date('d M Y') : 'Non définie' }}</h6>
-                <p class="card-text"><strong>Type :</strong> {{ event.typeE }}</p>
-                <p class="card-text text-muted">{{ event.infoE|slice(0, 80) }}...</p>
-
-                <!-- Boutons -->
-                <div class="d-flex justify-content-between mt-2">
-                    <a href="{{ path('app_evenement_showdetail', {'id': event.id}) }}" class="btn btn-primary btn-sm">
-                        <i class="fa fa-eye"></i> Voir
-                    </a>
-                    
+<section id="center" class="center_o bg_gray pt-2 pb-2">
+    <div class="container-xl">
+        <div class="row center_o1">
+            <div class="col-md-5">
+                <div class="center_o1l">
+                    <h2 class="mb-0">Liste des Événements</h2>
                 </div>
             </div>
+            <div class="col-md-7 text-end">
+                <h6 class="mb-0"><a href="{{ path('app_home') }}">Home</a> 
+                    <span class="me-2 ms-2"><i class="fa fa-caret-right"></i></span> Événements 
+                </h6>
+            </div>
         </div>
-    {% else %}
-        <div class="col-md-12 text-center">
-            <p class="alert alert-info">Aucun événement trouvé.</p>
+    </div>
+</section>
+
+<section id="events" class="p-4">
+    <div class="container-xl">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h2>Événements</h2>
+            <select class="form-select w-auto">
+                <option value="default">Tri par défaut</option>
+                <option value="date">Date</option>
+            </select>
         </div>
-    {% endfor %}
-</div>
+
+        <div class="row">
+            {% for event in events %}
+                <div class="col-md-3">
+                    <div class="prod_main p-2 bg-white d-flex flex-column align-items-center text-center shadow-sm" style="min-height: 450px;">
+                        <div class="product_2im position-relative w-100" style="height: 200px; overflow: hidden;">
+                            <a href="{{ path('app_evenement_showdetail', {'id': event.id}) }}">
+                            <figure class="effect-jazz mb-0">
+                                {% if event.photoE is not empty %}
+                                    <img src="{{ asset('uploads/photosevents/' ~ event.photoE) }}" class="w-100 h-100 object-fit-cover" alt="event Image">
+                                {% else %}
+                                    <img src="{{ asset('img/default-event.jpg') }}" class="w-100 h-100 object-fit-cover" alt="Aucune image disponible">
+                                {% endif %}
+                                </figure>
+                            </a>
+                        </div>
+                        <div class="text-center pt-3 pb-4 flex-grow-1 d-flex flex-column">
+                            <h5 class="font_14 text-uppercase flex-grow-0">
+                               <a href="{{ path('app_evenement_showdetail', {'id': event.id}) }}" class="col_dark">{{ event.nom }}</a>
+
+                            </h5>
+                            <h6 class="flex-grow-0">{{ event.dateE ? event.dateE|date('d M Y') : 'Non définie' }}</h6>
+                            <p class="flex-grow-0 col_dark"><strong>Type :</strong> {{ event.typeE }}</p>
+                            <p class="text-muted flex-grow-1">{{ event.infoE|slice(0, 60) }}...</p>
+                            <div style="display: flex; justify-content: center; align-items: center;">
+                                <a href="{{ path('app_evenement_showdetail', {'id': event.id}) }}" class="btn btn-sm" style="background-color: #6a0dad; color: white; border: none; padding: 5px 10px; font-size: 14px; width: 120px; height: 40px; text-align: center; display: inline-block; line-height: 30px;">
+                                    <i class="fa fa-eye"></i> Détail
+                                </a>
+                            </div>
 
 
+                    </a>
+
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <div class="col-md-12 text-center">
+                    <p class="alert alert-info">Aucun événement trouvé.</p>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
 
 {% endblock %}

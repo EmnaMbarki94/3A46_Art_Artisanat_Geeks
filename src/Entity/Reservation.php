@@ -35,6 +35,9 @@ class Reservation
     #[Assert\GreaterThan(0, message: "Le nombre de places doit être supérieur à 0.")]
     private ?int $nb_place = null;
 
+    #[ORM\ManyToOne]
+    private ?User $user_id = null;
+
 
     public function getId(): ?int
     {
@@ -86,6 +89,18 @@ class Reservation
     public function setNbPlace(?int $nb_place): static
     {
         $this->nb_place = $nb_place;
+
+        return $this;
+    }
+
+    public function getUserId(): ?User
+    {
+        return $this->user_id;
+    }
+
+    public function setUserId(?User $user_id): static
+    {
+        $this->user_id = $user_id;
 
         return $this;
     }

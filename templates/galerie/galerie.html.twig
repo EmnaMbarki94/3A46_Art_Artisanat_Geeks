@@ -5,6 +5,19 @@
 
 {% block body %}
 
+<div class="container">
+        {% for message in app.session.flashBag.get('success') %}
+            <div class="alert alert-success">
+                {{ message }}
+            </div>
+        {% endfor %}
+
+        {% for message in app.session.flashBag.get('error') %}
+            <div class="alert alert-danger">
+                {{ message }}
+            </div>
+        {% endfor %}
+    </div>
 
 <section id="galleries" class="p_4">
     <div class="container-xl pt-5">
@@ -17,10 +30,10 @@
                     </a>
                     <div>{{ galerie.nomG }}</div>
                     <div class="mt-2">
-                        <a href="{{ path('app_galerie_edit', {'id': galerie.id}) }}" class="btn btn-primary btn-sm">Edit</a>
+                        <a href="{{ path('app_galerie_edit', {'id': galerie.id}) }}" class="btn text-white bg_pink">Edit</a>
                         <form action="{{ path('app_galerie_delete', {'id': galerie.id}) }}" method="post" style="display:inline;">
                             <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ galerie.id) }}">
-                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                            <button type="submit" class="btn text-white bg_pink">Delete</button>
                         </form>
                     </div>
                 </div>

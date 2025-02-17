@@ -33,11 +33,32 @@ class Event
 
     private ?string $infoE = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)] // Change en DATETIME pour inclure l'heure
+    #[Assert\NotBlank(message: "La date de l'événement ne peut pas être vide.")]
+    #[Assert\Type("\DateTimeInterface", message: "Veuillez entrer une date valide.")]
+    #[Assert\GreaterThan("today", message: "La date de l'événement doit être dans le futur.")]
     private ?\DateTimeInterface $dateE = null;
+    
 
     #[ORM\Column(length: 255)]
     private ?string $photoE = null;
+
+    #[ORM\Column]
+    #[Assert\NotBlank(message: "Le prix simple est obligatoire.")]
+    #[Assert\Positive(message: "Le prix simple doit être un nombre positif.")]
+    private ?int $prixS = null;
+    
+    #[ORM\Column]
+    #[Assert\NotBlank(message: "Le prix VIP est obligatoire.")]
+    #[Assert\Positive(message: "Le prix VIP doit être un nombre positif.")]
+    private ?int $prixVIP = null;
+    
+    #[ORM\Column]
+    #[Assert\NotBlank(message: "Le nombre de tickets est obligatoire.")]
+    #[Assert\Positive(message: "Le nombre de tickets doit être un nombre positif.")]
+    #[Assert\Type(type: 'integer', message: "Le nombre de tickets doit être un entier.")]
+    private ?int $nb_ticket = null;
+    
 
 
     public function getId(): ?int
@@ -101,6 +122,42 @@ class Event
     public function setPhotoE(string $photoE): static
     {
         $this->photoE = $photoE;
+
+        return $this;
+    }
+
+    public function getPrixS(): ?int
+    {
+        return $this->prixS;
+    }
+
+    public function setPrixS(int $prixS): static
+    {
+        $this->prixS = $prixS;
+
+        return $this;
+    }
+
+    public function getPrixVIP(): ?int
+    {
+        return $this->prixVIP;
+    }
+
+    public function setPrixVIP(int $prixVIP): static
+    {
+        $this->prixVIP = $prixVIP;
+
+        return $this;
+    }
+
+    public function getNbTicket(): ?int
+    {
+        return $this->nb_ticket;
+    }
+
+    public function setNbTicket(int $nb_ticket): static
+    {
+        $this->nb_ticket = $nb_ticket;
 
         return $this;
     }

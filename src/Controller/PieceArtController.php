@@ -38,8 +38,17 @@ final class PieceArtController extends AbstractController
             throw $this->createNotFoundException('Galerie non trouvée');
         }
 
+        $user = $this->getUser();
+        if ($galerie->getUser() !== $user) {
+            $this->addFlash('error', 'Vous n\'êtes pas autorisé à ajouter une pièce d\'art à cette galerie.');
+            return $this->redirectToRoute('app_galerie_show', ['id' => $galerieId]);
+        }
+
         $pieceArt = new PieceArt();
-        $form = $this->createForm(PieceArtType::class, $pieceArt);
+        $pieceArt->setGalerie($galerie); 
+        $form = $this->createForm(PieceArtType::class, $pieceArt, [
+            'galerie' => $galerie, // Pass the selected gallery
+        ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -58,6 +67,8 @@ final class PieceArtController extends AbstractController
             
             $entityManager->persist($pieceArt);
             $entityManager->flush();
+
+            $this->addFlash('success', 'La pièce d\'art a été créée avec succès.');
 
             return $this->redirectToRoute('app_galerie_show', ['id' => $galerieId], Response::HTTP_SEE_OTHER);
         }
@@ -80,7 +91,18 @@ final class PieceArtController extends AbstractController
     #[Route('/{id}/edit', name: 'app_piece_art_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, PieceArt $pieceArt, EntityManagerInterface $entityManager): Response
     {
-        $form = $this->createForm(PieceArtType::class, $pieceArt);
+        $user = $this->getUser();
+        if (!$user) {
+            $this->addFlash('error', 'You must be logged in to edit a piece d\'art.');
+        }
+        $galerie = $pieceArt->getGalerie();
+        if (!$galerie || $galerie->getUser() !== $user) {
+            $this->addFlash('error', 'You do not have permission to edit this piece d\'art.');
+            return $this->redirectToRoute('app_galerie_index');
+        }
+        $form = $this->createForm(PieceArtType::class, $pieceArt, [
+            'galerie' => $galerie,  // Pass the associated galerie
+        ]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -113,7 +135,7 @@ final class PieceArtController extends AbstractController
             $entityManager->remove($pieceArt);
             $entityManager->flush();
         }
-    
+        $this->addFlash('success', 'La pièce d\'art a été supprimée avec succès.');
         return $this->redirectToRoute('app_galerie_show', ['id' => $pieceArt->getGalerie()->getId()], Response::HTTP_SEE_OTHER);
     }
 }
