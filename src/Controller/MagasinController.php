@@ -97,6 +97,19 @@ public function new(Request $request, EntityManagerInterface $entityManager): Re
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+<<<<<<< HEAD
+            $file = $form->get('photoM')->getData();
+
+            if ($file) {
+                $filename = uniqid() . '.' . $file->guessExtension();
+                $file->move($this->getParameter('magasin_directory'), $filename);
+                $magasin->setphotoM($filename);
+            }
+            $entityManager->persist($magasin);
+            $entityManager->flush();
+            
+            return $this->redirectToRoute('app_article_index', [], Response::HTTP_SEE_OTHER);
+=======
             // Gestion de l'upload de fichier
             /** @var UploadedFile $file */
             $file = $form->get('photoM')->getData();
@@ -127,6 +140,7 @@ public function new(Request $request, EntityManagerInterface $entityManager): Re
             $entityManager->flush();
 
             return $this->redirectToRoute('app_magasin_index', [], Response::HTTP_SEE_OTHER);
+>>>>>>> 4df36eff2bc97aa07002853c4b56d516ec638d7b
         }
 
         return $this->render('magasin/edit.html.twig', [
