@@ -195,6 +195,16 @@ final class ArticleController extends AbstractController
             }
             $entityManager->persist($article);
             $entityManager->flush();
+            
+            return $this->redirectToRoute('app_article_index', [], Response::HTTP_SEE_OTHER);
+
+            if ($file) {
+                $filename = uniqid() . '.' . $file->guessExtension();
+                $file->move($this->getParameter('produits_directory'), $filename);
+                $article->setImagePath($filename);
+            }
+            $entityManager->persist($article);
+            $entityManager->flush();
 
             return $this->redirectToRoute('app_article_index', [], Response::HTTP_SEE_OTHER);
         }

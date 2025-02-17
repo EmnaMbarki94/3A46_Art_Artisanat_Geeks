@@ -21,7 +21,6 @@ class Galerie
     #[ORM\Column(length: 255)]
 
     #[Assert\NotBlank(message: "Le nom de la galerie ne peut pas être vide.")]
-
     private ?string $nomG = null;
 
     #[ORM\Column(length: 255)]

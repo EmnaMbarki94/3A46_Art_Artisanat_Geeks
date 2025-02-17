@@ -4,6 +4,7 @@
 {% endblock %}
 
 {% block body %}
+
 	<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz@9..144&display=swap" rel="stylesheet">
 	<link href="{{ asset('front/css/product.css') }}" rel="stylesheet">
 	<style>
@@ -13,6 +14,8 @@
 			gap: 15px; /* Ajuste l'espacement entre les articles */
 			justify-content: start; /* Ou 'center' si tu veux centrer */
 		}
+
+	
 
 		#product-list .col-md-3 {
 			flex: 1 1 calc(25% - 15px); /* 4 articles par ligne */
@@ -212,6 +215,8 @@
 				</div>
 			</div>
 			<div class="row product_2 mt-4" id="product-list">
+			<h2 class="text-white text-center mb-4">Liste des Articles</h2>
+			<div class="row">
 				{% for article in articles %}
 					<div class="col-md-3">
 						<div class="prod_main p-1 bg-white clearfix">

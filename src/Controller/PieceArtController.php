@@ -63,6 +63,9 @@ final class PieceArtController extends AbstractController
                 $pieceArt->setPhotoP($fileName);
 
             }
+            else {
+                $pieceArt->setPhotoP('default.jpg'); 
+            }
             // Associer la pièce d'art à la galerie
             
             $entityManager->persist($pieceArt);
@@ -93,11 +96,11 @@ final class PieceArtController extends AbstractController
     {
         $user = $this->getUser();
         if (!$user) {
-            $this->addFlash('error', 'You must be logged in to edit a piece d\'art.');
+            $this->addFlash('error', 'Vous devez s\'authentifier pour éditer une piece d\'art.');
         }
         $galerie = $pieceArt->getGalerie();
-        if (!$galerie || $galerie->getUser() !== $user) {
-            $this->addFlash('error', 'You do not have permission to edit this piece d\'art.');
+        if (!$galerie || ($galerie->getUser() !== $user && !$this->isGranted('ROLE_ADMIN'))) {
+            $this->addFlash('error', 'Vous n\'etes pas autorisé à éditer cette piece d\'art.');
             return $this->redirectToRoute('app_galerie_index');
         }
         $form = $this->createForm(PieceArtType::class, $pieceArt, [
@@ -111,12 +114,13 @@ final class PieceArtController extends AbstractController
                 // Gérer l'upload de la photo ici
                 $filename = uniqid().'.'.$file->guessExtension();
                 $file->move(
-                    $this->getParameter('photos_directory'), // Assurez-vous que ce paramètre est défini dans services.yaml
+                    $this->getParameter('photos_directory'), 
                     $filename
                 );
                 // Mettez à jour le champ photoP avec le nouveau nom de fichier
                 $pieceArt->setPhotoP($filename);
             }
+        
             $entityManager->flush();
 
             return $this->redirectToRoute('app_galerie_show', ['id' => $pieceArt->getGalerie()->getId()], Response::HTTP_SEE_OTHER);

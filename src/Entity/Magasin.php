@@ -32,6 +32,7 @@ class Magasin
 
     #[ORM\Column( length: 255, nullable: true)] // Correspond au nom de la colonne dans la base de données
     // Vous pouvez utiliser Assert\Image ou Assert\File pour valider les images
+    #[ORM\Column(length: 255)]    
     private ?string $photoM = null;
 
     public function getId(): ?int

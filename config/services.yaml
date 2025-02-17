@@ -1,4 +1,7 @@
 parameters:
+    magasin_directory: '%kernel.project_dir%/public/uploads/magasin'
+    produits_directory: '%kernel.project_dir%/public/uploads/produits'
+
 
     uploads_directory: '%kernel.project_dir%/public/uploads/cours'
 
@@ -13,6 +16,12 @@ parameters:
 
 
 services:
+
+    # default configuration for services in *this* file
+    _defaults:
+        autowire: true      # Automatically injects dependencies in your services.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+
   _defaults:
     autowire: true
     autoconfigure: true
@@ -20,6 +29,7 @@ services:
   App\Service\CartService:
       arguments:
           $session: '@session'
+
 
 
   # Defines the App services

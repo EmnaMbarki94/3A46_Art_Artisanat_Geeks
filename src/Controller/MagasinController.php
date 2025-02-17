@@ -100,6 +100,18 @@ final class MagasinController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            $file = $form->get('photoM')->getData();
+
+            if ($file) {
+                $filename = uniqid() . '.' . $file->guessExtension();
+                $file->move($this->getParameter('magasin_directory'), $filename);
+                $magasin->setphotoM($filename);
+            }
+            $entityManager->persist($magasin);
+            $entityManager->flush();
+            
+            return $this->redirectToRoute('app_article_index', [], Response::HTTP_SEE_OTHER);
             $file = $form->get('photoM')->getData();
 
             if ($file) {
