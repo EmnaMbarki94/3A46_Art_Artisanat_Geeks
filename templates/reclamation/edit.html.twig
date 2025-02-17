@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Reclamation{% endblock %}
+
+{% block body %}
+
+
+    <section id="edit-section" class="d-flex justify-content-center align-items-center p-4" style="min-height: 80vh;">
+    <div class="col-md-8">
+        <div class="text-center mb-4">
+            <h2>Edit Reclamation</h2>
+        </div>
+        <!-- Formulaire de modification -->
+        {{ include('reclamation/_form.html.twig', {'button_label': 'Update'}) }}
+        <br>
+        
+        <!-- Formulaire de suppression -->
+        {{ include('reclamation/_delete_form.html.twig') }}
+    </div>
+</section>
+{% endblock %}

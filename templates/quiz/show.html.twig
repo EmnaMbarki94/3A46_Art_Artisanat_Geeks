@@ -3,24 +3,109 @@
 {% block title %}Quiz{% endblock %}
 
 {% block body %}
-    <h1>Quiz</h1>
+    <style>
+        body {
+            background-color: #000;
+            
+        }
+        .quiz-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .quiz-title {
+            text-align: center;
+            color: #8b008b;
+            margin-bottom: 30px;
+            padding-top:20px;
+        }
+        .card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            
+        }
+        .card-body {
+            padding: 20px;
+        }
+        .question-text {
+            color: #333;
+            margin-bottom: 15px;
+        }
+        .answer-label {
+            color: #555;
+        }
+        .submit-btn {
+            width: 100%;
+            padding: 10px;
+            font-size: 18px;
+            background-color: #8b008b;
+        }
+    </style>
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ quiz.id }}</td>
-            </tr>
-            <tr>
-                <th>TitreC</th>
-                <td>{{ quiz.titreC }}</td>
-            </tr>
-        </tbody>
+    <body>
+    <section id="center" class="center_o bg_gray pt-2 pb-2">
+        <div class="container-xl">
+        <div class="row center_o1">
+        <div class="col-md-5">
+            <div class="center_o1l">
+            <h2 class="mb-0">Quiz</h2>
+            </div>
+        </div>
+        <div class="col-md-7">
+            <div class="center_o1r text-end">
+            <h6 class="mb-0"><a href="{{ path('app_home') }}">Home</a> <span class="me-2 ms-2" ><i class="fa fa-caret-right" ></i></span>Cours<span class="me-2 ms-2" ><i class="fa fa-caret-right"></i></span> Quiz</h6>
+            </div>
+        </div>
+        </div>
+        </div>
+    </section>
+
+    <div class="quiz-container">
+            <h1 class="quiz-title">{{ quiz.titreC }}</h1>
+            {#<form action="{{ path('quiz_submit', {'id': quiz.id}) }}" method="POST">#}
+            {% if questions is empty %}
+                <p>No questions available for this quiz.</p>
+            {% else %}
+            <form action="" method="POST">
+                {% for question in questions %}
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="question-text">{{ question.contenuQ }}</h5>
+                            {% for reponse in question.reponses %}
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="question_{{ question.id }}" id="answer_{{ reponse }}" value="{{ reponse}}">
+                                    <label class="form-check-label answer-label" for="answer_{{ reponse }}">
+                                        {{ reponse }}
+                                    </label>
+                                </div>
+                            {% endfor %}
+                        </div>
+                        {% if is_granted('ROLE_ENSEIGNANT') %}
+                        <div class="m-2 widht=20">
+                        <a class="button submit-btn" href="{{ path('app_question_edit', {'id': question.id}) }}">edit</a>
+                        </div>
+                        {% endif %}
+                    </div>
+                    
+                {% endfor %}
+                {% if not is_granted('ROLE_ENSEIGNANT') %}
+                    <button type="submit" class="button submit-btn">Submit Quiz</button>
+                {% endif %}
+            </form>
+            {% endif %}
+        </div>
+    {% if is_granted('ROLE_ENSEIGNANT') %}
+    <a class="button" href="{{ path('app_question_new', {'id': quiz.id}) }}">ajouter question</a>
+    <table>
+    <tr>
+    <td>
+        <a class="button p-3 mb-5 " href="{{ path('app_quiz_edit', {'id': quiz.id}) }}">edit</a>
+    </td>
+    <td>
+        {{ include('quiz/_delete_form.html.twig') }}
+    </td>
+    </tr>
     </table>
+    {% endif %}
 
-    <a href="{{ path('app_quiz_index') }}">back to list</a>
-
-    <a href="{{ path('app_quiz_edit', {'id': quiz.id}) }}">edit</a>
-
-    {{ include('quiz/_delete_form.html.twig') }}
 {% endblock %}

@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+{% extends 'baseBack.html.twig' %}
 
 {% block title %}Ajouter cours{% endblock %}
 
@@ -7,5 +7,5 @@
 
     {{ include('cours/_form.html.twig') }}
 
-    <a href="{{ path('app_cours_index') }}">back to list</a>
+    <a href="{{ path('app_cours_index2') }}">back to list</a>
 {% endblock %}
