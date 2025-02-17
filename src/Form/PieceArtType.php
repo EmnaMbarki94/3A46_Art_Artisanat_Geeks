@@ -13,6 +13,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 
+
 class PieceArtType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -38,8 +39,11 @@ class PieceArtType extends AbstractType
 
             ->add('galerie', EntityType::class, [
                 'class' => Galerie::class,
-                'choice_label' => 'nomG', 
+                'choice_label' => 'nomG',
+                'choices' => [$options['galerie']], // Only include the selected gallery
+                'disabled' => true, // Disable selection if desired
             ])
+            
         ;
     }
 
@@ -47,6 +51,7 @@ class PieceArtType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => PieceArt::class,
+            'galerie' => null,
         ]);
     }
 }

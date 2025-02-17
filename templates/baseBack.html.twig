@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<<<<<<< HEAD
+
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -9,20 +9,7 @@
 			{% endblock %}
 		</title>
 
-=======
 
-	<head>
-
-		<!-- Required meta tags -->
-
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-		<title>
-			{% block title %}Bienvenue
-			{% endblock %}
-		</title>
-
->>>>>>> 4df36eff2bc97aa07002853c4b56d516ec638d7b
 		<!-- CSS Dependencies -->
 		<link rel="stylesheet" href="{{ asset('back/vendors/mdi/css/materialdesignicons.min.css') }}">
 		<link rel="stylesheet" href="{{ asset('back/vendors/ti-icons/css/themify-icons.css') }}">
@@ -33,23 +20,16 @@
 		<link rel="shortcut icon" href="{{ asset('back/images/favicon.png') }}"/>
 	</head>
 	<body>
-<<<<<<< HEAD
+  
 		<div
 			class="container-fluid page-body-wrapper">
 			<!-- Navbar -->
-=======
-		<div class="container-fluid page-body-wrapper">
-			<!-- Navbar -->
-      
->>>>>>> 4df36eff2bc97aa07002853c4b56d516ec638d7b
+
 			<nav class="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
 				<div class="navbar-brand-wrapper d-flex align-items-center justify-content-start">
-					<a class="navbar-brand brand-logo" href="{{ path('app_magasin_new') }}"><img src="{{ asset('back/images/logo.svg') }}" alt="logo"/></a>
-					<a class="navbar-brand brand-logo-mini" href="{{ path('app_magasin_new') }}"><img src="{{ asset('back/images/logo-mini.svg') }}" alt="logo"/></a>
-<<<<<<< HEAD
-=======
 
->>>>>>> 4df36eff2bc97aa07002853c4b56d516ec638d7b
+					<a class="navbar-brand brand-logo" href="{{ path('app_admin') }}">Artis</a>
+
 				</div>
 				<div class="navbar-menu-wrapper d-flex align-items-stretch">
 					<button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
@@ -59,7 +39,7 @@
 						<li class="nav-item nav-profile dropdown">
 							<a class="nav-link dropdown-toggle" id="profileDropdown" href="#" data-bs-toggle="dropdown">
 								<div class="nav-profile-img">
-									<img src="{{ asset('back/images/faces/face1.jpg') }}" alt="image">
+									
 									<span class="availability-status online"></span>
 								</div>
 								<div class="nav-profile-text">
@@ -86,14 +66,17 @@
 			<div class="container-fluid page-body-wrapper">
 
 				<nav class="sidebar sidebar-offcanvas" id="sidebar">
-<<<<<<< HEAD
-					<ul class="nav">
-=======
         
-  
-					<ul class="nav">
+				<ul class="nav">
             
->>>>>>> 4df36eff2bc97aa07002853c4b56d516ec638d7b
+
+				<li class="nav-item">
+							<a class="nav-link" href="{{ path('admin_user') }}">
+								<span class="menu-title">Utilisateurs</span>
+								<i class="mdi mdi-account menu-icon"></i>
+							</a>
+						</li>
+            
 						<li class="nav-item nav-profile">
 							<a href="#" class="nav-link">
 								<div class="nav-profile-image">
@@ -108,14 +91,7 @@
 								<i class="mdi mdi-bookmark-check text-success nav-profile-badge"></i>
 							</a>
 						</li>
-<<<<<<< HEAD
-						<li class="nav-item">
-							<a class="nav-link" href="index.html">
-								<span class="menu-title">Dashboard</span>
-								<i class="mdi mdi-home menu-icon"></i>
-							</a>
-						</li>
-=======
+
             <li class="nav-item">
 						<a class="nav-link" href="{{ path('admin_user') }}">
 							<span class="menu-title">Gestion des utilisateurs</span>
@@ -142,73 +118,57 @@
               </a>
             </li>
         
->>>>>>> 4df36eff2bc97aa07002853c4b56d516ec638d7b
 						<li class="nav-item">
-							<a class="nav-link" data-bs-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
-								<span class="menu-title">Basic UI Elements</span>
-								<i class="menu-arrow"></i>
-								<i class="mdi mdi-crosshairs-gps menu-icon"></i>
+							<a class="nav-link" href="{{ path('admin_stat_user') }}">
+								<span class="menu-title">Statistiques</span>
+								<i class="mdi mdi-chart-bar menu-icon"></i>
 							</a>
-							<div class="collapse" id="ui-basic">
-								<ul class="nav flex-column sub-menu">
-									<li class="nav-item">
-										<a class="nav-link" href="pages/ui-features/buttons.html">Buttons</a>
-									</li>
-									<li class="nav-item">
-										<a class="nav-link" href="pages/ui-features/dropdowns.html">Dropdowns</a>
-									</li>
-									<li class="nav-item">
-										<a class="nav-link" href="pages/ui-features/typography.html">Typography</a>
-									</li>
-								</ul>
-							</div>
 						</li>
-						<li class="nav-item">
-							<a class="nav-link" data-bs-toggle="collapse" href="#icons" aria-expanded="false" aria-controls="icons">
-								<span class="menu-title">Icons</span>
-								<i class="mdi mdi-contacts menu-icon"></i>
-							</a>
-							<div class="collapse" id="icons">
-								<ul class="nav flex-column sub-menu">
-									<li class="nav-item">
-										<a class="nav-link" href="pages/icons/font-awesome.html">Font Awesome</a>
-									</li>
-								</ul>
-							</div>
-						</li>
+					
+				<li class="nav-item">
+				<a class="nav-link" href="{{ path('app_admin2') }}">
+					<span class="menu-title">Reclamation</span>
+					<i class="mdi mdi-comment-question menu-icon"></i>
+				</a>
+				</li>
+				<li class="nav-item">
+				<a class="nav-link" href="{{ path('app_reponse_index') }}">
+					<span class="menu-title">Reponse</span>
+					<i class="mdi mdi-reply menu-icon"></i>
+				</a>
+				</li>
+        
 						<li class="nav-item">
 							<a class="nav-link" data-bs-toggle="collapse" href="#forms" aria-expanded="false" aria-controls="forms">
-								<span class="menu-title">Forms</span>
+								<span class="menu-title">Les gestions</span>
 								<i class="mdi mdi-format-list-bulleted menu-icon"></i>
 							</a>
 							<div class="collapse" id="forms">
 								<ul class="nav flex-column sub-menu">
 									<li class="nav-item">
-										<a class="nav-link" href="{{ path('app_magasin_new') }}">Ajout Magasin</a>
+										<a class="nav-link" href="{{ path('app_magasin_new') }}">Magasin</a>
+										<i class="mdi mdi-store menu-icon"></i>
 									</li>
 									<li class="nav-item">
-										<a class="nav-link" href="{{ path('app_article_new') }}">Ajout Article</a>
+										<a class="nav-link" href="{{ path('app_article_new') }}">Articles</a>
+										<i class="mdi mdi-file-plus menu-icon"></i>
 									</li>
-<<<<<<< HEAD
-									<li class="nav-item">
-										<a class="nav-link" href="{{ asset('back/pages/forms/input_validation.html') }}">Ajout Evenement</a>
-									</li>
-									<li class="nav-item">
-										<a class="nav-link" href="{{ asset('back/pages/forms/wizard_form.html') }}">Ajout Cours</a>
-=======
-									
 
 									
 									<li class="nav-item">
 										<a class="nav-link" href="{{ path('app_galerie_indexA') }}">Galeries</a>
+										<i class="mdi mdi-image-multiple menu-icon"></i>
 									</li>
 									
 									<li class="nav-item">
-										<a class="nav-link" href="{{ path('app_evenement_new') }}">Ajout Evenement</a>
+										<a class="nav-link" href="{{ path('app_evenement_new') }}">Evenements</a>
+										<i class="mdi mdi-calendar-plus menu-icon"></i>
 									</li>
 									<li class="nav-item">
-										<a class="nav-link" href="{{ path('app_reservation_index') }}">Ajout Reservation</a>
->>>>>>> 4df36eff2bc97aa07002853c4b56d516ec638d7b
+
+										<a class="nav-link" href="{{ path('app_reservation_index') }}">Reservations</a>
+										<i class="mdi mdi-bookmark-plus menu-icon"></i>
+
 									</li>
 								</ul>
 							</div>
@@ -247,10 +207,7 @@
 									</li>
 									<li class="nav-item">
 										<a class="nav-link" href="pages/tables/custom-table.html">Custom Table</a>
-<<<<<<< HEAD
-=======
 
->>>>>>> 4df36eff2bc97aa07002853c4b56d516ec638d7b
 									</li>
 								</ul>
 							</div>
@@ -306,8 +263,6 @@
 					<div class="content-wrapper"> {% block body %}{% endblock %}
 						</div>
 					</div>
-<<<<<<< HEAD
-=======
 
 					<!-- Footer -->
 					<footer class="footer">
@@ -318,9 +273,10 @@
 							</span>
 						</div>
 					</footer>
->>>>>>> 4df36eff2bc97aa07002853c4b56d516ec638d7b
 				</div>
+				
 			</div>
+			
 
 			<!-- Scripts -->
 			<script src="{{ asset('back/vendors/js/vendor.bundle.base.js') }}"></script>
@@ -332,11 +288,7 @@
 			<script src="{{ asset('back/js/todolist.js') }}"></script>
 			<script src="{{ asset('back/js/dashboard.js') }}"></script>
 		</body>
-<<<<<<< HEAD
-	</html>
-=======
 
 	</html>
 
 
->>>>>>> 4df36eff2bc97aa07002853c4b56d516ec638d7b

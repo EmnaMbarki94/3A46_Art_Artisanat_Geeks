@@ -21,7 +21,6 @@ class Galerie
     #[ORM\Column(length: 255)]
 
     #[Assert\NotBlank(message: "Le nom de la galerie ne peut pas être vide.")]
-
     private ?string $nomG = null;
 
     #[ORM\Column(length: 255)]
@@ -46,6 +45,11 @@ class Galerie
      */
     #[ORM\OneToMany(targetEntity: PieceArt::class, mappedBy: 'galerie')]
     private Collection $pieceArt;
+
+    #[ORM\OneToOne(cascade: ['persist'])]
+    private ?User $user = null;
+
+    
 
     public function __construct()
     {
@@ -134,4 +138,19 @@ class Galerie
 
         return $this;
     }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+
+   
 }
