@@ -70,4 +70,9 @@ class Question
 
         return $this;
     }
+    public function __construct()
+{
+    $this->statusR = 'En attente';
+}
+
 }

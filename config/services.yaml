@@ -5,11 +5,11 @@ parameters:
     twilio.sid: "%env(TWILIO_SID)%"
     twilio.auth_token: "%env(TWILIO_AUTH_TOKEN)%"
     twilio.phone_number: "%env(TWILIO_PHONE_NUMBER)%"
-<<<<<<< HEAD
+
   
-=======
+
     
->>>>>>> 4df36eff2bc97aa07002853c4b56d516ec638d7b
+
     magasin_directory: '%kernel.project_dir%/public/uploads/magasin'
     produits_directory: '%kernel.project_dir%/public/uploads/produits'
     photos_directory: '%kernel.project_dir%/public/uploads/photos'

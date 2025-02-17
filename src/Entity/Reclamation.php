@@ -21,7 +21,7 @@ class Reclamation
     private ?\DateTimeInterface $dateR = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $statusR = null;
+    private ?string $statusR = 'En attente';
 
     #[ORM\Column(length: 255)]
     private ?string $typeR = null;
@@ -78,4 +78,9 @@ class Reclamation
 
         return $this;
     }
+    public function __toString(): string
+{
+    return (string) $this->id; // Ou un autre champ pertinent, comme $this->titre
+}
+
 }

@@ -10,18 +10,20 @@
         {{ form_widget(form.dateR, {'attr': {'class': 'form-control'}}) }}
     </div>
 
+    {# Status affiché mais non modifiable par l'utilisateur #}
     <div class="col-md-6">
-        {{ form_label(form.statusR, 'Status de la reclamation', {'label_attr': {'class': 'form-label'}}) }}
-        {{ form_widget(form.statusR, {'attr': {'class': 'form-control'}}) }}
+        <label class="form-label">Status de la réclamation</label>
+        <input type="text" class="form-control" value="En attente" disabled>
     </div>
 
     <div class="col-md-6">
-        {{ form_label(form.typeR, 'Type de la reclamation', {'label_attr': {'class': 'form-label'}}) }}
+        {{ form_label(form.typeR, 'Type de la réclamation', {'label_attr': {'class': 'form-label'}}) }}
         {{ form_widget(form.typeR, {'attr': {'class': 'form-control'}}) }}
     </div>
-<div class="col-12 text-center">
-    <button type="submit" class="btn btn-primary w-100">Save</button>
-</div>
 
+    <div class="col-12 text-center">
+        <button type="submit" class="btn btn-primary w-100">Envoyer</button>
+    </div>
 
 {{ form_end(form) }}
+

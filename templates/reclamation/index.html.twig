@@ -1,55 +1,125 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Reclamation Affichage{% endblock %}
+{% block title %}Gestion des Réclamations
+{% endblock %}
 
 {% block body %}
+	<br>
+	<br>
+	<br>
+	<br>
+	<div class="container mt-4">
+		<div class="card border-0 shadow-sm" style="background-color: #f8f9fa;">
+			<div class="card-header text-white text-center" style="background-color: #5a3d6a;">
+				<h4 class="mb-0 fw-semibold">Liste des Réclamations</h4>
+			</div>
 
-    <section class="container mt-5 pt-5">
-    <div class="row justify-content-center pt-5">
-        <div class="col-md-10">
-            <div class="card shadow-lg rounded">
-                <div class="card-header text-center bg-primary text-white">
-                    <h2>Liste des Réclamations</h2>
-                </div>
-                <div class="card-body">
-                    <table class="table table-hover table-bordered text-center">
-                        <thead class="table-dark">
-                            <tr>
-                                <th>ID</th>
-                                <th>Description</th>
-                                <th>Date de soumission</th>
-                                <th>Status</th>
-                                <th>Type</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        {% for reclamation in reclamations %}
-                            <tr>
-                                <td>{{ reclamation.id }}</td>
-                                <td>{{ reclamation.descR }}</td>
-                                <td>{{ reclamation.dateR ? reclamation.dateR|date('Y-m-d') : '' }}</td>
-                                <td>{{ reclamation.statusR }}</td>
-                                <td>{{ reclamation.typeR }}</td>
-                                <td>
-                                    <a href="{{ path('app_reclamation_show', {'id': reclamation.id}) }}" class="btn btn-info btn-sm">Voir</a>
-                                    <a href="{{ path('app_reclamation_edit', {'id': reclamation.id}) }}" class="btn btn-warning btn-sm">Modifier</a>
-                                </td>
-                            </tr>
-                        {% else %}
-                            <tr>
-                                <td colspan="6" class="text-center text-muted">Aucune réclamation trouvée</td>
-                            </tr>
-                        {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-                <div class="card-footer text-center">
-                    <a href="{{ path('app_reclamation_new') }}" class="btn btn-success">Créer une nouvelle réclamation</a>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
+			<div class="card-body">
+				<div class="table-responsive">
+					<table class="table table-bordered text-center align-middle" style="color: #2c2c2c;">
+						<thead style="background-color: #7e5898; color: white;">
+							<tr>
+								<th>ID</th>
+								<th>Description</th>
+								<th>Date</th>
+								<th>Status</th>
+								<th>Type</th>
+								<th>Actions</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for reclamation in reclamations %}
+								<tr style="background-color: white;">
+									<td class="fw-bold">{{ reclamation.id }}</td>
+									<td>{{ reclamation.descR }}</td>
+									<td>{{ reclamation.dateR ? reclamation.dateR|date('Y-m-d') : '-' }}</td>
+									<td>
+										{% if reclamation.statusR == 'En attente' %}
+											<span class="badge bg-warning text-dark">En attente</span>
+										{% elseif reclamation.statusR == 'En cours' %}
+											<span class="badge bg-primary">En cours</span>
+										{% elseif reclamation.statusR == 'Résolue' %}
+											<span class="badge bg-success">Résolue</span>
+										{% else %}
+											<span class="badge bg-secondary">{{ reclamation.statusR }}</span>
+										{% endif %}
+									</td>
+									<td>{{ reclamation.typeR }}</td>
+									<td>
+										<a href="{{ path('app_reclamation_show', {'id': reclamation.id}) }}" class="btn btn-outline-dark btn-sm">
+											Voir
+										</a>
+										<a href="{{ path('app_reclamation_edit', {'id': reclamation.id}) }}" class="btn btn-outline-primary btn-sm" style="border-color: #7e5898; color: #7e5898;">
+											Modifier
+										</a>
+									</td>
+								</tr>
+							{% else %}
+								<tr>
+									<td colspan="6" class="text-center text-muted py-4">Aucune réclamation trouvée</td>
+								</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
+			</div>
 
+			<div class="card-footer text-center" style="background-color: #f8f9fa;">
+				<a href="{{ path('app_reclamation_new') }}" class="btn text-white px-4" style="background-color: #7e5898;">
+					Nouvelle réclamation
+				</a>
+			</div>
+		</div>
+	</div>
 {% endblock %}
+
+
+{# <section class="container mt-5 pt-5">
+		    <div class="row justify-content-center pt-5">
+		        <div class="col-md-10">
+		            <div class="card shadow-lg rounded">
+		                <div class="card-header text-center bg-primary text-white">
+		                    <h2>Liste des Réclamations</h2>
+		                </div>
+		                <div class="card-body">
+		                    <table class="table table-hover table-bordered text-center">
+		                        <thead class="table-dark">
+		                            <tr>
+		                                <th>ID</th>
+		                                <th>Description</th>
+		                                <th>Date de soumission</th>
+		                                <th>Status</th>
+		                                <th>Type</th>
+		                                <th>Actions</th>
+		                            </tr>
+		                        </thead>
+		                        <tbody>
+		                        {% for reclamation in reclamations %}
+		                            <tr>
+		                                <td>{{ reclamation.id }}</td>
+		                                <td>{{ reclamation.descR }}</td>
+		                                <td>{{ reclamation.dateR ? reclamation.dateR|date('Y-m-d') : '' }}</td>
+		                                <td>{{ reclamation.statusR }}</td>
+		                                <td>{{ reclamation.typeR }}</td>
+		                                <td>
+		                                    <a href="{{ path('app_reclamation_show', {'id': reclamation.id}) }}" class="btn btn-info btn-sm">Voir</a>
+		                                    <a href="{{ path('app_reclamation_edit', {'id': reclamation.id}) }}" class="btn btn-warning btn-sm">Modifier</a>
+		                                </td>
+		                            </tr>
+		                        {% else %}
+		                            <tr>
+		                                <td colspan="6" class="text-center text-muted">Aucune réclamation trouvée</td>
+		                            </tr>
+		                        {% endfor %}
+		                        </tbody>
+		                    </table>
+		                </div>
+		                <div class="card-footer text-center">
+		                    <a href="{{ path('app_reclamation_new') }}" class="btn btn-success">Créer une nouvelle réclamation</a>
+		                </div>
+		            </div>
+		        </div>
+		    </div>
+		</section> #}
+
+{# {% endblock %} #}
