@@ -16,7 +16,7 @@ class ReclamationType extends AbstractType
             ->add('dateR', null, [
                 'widget' => 'single_text',
             ])
-            ->add('statusR')
+            // ->add('statusR')
             ->add('typeR')
         ;
     }

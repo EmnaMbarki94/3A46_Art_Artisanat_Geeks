@@ -1,9 +1,59 @@
 {% extends 'baseBack.html.twig' %}
 
-{% block title %}Listes Réponses{% endblock %}
+{% block title %}Listes Réponses
+{% endblock %}
 
 {% block body %}
-{% block content %}
+
+<br>
+<br>
+<br>
+<br>
+<h1 class="mb-4">Liste Des Reponses</h1>
+
+<div class="mb-3" class="search-container">
+
+	<input type="text" id="searchInput" class="form-control" placeholder="🔍 Rechercher une réponse...">
+</div>
+<div class="table-container" id="reclamationTable">
+<table class="table table-striped" id="reponseTable">
+	<thead >
+		<tr>
+			<th onclick="sortTable(0)">ID 🔽</th>
+			<th onclick="sortTable(1)">Description 🔽</th>
+			<th onclick="sortTable(2)">Date 🔽</th>
+			<th>Actions</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for reponse in reponses %}
+			<tr>
+				<td>{{ reponse.id }}</td>
+				<td>{{ reponse.descRep }}</td>
+				<td>
+					<span class="badge bg-secondary">
+						{{ reponse.dateRep ? reponse.dateRep|date('Y-m-d') : '-' }}
+					</span>
+				</td>
+				<td>
+					<a href="{{ path('app_reponse_show', {'id': reponse.id}) }}" class="btn btn-info btn-sm">
+						👁 Afficher
+					</a>
+					<a href="{{ path('app_reponse_edit', {'id': reponse.id}) }}" class="btn btn-warning btn-sm">
+						✏ Modifier
+					</a>
+				</td>
+			</tr>
+		{% else %}
+			<tr>
+				<td colspan="4" class="text-center text-muted">🚫 Aucune réponse trouvée</td>
+			</tr>
+		{% endfor %}
+	</tbody>
+</table>
+</div>
+
+{# {% block content %}
   
   <div class="main-panel">
     <div class="content-wrapper">
@@ -66,38 +116,38 @@
         </div>
       </section>
     </div>
-  </div>
+  </div> #}
 
 
-<!-- ✅ Script pour la recherche (Uniquement sur l'ID) -->
-<script>
-document.getElementById("searchInput").addEventListener("keyup", function() {
-    let filter = this.value.toLowerCase();
-    let rows = document.querySelectorAll("#reponseTable tbody tr");
-    
-    rows.forEach(row => {
-        let cell = row.cells[0]; // Colonne ID (Index 0)
-        let text = cell.textContent || cell.innerText;
-        row.style.display = text.includes(filter) ? "" : "none";
-    });
+	<!-- ✅ Script pour la recherche (Uniquement sur l'ID) -->
+	<script>
+		document.getElementById("searchInput").addEventListener("keyup", function () {
+let filter = this.value.toLowerCase();
+let rows = document.querySelectorAll("#reponseTable tbody tr");
+
+rows.forEach(row => {
+let cell = row.cells[0]; // Colonne ID (Index 0)
+let text = cell.textContent || cell.innerText;
+row.style.display = text.includes(filter) ? "" : "none";
+});
 });
 
 function sortTable(n) {
-    let table = document.getElementById("reponseTable");
-    let rows = Array.from(table.querySelectorAll("tbody tr"));
-    let ascending = table.getAttribute("data-sort-order") !== "asc";
-    
-    rows.sort((rowA, rowB) => {
-        let cellA = rowA.cells[n].innerText.trim().toLowerCase();
-        let cellB = rowB.cells[n].innerText.trim().toLowerCase();
-        
-        return ascending ? cellA.localeCompare(cellB) : cellB.localeCompare(cellA);
-    });
+let table = document.getElementById("reponseTable");
+let rows = Array.from(table.querySelectorAll("tbody tr"));
+let ascending = table.getAttribute("data-sort-order") !== "asc";
 
-    rows.forEach(row => table.querySelector("tbody").appendChild(row));
-    table.setAttribute("data-sort-order", ascending ? "asc" : "desc");
+rows.sort((rowA, rowB) => {
+let cellA = rowA.cells[n].innerText.trim().toLowerCase();
+let cellB = rowB.cells[n].innerText.trim().toLowerCase();
+
+return ascending ? cellA.localeCompare(cellB) : cellB.localeCompare(cellA);
+});
+
+rows.forEach(row => table.querySelector("tbody").appendChild(row));
+table.setAttribute("data-sort-order", ascending ? "asc" : "desc");
 }
-</script>
+	</script>
 
-{% endblock %}  
+	{# {% endblock %}   #}
 {% endblock %}

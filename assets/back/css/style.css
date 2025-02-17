@@ -26280,10 +26280,43 @@ dl li {
 }
 
 .content-wrapper {
+
   background: #fcfcfd;
+
   padding: 2.75rem 2.25rem;
   width: 100%;
   -webkit-flex-grow: 1;
   flex-grow: 1;
+  
 }
+.table-container {
+  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.55);
+  
+  /* border-radius: 12px; */
+  background: white;
+
+}
+#reclamationTable{
+  
+  padding: 5px 10px; /* Ajuste l'espacement */
+  border-radius: 12px; /* Arrondi les bords */
+
+
+}
+.search-container {
+  display: flex;
+  justify-content: flex-end; /*Aligner à droite*/
+  margin-bottom: 10px;
+
+}
+
+#searchInput {
+  width: 250px; /* Réduit la taille */
+  font-size: 14px; /* Réduit la taille du texte */
+  padding: 5px 10px; /* Ajuste l'espacement */
+  border-radius: 12px; /* Arrondi les bords */
+  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.55);
+
+}
+
 /*# sourceMappingURL=maps/style.css.map */

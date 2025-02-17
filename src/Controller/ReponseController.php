@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Entity\Reclamation;
+
 use App\Entity\Reponse;
 use App\Form\ReponseType;
 use App\Repository\ReponseRepository;
@@ -22,25 +24,36 @@ final class ReponseController extends AbstractController
         ]);
     }
 
-    #[Route('/new', name: 'app_reponse_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    #[Route('/new', name: 'app_reponse_new')]
+    public function new(Request $request, EntityManagerInterface $em): Response
     {
         $reponse = new Reponse();
+        
+        // Récupérer l'ID de la réclamation depuis l'URL
+        $reclamationId = $request->query->get('id');
+        
+        if ($reclamationId) {
+            $reclamation = $em->getRepository(Reclamation::class)->find($reclamationId);
+            if ($reclamation) {
+                $reponse->setReclamation($reclamation);
+            }
+        }
+
         $form = $this->createForm(ReponseType::class, $reponse);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($reponse);
-            $entityManager->flush();
+            $em->persist($reponse);
+            $em->flush();
 
-            return $this->redirectToRoute('app_reponse_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_reponse_index');
         }
 
         return $this->render('reponse/new.html.twig', [
-            'reponse' => $reponse,
-            'form' => $form,
+            'form' => $form->createView(),
         ]);
     }
+
 
     
 

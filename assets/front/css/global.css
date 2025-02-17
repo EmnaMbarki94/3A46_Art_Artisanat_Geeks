@@ -8,7 +8,7 @@ Licence: <a href="https://www.templateonweb.com/license">Website Template Licenc
 body{
 font-family: 'Fraunces', serif;
 color:#fff;
-background:#000;
+background:#ccb166;
 letter-spacing:0.5px;
 }
 ul{
@@ -194,21 +194,23 @@ line-height:0.2em;
  }
 
 #header .nav-link{
-font-size:14px;
-color:#fff;
-padding-right:15px;
-padding-left:15px;
-text-transform:uppercase;
- }
+/* font-size:18px; */
+color:#3c0247;
+padding-right:10px;
+padding-left:10px;
+text-transform:capitalize;
+font-size: 18px; /* Augmente la taille du texte */
+font-weight:bold;
+}
 #header .nav-link:hover{
 
-color:#8b008b; 
+color:#d4cdc4; 
  }
 #header .nav-link:focus{
-color:#8b008b;
+color:#f1f0ee;
  }
 #header .active{
-color:#8b008b;
+color:#3c0247;
 font-weight:bold;
  }
 
