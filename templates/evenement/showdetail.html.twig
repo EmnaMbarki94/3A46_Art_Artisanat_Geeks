@@ -9,6 +9,43 @@
             <div class="col-md-5">
                 <div class="center_o1l">
                     <h2 class="mb-0">Detail</h2>
+    <div class="row">
+        <!-- Colonne pour l'image -->
+        <div class="col-md-5">
+            <div class="card shadow-lg">
+                {% if event.photoE is not empty %}
+                        <img src="{{ asset('uploads/photosevents/' ~ event.photoE) }}" width="600" height="300" alt="event Image" class="img-fluid rounded">
+                    {% else %}
+                    <img src="{{ asset('img/default-event.jpg') }}" class="card-img-top" alt="Aucune image disponible">
+                    {% endif %}
+                   
+            </div>
+        </div>
+
+        <!-- Colonne pour les détails -->
+        <div class="col-md-7">
+            <div class="card shadow-lg p-4">
+                <h2 class="text-center text-primary mb-4">{{ event.nom }}</h2>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        <strong><i class="fa fa-list-alt me-2"></i> Type :</strong> {{ event.typeE }}
+                    </li>
+                    <li class="list-group-item">
+                        <strong><i class="fa fa-info-circle me-2"></i> Description :</strong> {{ event.infoE }}
+                    </li>
+                    <li class="list-group-item">
+                        <strong><i class="fa fa-calendar me-2"></i> Date :</strong> {{ event.dateE ? event.dateE|date('d-m-Y') : 'Non définie' }}
+                    </li>
+                    
+                </ul>
+
+                <div class="mt-4 text-center">
+                    <a href="{{ path('app_evenement_listeF') }}" class="btn btn-secondary me-2">
+                        <i class="fa fa-arrow-left"></i> Retour
+                    </a>
+                    <a href="{{ path('app_reservation_new', {'id': event.id}) }}" class="btn btn-success">
+                        <i class="fa fa-ticket"></i> Réserver
+                    </a>
                 </div>
             </div>
             <div class="col-md-7 text-end">

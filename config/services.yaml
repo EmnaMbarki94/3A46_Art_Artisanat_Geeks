@@ -1,6 +1,5 @@
 parameters:
-    magasin_directory: '%kernel.project_dir%/public/uploads/magasin'
-    produits_directory: '%kernel.project_dir%/public/uploads/produits'
+   
 
 
     uploads_directory: '%kernel.project_dir%/public/uploads/cours'
@@ -16,25 +15,23 @@ parameters:
 
 
 services:
-<<<<<<< HEAD
+
 
     # default configuration for services in *this* file
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
-=======
-  _defaults:
-    autowire: true
-    autoconfigure: true
->>>>>>> 4df36eff2bc97aa07002853c4b56d516ec638d7b
 
-  # Defines the App services
-  App\:
-    resource: '../src/'
-    exclude:
-      - '../src/DependencyInjection/'
-      - '../src/Entity/'
-      - '../src/Kernel.php'
+    # makes classes in src/ available to be used as services
+    # this creates a service per class whose id is the fully-qualified class name
+    App\:
+    
+        resource: '../src/'
+        exclude:
+            - '../src/DependencyInjection/'
+            - '../src/Entity/'
+            - '../src/Kernel.php'
+
 
   App\Service\TwilioService:
     arguments:
