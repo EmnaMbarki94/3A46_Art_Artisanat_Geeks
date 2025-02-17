@@ -5,7 +5,12 @@
 {% block body %}
     <h1 class="mb-4">Magasin</h1>
 
-    <table class="table table-striped">
+    <!-- Search Bar -->
+    <div class="mb-4">
+        <input type="text" id="searchInput" class="form-control" placeholder="Rechercher par nom ou type de magasin...">
+    </div>
+
+    <table class="table table-striped" id="magasinTable">
         <thead>
             <tr>
                 <th>Id</th>
@@ -45,4 +50,31 @@
     <div class="text-center mt-4">
         <a href="{{ path('app_magasin_new') }}" class="btn btn-primary rounded-pill">Create new</a>
     </div>
+
+    <!-- JavaScript for Dynamic Search -->
+    <script>
+        document.getElementById('searchInput').addEventListener('input', function() {
+            let searchQuery = this.value.toLowerCase();
+            let rows = document.querySelectorAll('#magasinTable tbody tr');
+            
+            rows.forEach(function(row) {
+                let columns = row.querySelectorAll('td');
+                let matchFound = false;
+
+                // Check if any column contains the search query
+                columns.forEach(function(column) {
+                    if (column.textContent.toLowerCase().includes(searchQuery)) {
+                        matchFound = true;
+                    }
+                });
+
+                // Show or hide the row based on search query match
+                if (matchFound) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+    </script>
 {% endblock %}

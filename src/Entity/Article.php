@@ -38,9 +38,9 @@ class Article
     )]
     private ?string $descA = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    #[Assert\Url(message: "Le chemin de l'image doit être une URL valide.")]
+    #[ORM\Column(length: 255)]    
     private ?string $imagePath = null;
+
 
     
     #[ORM\ManyToOne(inversedBy: 'article')]
@@ -95,7 +95,10 @@ class Article
 
     public function setImagePath(?string $imagePath): self
     {
-        $this->imagePath = $imagePath;
+        if ($imagePath !== null) { // Ne met à jour que si une nouvelle image est envoyée
+            $this->imagePath = $imagePath;
+        }
+    
         return $this;
     }
 

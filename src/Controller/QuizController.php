@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Quiz;
 use App\Entity\Cours;
+use App\Entity\Question;
 use App\Form\QuizType;
 use App\Repository\QuizRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -11,6 +12,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+
 
 #[Route('/quiz')]
 final class QuizController extends AbstractController
@@ -26,6 +29,10 @@ final class QuizController extends AbstractController
     #[Route('/new', name: 'app_quiz_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
+        //access deny
+        if (!$this->isGranted('ROLE_ENSEIGNANT') && !$this->isGranted('ROLE_ADMIN')) {
+            throw new AccessDeniedException("Vous n'avez pas la permission d'accéder à cette page.");
+        }
         $quiz = new Quiz();
 
         $courseId = $request->query->get('id');
@@ -36,7 +43,8 @@ final class QuizController extends AbstractController
         }
         
         $form = $this->createForm(QuizType::class, $quiz, [
-            'selected_course' => $selectedCourse
+            'selected_course' => $selectedCourse,
+            'user' => $this->getUser(),
         ]);
         $form->handleRequest($request);
 
@@ -49,7 +57,7 @@ final class QuizController extends AbstractController
             $entityManager->persist($quiz);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_question_new', ['quizId' => $quiz->getId()]);
+            return $this->redirectToRoute('app_question_new', ['id' => $quiz->getId()]);
         }
 
         return $this->render('quiz/new.html.twig', [
@@ -59,18 +67,27 @@ final class QuizController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_quiz_show', methods: ['GET'])]
-    public function show(Quiz $quiz): Response
+    public function show(Quiz $quiz,EntityManagerInterface $entityManager): Response
     {
+        if (!$this->isGranted('ROLE_USER')) {
+            throw new AccessDeniedException("Vous n'avez pas la permission d'accéder à cette page.");
+        }
+        $questions=$entityManager->getRepository(Question::class)->findBy(['quiz'=>$quiz]);
         return $this->render('quiz/show.html.twig', [
             'quiz' => $quiz,
+            'questions' => $questions,
         ]);
     }
 
     #[Route('/{id}/edit', name: 'app_quiz_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Quiz $quiz, EntityManagerInterface $entityManager): Response
     {
+        if (!$this->isGranted('ROLE_ENSEIGNANT') && !$this->isGranted('ROLE_ADMIN')) {
+            throw new AccessDeniedException("Vous n'avez pas la permission d'accéder à cette page.");
+        }
         $form = $this->createForm(QuizType::class, $quiz, [
             'selected_course' => $quiz->getCours(),
+            'user' => $this->getUser(),
         ]);
         $form->handleRequest($request);
 
@@ -89,11 +106,14 @@ final class QuizController extends AbstractController
     #[Route('/{id}', name: 'app_quiz_delete', methods: ['POST'])]
     public function delete(Request $request, Quiz $quiz, EntityManagerInterface $entityManager): Response
     {
+        if (!$this->isGranted('ROLE_ENSEIGNANT') && !$this->isGranted('ROLE_ADMIN')) {
+            throw new AccessDeniedException("Vous n'avez pas la permission d'accéder à cette page.");
+        }
         if ($this->isCsrfTokenValid('delete'.$quiz->getId(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($quiz);
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('app_quiz_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_cours_index', [], Response::HTTP_SEE_OTHER);
     }
 }

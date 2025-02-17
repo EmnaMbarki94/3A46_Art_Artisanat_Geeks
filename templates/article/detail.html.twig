@@ -1,8 +1,77 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Détails de l'article - {{ article.nomA }}{% endblock %}
+{% block title %}Détails de l'article -
+	{{ article.nomA }}
+{% endblock %}
 
 {% block body %}
+	<section id="center" class="center_o bg_gray pt-2 pb-2">
+		<div class="container-xl">
+			<div class="row center_o1">
+				<div class="col-md-5">
+					<div class="center_o1l">
+						<h2 class="mb-0">Détails de l'article</h2>
+					</div>
+				</div>
+				<div class="col-md-7">
+					<div class="center_o1r text-end">
+						<h6 class="mb-0">
+							<a href="{{path('app_article_list')}}">Articles</a>
+							<span class="me-2 ms-2">
+								<i class="fa fa-caret-right"></i>
+							</span>
+							Détails de l'article</h6>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<section id="detail" class="p_4">
+		<div class="container-xl">
+			<div class="row detail_1">
+				<div class="col-md-5">
+					<div class="detail_1l">
+						{% if article.imagePath is not empty %}
+							<img src="{{ asset('uploads/produits/' ~ article.imagePath) }}" class="d-block w-100" alt="Image de l'article">
+						{% else %}
+							<img src="{{ asset('img/default-article.jpg') }}" class="d-block w-100" alt="Aucune image disponible">
+						{% endif %}
+					</div>
+				</div>
+
+				<div class="col-md-7">
+					<div class="detail_1r">
+						<h2>{{ article.nomA }}</h2>
+						<h6 class="font_14 mt-3 col_pink">
+							<span class="col_yell">
+								<i class="fa fa-star"></i>
+								<i class="fa fa-star"></i>
+								<i class="fa fa-star"></i>
+								<i class="fa fa-star"></i>
+								<i class="fa fa-star-half-o"></i>
+							</span>
+							{# {{ article.reviews|length }} Avis #}
+						</h6>
+						<h4 class="mt-3">
+							<span class="me-2">{{ article.prixA }}
+								TND</span>
+							{# <span class="fs-6 text-decoration-line-through col_light">{{ article.oldPrixA }} $</span> #}
+						</h4>
+						<p>{{ article.descA }}</p>
+						<form
+							action="{{ path('app_add_to_cart', {'id': article.id}) }}" method="get">
+							<!-- Récupère la quantité de l'input ou initialise à 1 si non définie -->
+							<input type="number" name="quantity" min="1" value="{{ quantity is defined ? quantity : 1 }}" class="form-control mt-2 bg_dark" placeholder="Quantité" style="width:180px; height:50px; margin-right:15px; float:left;">
+							<h6 class="mt-4 mb-0 text-uppercase">
+								<button type="submit" class="button">
+									<i class="fa fa-shopping-cart bg-white col_pink p-3"></i>
+									<span class="ps-3 pe-3">Ajouter au panier</span>
+								</button>
+							</h6>
+							
+						</form>
+
 
 <section class="container mt-5 pt-5">
     <div class="row pt-5">
@@ -18,7 +87,7 @@
         </div>
 
         <!-- Colonne pour les détails -->
-        <div class="col-md-7 ">
+        <div class="col-md-7">
             <div class="card shadow-lg p-4">
                 <h2 class="text-center text-primary mb-4">{{ article.nomA }}</h2>
                 <ul class="list-group list-group-flush">
@@ -42,16 +111,44 @@
                     </span>
                 </div>
 
-                <div class="mt-4 text-center">
-                    <a href="{{ path('app_article_list') }}" class="btn btn-secondary me-2">
-                        <i class="fa fa-arrow-left"></i> Retour
-                    </a>
-                    <a href="#" class="btn btn-primary">
-                        <i class="fa fa-shopping-cart"></i> Ajouter au panier
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
+
+						<p class="mt-3 mb-2">Le produit est déjà dans la liste de souhaits !
+							<a class="col_pink hover_white" href="#">Consulter la liste de souhaits</a>
+						</p>
+						<p>Catégorie:
+							<a class="col_pink hover_white" href="#">Posters</a>
+						</p>
+						<ul class="social-network social-circle mb-0">
+							<li>
+								<a href="#" class="icoRss" title="Rss">
+									<i class="fa fa-skype"></i>
+								</a>
+							</li>
+							<li>
+								<a href="#" class="icoFacebook" title="Facebook">
+									<i class="fa fa-facebook"></i>
+								</a>
+							</li>
+							<li>
+								<a href="#" class="icoTwitter" title="Twitter">
+									<i class="fa fa-twitter"></i>
+								</a>
+							</li>
+							<li>
+								<a href="#" class="icoGoogle" title="Google +">
+									<i class="fa fa-instagram"></i>
+								</a>
+							</li>
+							<li>
+								<a href="#" class="icoLinkedin" title="Linkedin">
+									<i class="fa fa-linkedin"></i>
+								</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
 {% endblock %}

@@ -57,16 +57,32 @@
 </section>
 
     {% if cour.quiz is not null %}
-        <h6 class="font_14 mb-0 mt-4">
-            <a class="button p-3 pt-2 pb-2" href="{{ path('app_quiz_show',{'id': cour.quiz.id}) }}">GO TO QUIZ</a>
-        </h6>
+        {% if app.user %}
+            <h6 class="font_14 mb-0 mt-4">
+                <a class="button p-3 pt-2 pb-2" href="{{ path('app_quiz_show',{'id': cour.quiz.id}) }}">GO TO QUIZ</a>
+            </h6>
+        {% endif %}
     {% else %}
         <p>No quiz available for this course.</p>
+        {#{% if is_granted('ROLE_ENSEIGNANT') or is_granted('ROLE_ENSEIGNANT') %}#}
+        {% if is_granted('ROLE_ENSEIGNANT') %}
+        <a class="button" href="{{ path('app_quiz_new', {'id':  cour.id}) }}">creer un quiz pour ce cours</a>
+        {% endif %}
     {% endif %}
 
+    {% if is_granted('ROLE_ENSEIGNANT') %}
+    <table>
+    <tr>
+    <td>
+        <a class="button button p-3 mb-5 " href="{{ path('app_cours_edit', {'id': cour.id}) }}">edit</a>
+    </td>
+    <td>
+        {{ include('cours/_delete_form.html.twig') }}
+    </td>
+    </tr>
+    </table>
+    {% endif %}
+    
+
     <a href="{{ path('app_cours_index') }}">back to list</a></br>
-
-    {#<a href="{{ path('app_cours_edit', {'id': cour.id}) }}">edit</a>#}
-
-    {#{{ include('cours/_delete_form.html.twig') }}#}
 {% endblock %}

@@ -34,7 +34,6 @@ final class EvenementController extends AbstractController
         $event = new Event();
         $form = $this->createForm(EventType::class, $event);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $file = $form->get('photoE')->getData();
 

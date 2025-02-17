@@ -4,20 +4,115 @@ namespace App\Controller;
 
 use App\Entity\Article;
 use App\Entity\Magasin;
+use App\Service\CartService;
 use App\Form\ArticleType;
 use App\Repository\ArticleRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Symfony\Component\HttpFoundation\File\Exception\FileException;
+// use Psr\Log\LoggerInterface;
+
 
 
 #[Route('/article')]
 final class ArticleController extends AbstractController
 {
+
+    private $cartService;
+
+    public function __construct(CartService $cartService)
+    {
+        $this->cartService = $cartService;
+    }
+
+    // Add item to the cart
+    #[Route('/add-to-cart/{id}', name: 'app_add_to_cart')]
+    public function addToCart(Article $article, Request $request): RedirectResponse
+    {
+        // Récupère la quantité envoyée par l'utilisateur dans l'input, avec un minimum de 1
+        $quantity = $request->query->get('quantity', 1); // Quantité par défaut si non envoyée
+
+        // Si la quantité est inférieure à 1, réinitialiser à 1
+        if ($quantity < 1) {
+            $quantity = 1;
+        }
+
+        // Ajoute l'article au panier avec la quantité donnée
+        $this->cartService->addToCart($article, $quantity);
+
+        // Message flash pour informer l'utilisateur
+        //$this->addFlash('success', 'Article ajouté au panier !');
+
+        return $this->redirectToRoute('app_cart'); // Redirection vers le panier
+    }
+
+    //update !quantity cart
+    #[Route('/article/update-quantity/{id}', name: 'app_update_quantity', methods: ['POST','GET'])]
+    public function updateQuantity(Request $request, SessionInterface $session, $id): JsonResponse
+    {
+        $cart = $session->get('cart', []);
+    
+        if (!isset($cart[$id])) {
+            return new JsonResponse(['success' => false, 'message' => 'Produit non trouvé']);
+        }
+    
+        $data = json_decode($request->getContent(), true); // Récupérer la donnée envoyée
+    
+        // Vérification de la quantité
+        if (!isset($data['quantity']) || !is_numeric($data['quantity']) || $data['quantity'] < 1) {
+            return new JsonResponse(['success' => false, 'message' => 'Quantité invalide']);
+        }
+    
+        // Mise à jour de la quantité
+        $cart[$id]['quantity'] = (int) $data['quantity'];
+        $session->set('cart', $cart); // Sauvegarder dans la session
+        $total = 0;
+        foreach ($cart as $item) {
+            $total += $item['quantity'] * $item['prixA'];  // prixA est supposé être le prix de l'article
+        }
+        return new JsonResponse(['success' => true, 'quantity' => $cart[$id]['quantity']]);
+    }
+    
+    // View the cart
+    #[Route('/cart', name: 'app_cart')]
+    public function viewCart()
+    {
+        $cart = $this->cartService->getCart();
+        $total = $this->cartService->getTotal();
+
+        return $this->render('article/cart.html.twig', [
+            'cart' => $cart,
+            'total' => $total,
+        ]);
+    }
+
+    // Remove item from the cart
+    #[Route('/remove-from-cart/{id}', name: 'app_remove_from_cart')]
+    public function removeFromCart(Article $article)
+    {
+        $this->cartService->removeFromCart($article);
+        $this->addFlash('success', 'Article removed from cart!');
+
+        return $this->redirectToRoute('app_cart');
+    }
+
+    // Clear the cart
+    #[Route('/clear-cart', name: 'app_clear_cart')]
+    public function clearCart()
+    {
+        $this->cartService->clearCart();
+        $this->addFlash('success', 'Cart cleared!');
+
+        return $this->redirectToRoute('app_cart');
+    }
+
+
+    //////////////////////////////////////////////////////////////////////////////
     #[Route(name: 'app_article_index', methods: ['GET'])]
     public function index(ArticleRepository $articleRepository): Response
     {
@@ -25,13 +120,17 @@ final class ArticleController extends AbstractController
             'articles' => $articleRepository->findAll(),
         ]);
     }
-    #[Route('/articles', name: 'app_article_list', methods: ['GET','POST'])]
-    public function showArticle(ArticleRepository $articleRepository): Response
+    #[Route('/articles', name: 'app_article_list', methods: ['GET', 'POST'])]
+    public function showArticle(ArticleRepository $articleRepository, SessionInterface $session): Response
     {
+        $cart = $session->get('cart', []); // ✅ Récupérer le panier depuis la session
+
         return $this->render('article/article.html.twig', [
             'articles' => $articleRepository->findAll(),
+            'cart' => $cart, // ✅ Passer la variable cart correctement
         ]);
     }
+
     #[Route('/new', name: 'app_article_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
@@ -47,29 +146,17 @@ final class ArticleController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // Récupérer l'image téléchargée
-            $imageFile = $form->get('imagePath')->getData(); // 'imagePath' is now a single file input field
+            $file = $form->get('imagePath')->getData();
 
-            if ($imageFile instanceof UploadedFile) {
-                // Générer un nom unique pour l'image
-                $fileName = uniqid() . '.' . $imageFile->guessExtension();
-
-                try {
-                    // Déplacer l'image vers le répertoire défini dans services.yaml
-                    $imageFile->move($this->getParameter('produits_directory'), $fileName);
-                } catch (FileException $e) {
-                    throw new \Exception('Impossible de télécharger l\'image.');
-                }
-
-                // Enregistrer le chemin de l'image dans l'entité Article
-                $article->setImagePath($fileName);
+            if ($file) {
+                $filename = uniqid() . '.' . $file->guessExtension();
+                $file->move($this->getParameter('produits_directory'), $filename);
+                $article->setImagePath($filename);
             }
-
-            // Persister l'article (et l'image, si applicable)
             $entityManager->persist($article);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_article_index');
+            return $this->redirectToRoute('app_article_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('article/new.html.twig', [
@@ -99,41 +186,27 @@ final class ArticleController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // Gestion de l'upload de l'image
-            /** @var UploadedFile $imageFile */
-            $imageFile = $form->get('imagePath')->getData();
+            $file = $form->get('imagePath')->getData();
 
-            if ($imageFile) {
-                // Générer un nom unique pour le fichier
-                $fileName = uniqid() . '.' . $imageFile->guessExtension();
-
-                // Déplacer l'image vers le dossier configuré
-                try {
-                    $imageFile->move(
-                        $this->getParameter('produits_directory'), // Dossier d'upload pour les produits
-                        $fileName
-                    );
-                } catch (FileException $e) {
-                    throw new \Exception('Impossible de télécharger l\'image.');
-                }
-
-                // Supprimer l'ancienne image si elle existe
-                if ($article->getImagePath()) {
-                    $oldFilePath = $this->getParameter('produits_directory') . '/' . $article->getImagePath();
-                    if (file_exists($oldFilePath)) {
-                        unlink($oldFilePath);
-                    }
-                }
-
-                // Mettre à jour le chemin de l'image
-                $article->setImagePath($fileName);
+            if ($file) {
+                $filename = uniqid() . '.' . $file->guessExtension();
+                $file->move($this->getParameter('produits_directory'), $filename);
+                $article->setImagePath($filename);
             }
+            $entityManager->persist($article);
+            $entityManager->flush();
+            
+            return $this->redirectToRoute('app_article_index', [], Response::HTTP_SEE_OTHER);
 
-            // Sauvegarder les modifications de l'article dans la base de données
+            if ($file) {
+                $filename = uniqid() . '.' . $file->guessExtension();
+                $file->move($this->getParameter('produits_directory'), $filename);
+                $article->setImagePath($filename);
+            }
+            $entityManager->persist($article);
             $entityManager->flush();
 
-            // Rediriger après l'édition
-            return $this->redirectToRoute('app_article_show', ['id' => $article->getId()]);
+            return $this->redirectToRoute('app_article_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('article/edit.html.twig', [
@@ -154,9 +227,6 @@ final class ArticleController extends AbstractController
         return $this->redirectToRoute('app_article_index', [], Response::HTTP_SEE_OTHER);
     }
 
-    
-   
-
     #[Route('/articles/{id}', name: 'article_detail')]
     public function showArticleDetail($id, ArticleRepository $articleRepository): Response
     {
@@ -170,5 +240,30 @@ final class ArticleController extends AbstractController
         return $this->render('article/detail.html.twig', [
             'article' => $article,
         ]);
+    }
+    #[Route('/magasin/{id}', name: 'magasin_articles')]
+    public function articlesParMagasin(Magasin $magasin, ArticleRepository $articleRepository): JsonResponse
+    {
+        // Récupérer les articles correspondant à ce magasin
+        $articles = $articleRepository->findBy(['magasin' => $magasin]);
+
+        // Vérifier si des articles sont trouvés
+        if (empty($articles)) {
+            return new JsonResponse(['message' => 'Aucun article trouvé pour ce magasin'], 200);
+        }
+
+        // Sérialiser les articles pour les envoyer sous forme de données JSON
+        $articleData = [];
+        foreach ($articles as $article) {
+            $articleData[] = [
+                'id' => $article->getId(),
+                'nomA' => $article->getNomA(),
+                'prixA' => $article->getPrixA(),
+                'imagePath' => $article->getImagePath(),
+            ];
+        }
+
+        // Retourner les articles sérialisés sous forme de réponse JSON
+        return new JsonResponse($articleData);
     }
 }

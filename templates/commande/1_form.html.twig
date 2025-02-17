@@ -1,0 +1,53 @@
+{{ form_start(form, {'attr': {'class': 'needs-validation', 'novalidate': 'novalidate'}}) }}
+
+<div class="container mt-4">
+    <div class="card shadow-sm p-4 rounded-4 border-0">
+        <div class="row g-3">
+            {% for field in form %}
+                {% if field.vars.name != '_token' %}
+                    <div class="col-12">
+                        <label class="form-label fw-bold">{{ field.vars.label|default(field.vars.name|capitalize) }}</label>
+
+                        {% if field.vars.errors|length > 0 %}
+                            <div class="text-danger small">
+                                {% for error in field.vars.errors %}
+                                    <p>{{ error.message }}</p>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+
+                        {{ form_widget(field, {'attr': {'class': 'form-control'}}) }}
+                        
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="text-center mt-4">
+        <button type="submit" class="btn btn-primary rounded-pill">Sauvegarder</button>
+    </div>
+
+    <div class="text-center mt-3">
+        <a href="{{ path('app_commande_index') }}" class="btn btn-outline-secondary rounded-pill">
+            ← Retour à la liste
+        </a>
+    </div>
+</div>
+
+{{ form_end(form) }}
+
+<!-- Inclure Flatpickr -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        flatpickr(".datepicker", {
+            enableTime: false,
+            dateFormat: "d-m-Y",
+            theme: "dark",
+            defaultDate: "today"
+        });
+    });
+</script>

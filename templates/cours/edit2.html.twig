@@ -1,0 +1,14 @@
+{% extends 'baseBack.html.twig' %}
+
+{% block title %}Modifier Cours{% endblock %}
+
+{% block body %}
+<div class="d-flex flex-column">
+    <h1 class="text-center bold my-4">Modifier Cours</h1>
+
+    {{ include('cours/_form.html.twig', {'button_label': 'Sauvegarder'}) }}
+    <div class="text-center mt-2">
+    {{ include('cours/_delete_form.html.twig') }}
+    </div>
+</div>
+{% endblock %}

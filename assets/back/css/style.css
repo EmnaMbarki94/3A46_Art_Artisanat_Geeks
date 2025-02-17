@@ -26280,7 +26280,9 @@ dl li {
 }
 
 .content-wrapper {
-  background: #fff;
+
+  background: #fcfcfd;
+
   padding: 2.75rem 2.25rem;
   width: 100%;
   -webkit-flex-grow: 1;

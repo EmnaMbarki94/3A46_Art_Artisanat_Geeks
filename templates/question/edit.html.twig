@@ -3,11 +3,13 @@
 {% block title %}Edit Question{% endblock %}
 
 {% block body %}
+<div class="d-flex flex-column">
     <h1 class="text-center bold my-4">Modifier Question</h1>
 
     {{ include('question/_form.html.twig', {'button_label': 'Sauvegarder'}) }}
 
-    <a href="{{ path('app_question_index') }}">back to list</a>
-
+    <div class="text-center mt-2">
     {{ include('question/_delete_form.html.twig') }}
+    </div>
+</div>
 {% endblock %}

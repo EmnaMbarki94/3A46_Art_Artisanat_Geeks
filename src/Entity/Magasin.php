@@ -30,11 +30,9 @@ class Magasin
     #[Assert\Length(min: 3, max: 100, minMessage: "Le type doit avoir au moins {{ limit }} caractères.")]
     private ?string $typeM = null;
 
-    #[ORM\Column(name: "photo_m", length: 255, nullable: true)] // Correspond au nom de la colonne dans la base de données
+    #[ORM\Column( length: 255, nullable: true)] // Correspond au nom de la colonne dans la base de données
     // Vous pouvez utiliser Assert\Image ou Assert\File pour valider les images
-    #[Assert\Image(
-        mimeTypesMessage: "Veuillez télécharger une image valide (JPEG, PNG, GIF)."
-    )]
+    #[ORM\Column(length: 255)]    
     private ?string $photoM = null;
 
     public function getId(): ?int

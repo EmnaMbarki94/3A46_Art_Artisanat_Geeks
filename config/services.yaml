@@ -1,4 +1,6 @@
 parameters:
+   
+
 
     uploads_directory: '%kernel.project_dir%/public/uploads/cours'
 
@@ -17,9 +19,19 @@ parameters:
 
 
 services:
-  _defaults:
-    autowire: true
-    autoconfigure: true
+
+    # default configuration for services in *this* file
+    _defaults:
+        autowire: true      # Automatically injects dependencies in your services.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+
+
+
+  App\Service\CartService:
+      arguments:
+          $session: '@session'
+
+
 
   # Defines the App services
   App\:
@@ -28,6 +40,7 @@ services:
       - '../src/DependencyInjection/'
       - '../src/Entity/'
       - '../src/Kernel.php'
+
 
   App\Service\TwilioService:
     arguments:
