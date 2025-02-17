@@ -24,22 +24,34 @@ final class GalerieController extends AbstractController{
         ]);
     }
 
-    #[IsGranted("ROLE_ARTISTE")]
+    
     #[Route('/new', name: 'app_galerie_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
+
+        $user = $this->getUser(); 
+        if (!$user) {
+            return $this->redirectToRoute('app_login'); 
+        }
+
+        if (!$this->isGranted('ROLE_ARTISTE')) {
+            $this->addFlash('error', 'Accès refusé. Vous devez être un artiste pour créer une galerie.');
+            return $this->redirectToRoute('app_galerie_index'); 
+        }
+
+        $existingGalerie = $entityManager->getRepository(Galerie::class)->findOneBy(['user' => $user]);
+
+        if ($existingGalerie) {
+            $this->addFlash('error', 'Chaque utilisateur ne peut créer qu\'une seule galerie.');
+            return $this->redirectToRoute('app_galerie_index');
+        }
+
         $galerie = new Galerie();
         $form = $this->createForm(GalerieType::class, $galerie);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $user = $this->getUser(); // Get the currently authenticated user
-            if ($user) {
-                $galerie->setUser($user); // Associate the gallery with the user
-            }else {
-               
-                return $this->redirectToRoute('app_login');
-            }
+            $galerie->setUser($user); // Associate the gallery with the user
         
             $file = $form->get('photoG')->getData();
 
@@ -47,6 +59,9 @@ final class GalerieController extends AbstractController{
                 $filename = uniqid() . '.' . $file->guessExtension();
                 $file->move($this->getParameter('photos_directory'), $filename);
                 $galerie->setPhotoG($filename);
+            }
+            else {
+                $galerie->setPhotoG('default.jpg'); 
             }
     
             $entityManager->persist($galerie);
@@ -80,13 +95,13 @@ final class GalerieController extends AbstractController{
     {
         $user = $this->getUser();
         if (!$user) {
-            $this->addFlash('error', 'You must be logged in to edit a gallery.');
+            $this->addFlash('error', 'Vous devez s\'authentifier pour éditer une galerie.');
             return $this->redirectToRoute('app_galerie_index'); 
         }
     
         // Ensure the user is the owner of the gallery
-        if ($galerie->getUser() !== $user) {
-            $this->addFlash('error', 'You do not have permission to edit this gallery.');
+        if ($galerie->getUser() !== $user && !$this->isGranted('ROLE_ADMIN')) {
+            $this->addFlash('error', 'Vous n\'etes pas autorisé à éditer cette galerie.');
             return $this->redirectToRoute('app_galerie_index');
         }
         
@@ -125,13 +140,16 @@ final class GalerieController extends AbstractController{
         }
 
         // Check if the user is authenticated and the owner of the gallery
-        if (!$user || $galerie->getUser() !== $user) {
-            $this->addFlash('error', 'You do not have permission to delete this gallery.');
+        if (!$user || $galerie->getUser() !== $user && !$this->isGranted('ROLE_ADMIN')) {
+            $this->addFlash('error', 'Vous n\'etes pas autorisé à supprimer cette galerie.');
             return $this->redirectToRoute('app_galerie_index');
         }
     
         // Check CSRF token for security
         if ($this->isCsrfTokenValid('delete' . $galerie->getId(), $request->request->get('_token'))) {
+            foreach ($galerie->getPieceArt() as $pieceArt) {
+                $entityManager->remove($pieceArt);
+            }
             $entityManager->remove($galerie); // Remove the gallery
             $entityManager->flush(); // Persist the deletion
         }
@@ -158,4 +176,5 @@ final class GalerieController extends AbstractController{
             'galerie' => $galerie,
         ]);
     }
+
 }

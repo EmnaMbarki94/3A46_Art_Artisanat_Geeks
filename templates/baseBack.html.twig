@@ -2,15 +2,13 @@
 <html lang="en">
 
 	<head>
-
-		<!-- Required meta tags -->
-
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 		<title>
 			{% block title %}Bienvenue!
 			{% endblock %}
 		</title>
+
 
 		<!-- CSS Dependencies -->
 		<link rel="stylesheet" href="{{ asset('back/vendors/mdi/css/materialdesignicons.min.css') }}">
@@ -22,9 +20,11 @@
 		<link rel="shortcut icon" href="{{ asset('back/images/favicon.png') }}"/>
 	</head>
 	<body>
-		<div class="container-fluid page-body-wrapper">
+  
+		<div
+			class="container-fluid page-body-wrapper">
 			<!-- Navbar -->
-      
+
 			<nav class="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
 				<div class="navbar-brand-wrapper d-flex align-items-center justify-content-start">
 					<a class="navbar-brand brand-logo" href="{{ path('app_admin') }}">Artis</a>
@@ -66,8 +66,15 @@
 
 				<nav class="sidebar sidebar-offcanvas" id="sidebar">
         
-  
-					<ul class="nav">
+				<ul class="nav">
+            
+
+				<li class="nav-item">
+							<a class="nav-link" href="{{ path('admin_user') }}">
+								<span class="menu-title">Utilisateurs</span>
+								<i class="mdi mdi-account menu-icon"></i>
+							</a>
+						</li>
             
 				<li class="nav-item">
 							<a class="nav-link" href="{{ path('admin_user') }}">
