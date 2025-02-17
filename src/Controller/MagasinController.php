@@ -112,17 +112,6 @@ final class MagasinController extends AbstractController
             $entityManager->flush();
             
             return $this->redirectToRoute('app_article_index', [], Response::HTTP_SEE_OTHER);
-            $file = $form->get('photoM')->getData();
-
-            if ($file) {
-                $filename = uniqid() . '.' . $file->guessExtension();
-                $file->move($this->getParameter('magasin_directory'), $filename);
-                $magasin->setPhotoM($filename);
-            }
-            $entityManager->persist($magasin);
-            $entityManager->flush();
-            
-            return $this->redirectToRoute('app_magasin_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('magasin/edit.html.twig', [
