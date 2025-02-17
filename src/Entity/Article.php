@@ -39,7 +39,6 @@ class Article
     private ?string $descA = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Assert\Url(message: "Le chemin de l'image doit être une URL valide.")]
     private ?string $imagePath = null;
 
     

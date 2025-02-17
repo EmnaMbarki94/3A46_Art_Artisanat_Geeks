@@ -4,7 +4,7 @@
 
 {% block body %}
 
-    <h1>Galerie index</h1>
+    <h1>Liste des galeries</h1>
 
     <table class="table">
         <thead>
@@ -32,8 +32,8 @@
                 <td>{{ galerie.descG }}</td>
                 <td>{{ galerie.typeG }}</td>
                 <td>
-                    <a href="{{ path('app_galerie_show', {'id': galerie.id}) }}">Afficher</a>
-                    <a href="{{ path('app_galerie_pieces_art', {'id': galerie.id}) }}" class="btn btn-info">Voir Pièces d'Art</a>
+                    <a href="{{ path('app_galerie_show', {'id': galerie.id}) }}" class="btn btn-gradient-primary font-weight-bold">Afficher</a>
+                    <a href="{{ path('app_galerie_pieces_art', {'id': galerie.id}) }}" class="btn btn-gradient-primary font-weight-bold">Voir Pièces d'Art</a>
                 </td>
             </tr>
         {% else %}

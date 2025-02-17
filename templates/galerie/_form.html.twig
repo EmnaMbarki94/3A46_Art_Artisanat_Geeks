@@ -17,6 +17,11 @@
     {{ form_label(form.photoG, 'Photo de la Galerie', { 'label_attr': {'class': 'form-label'} }) }}
     {{ form_widget(form.photoG, { 'attr': {'class': 'form-control', 'accept': 'image/*', 'oninput': 'validateField(this)'} }) }}
     <div class="text-danger">{{ form_errors(form.photoG) }}</div>
+    {% if galerie.photoG %}
+            <div class="mt-2">
+                <img src="{{ asset('uploads/photos/' ~ galerie.photoG) }}" class="img-thumbnail" width="150">
+            </div>
+    {% endif %}
 </div>
 
 <div class="mb-3">
@@ -26,7 +31,7 @@
 </div>
 
 <div class="mb-3 mt-4">
-    <button type="submit" class="btn btn-primary">{{ button_label|default('Créer la Galerie') }}</button>
+    <button type="submit" class="btn text-white bg_pink">{{ button_label|default('Créer la Galerie') }}</button>
 </div>
 
 {{ form_end(form) }}

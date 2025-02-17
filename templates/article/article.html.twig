@@ -4,38 +4,253 @@
 {% endblock %}
 
 {% block body %}
-	
+	<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz@9..144&display=swap" rel="stylesheet">
+	<link href="{{ asset('front/css/product.css') }}" rel="stylesheet">
+	<style>
+		#product-list {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 15px; /* Ajuste l'espacement entre les articles */
+			justify-content: start; /* Ou 'center' si tu veux centrer */
+		}
 
+		#product-list .col-md-3 {
+			flex: 1 1 calc(25% - 15px); /* 4 articles par ligne */
+			max-width: calc(25% - 15px); /* Ajuste la largeur */
+		}
+		/* Assurer que toutes les cartes ont la même hauteur et largeur */
+		.prod_main {
+			height: 100%; /* Prend toute la hauteur disponible */
+			display: flex;
+			flex-direction: column;
+			justify-content: space-between;
+		}
+
+		/* Fixer la hauteur des images */
+		.product_2imi img {
+			height: 250px; /* Ajuste selon ton design */
+			object-fit: cover; /* S'assure que l'image garde un bon ratio */
+			width: 100%;
+		}
+
+		/* Uniformiser la hauteur des descriptions */
+		.product_2im1 {
+			flex-grow: 1; /* Permet aux descriptions de s'étirer également */
+			display: flex;
+			flex-direction: column;
+			justify-content: space-between;
+			text-align: center;
+		}
+
+		/* Position et apparence de l'icône */
+		.cart-icon {
+			position: fixed;
+			top: 20px;
+			right: 20px;
+			font-size: 24px;
+			text-decoration: none;
+			color: inherit;
+			transition: transform 0.2s ease-in-out;
+		}
+
+		/* Effet de rebond au survol */
+		.cart-icon:hover {
+			animation: bounce 0.6s ease-in-out;
+		}
+
+		/* Icône principale */
+		.cart-icon-main {
+			font-size: 28px;
+			transition: transform 0.3s ease-in-out;
+		}
+
+		/* Effet de vibration légère quand un article est ajouté */
+		.cart-icon-main.animated {
+			animation: vibrate 0.3s ease-in-out;
+		}
+
+		/* Badge (nombre d'articles) */
+		.cart-badge {
+			position: absolute;
+			top: -5px;
+			right: -10px;
+			background-color: inherit;
+			color: white;
+			font-size: 12px;
+			font-weight: bold;
+			border-radius: 50%;
+			width: 20px;
+			height: 20px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			opacity: 0;
+			transform: scale(0.5);
+			transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+		}
+
+		/* Apparition animée du badge */
+		.cart-badge.active {
+			opacity: 1;
+			transform: scale(1);
+			animation: popIn 0.3s ease-in-out, pulse 1.5s infinite ease-in-out;
+		}
+
+		/* ✨ ANIMATIONS ✨ */
+
+		/* Rebond au survol */
+		@keyframes bounce {
+			0,
+			100% {
+				transform: translateY(0);
+			}
+			50% {
+				transform: translateY(-5px);
+			}
+		}
+
+		/* Effet de vibration subtile */
+		@keyframes vibrate {
+			0% {
+				transform: translateX(0);
+			}
+			25% {
+				transform: translateX(-2px);
+			}
+			50% {
+				transform: translateX(2px);
+			}
+			75% {
+				transform: translateX(-2px);
+			}
+			100% {
+				transform: translateX(0);
+			}
+		}
+
+		/* Pop-in du badge */
+		@keyframes popIn {
+			0% {
+				transform: scale(0);
+				opacity: 0;
+			}
+			50% {
+				transform: scale(1.3);
+				opacity: 1;
+			}
+			100% {
+				transform: scale(1);
+				opacity: 1;
+			}
+		}
+
+		/* Pulsation douce du badge */
+		@keyframes pulse {
+			0% {
+				transform: scale(1);
+			}
+			50% {
+				transform: scale(1.2);
+			}
+			100% {
+				transform: scale(1);
+			}
+		}
+	</style>
 	<!-- Section Articles -->
-	<section id="articles" class="p-4">
-		<div class="container-xl pt-5">
-			<h2 class="text-white text-center mb-4">Liste des Articles</h2>
-			<div class="row">
+
+	<section id="center" class="center_o bg_gray pt-2 pb-2">
+		<div class="container-xl">
+			<div class="row center_o1">
+				<div class="col-md-5">
+					<div class="center_o1l">
+						<h2 class="mb-0">Tous les articles</h2>
+					</div>
+				</div>
+
+				<div class="col-md-7">
+					<div class="center_o1r text-end">
+						<h6 class="mb-0">
+							<a href="/">Home</a>
+							<span class="me-2 ms-2">
+								<i class="fa fa-caret-right"></i>
+							</span>
+							Tous les articles</h6>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<section id="product" class="p_4">
+
+		<div class="container-xl">
+			<div class="row product_1">
+				<div class="col-md-9">
+					<div class="product_1l">
+						<p class="mb-0 mt-2">Affichage de
+							{{ articles|length }}
+							articles</p>
+						<a href="{{ path('app_cart') }}" class="cart-icon">
+							<i class="fa fa-shopping-cart cart-icon-main"></i>
+							<span class="cart-badge {{ cart|length > 0 ? 'active' : '' }}">
+								{{ cart is defined ? cart|length : 0 }}
+							</span>
+						</a>
+
+
+					</div>
+
+				</div>
+
+
+				<div class="col-md-3">
+					<div class="product_1r">
+						<select id="magasins" name="magasins" class="form-select bg_gray col_light" required="" title="Sélectionnez un magasin">
+							<option value="">Sélectionnez un magasin</option>
+						</select>
+					</div>
+				</div>
+			</div>
+			<div class="row product_2 mt-4" id="product-list">
 				{% for article in articles %}
-					<div class="col-lg-3 col-md-4 col-sm-6 mb-4">
-						<div
-							class="card shadow-sm text-center border-0 h-100">
-							<!-- Image -->
-							<div class="card-img-top">
-								<a href="{{ path('article_detail', {'id': article.id}) }}">
-									<img src="{{ asset('uploads/produits/' ~ article.imagePath) }}" class="img-fluid rounded img-fixed" alt="Article Image">
-								</a>
+					<div class="col-md-3">
+						<div class="prod_main p-1 bg-white clearfix">
+							<div class="product_2im clearfix position-relative">
+								<div class="product_2imi clearfix">
+									<div class="grid clearfix">
+										<figure class="effect-jazz mb-0">
+											<a href="{{ path('article_detail', {'id': article.id}) }}">
+												<img src="{{ asset('uploads/produits/' ~ article.imagePath) }}" class="w-100" alt="{{ article.nomA }}">
+											</a>
+										</figure>
+									</div>
+								</div>
+								<div class="product_2imi1 position-absolute clearfix w-100 top-0 text-center">
+									<ul class="mb-0">
+										<li class="d-inline-block">
+											<a class="bg_pink text-white d-block" href="{{ path('article_detail', {'id': article.id}) }}">
+												<i class="fa fa-shopping-cart"></i>
+											</a>
+										</li>
+
+									</ul>
+								</div>
 							</div>
-							<!-- Détails -->
-							<div class="card-body d-flex flex-column justify-content-between">
-								<h5 class="card-title text-uppercase">
-									<a class="text-dark text-decoration-none" href="{{ path('article_detail', {'id': article.id}) }}">{{ article.nomA }}</a>
-								</h5>
-								<h6 class="text-muted mt-2 mb-1">
-									<strong>Prix :</strong>
-									{{ article.prixA }}
-									TND</h6>
-								<p class="card-text text-muted desc-fixed">{{ article.descA|slice(0, 80) }}...</p>
-								<!-- Bouton Voir -->
-								<a href="{{ path('article_detail', {'id': article.id}) }}" class="btn btn-primary btn-sm mt-auto">
-									<i class="fa fa-eye"></i>
-									Voir
-								</a>
+							<div class="product_2im1 position-relative clearfix">
+								<div class="clearfix product_2im1i text-center pt-3 pb-4">
+									<h5 class="font_14 text-uppercase">
+										<a class="col_dark" href="{{ path('article_detail', {'id': article.id}) }}">{{ article.nomA }}</a>
+									</h5>
+									<span class="font_12 col_yell">
+										<i class="fa fa-star"></i>
+										<i class="fa fa-star"></i>
+										<i class="fa fa-star"></i>
+										<i class="fa fa-star-half-o"></i>
+										<i class="fa fa-star-o"></i>
+									</span>
+									<h6 class="col_dark mt-2 mb-0">{{ article.prixA }}
+										TND</h6>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -48,34 +263,87 @@
 		</div>
 	</section>
 
-	<style>
-		/* Assure que toutes les cartes ont la même hauteur */
-		.card {
-			height: 100%;
-			display: flex;
-			flex-direction: column;
-		}
-		.card-body {
-			flex-grow: 1;
-			display: flex;
-			flex-direction: column;
-			justify-content: space-between;
-		}
-		/* Fixe une hauteur uniforme pour les images */
-		.img-fixed {
-			width: 100%;
-			height: 200px; /* Ajustez selon vos besoins */
-			object-fit: cover;
-		}
-		/* Fixe la hauteur du titre et de la description pour éviter les décalages */
-		.card-title {
-			min-height: 50px;
-		}
-		.desc-fixed {
-			min-height: 60px;
-			overflow: hidden;
-		}
-	</style>
+	<script>
+		document.addEventListener("DOMContentLoaded", function () { // Charger les magasins dans le select
+fetch("/magasin/magasins/liste").then(response => response.json()).then(data => {
+console.log("Données reçues du backend :", data); // ✅ Voir exactement ce que le backend envoie
+let select = document.getElementById("magasins");
+data.forEach(magasin => {
+let option = document.createElement("option");
+option.value = magasin.id; // ✅ On met l'ID réel ici !
+option.textContent = magasin.nom;
+select.appendChild(option);
+});
 
+}).catch(error => console.error("Erreur lors du chargement des magasins :", error));
+
+// Ajouter un événement au changement de magasin
+document.getElementById("magasins").addEventListener("change", function () {
+let magasinId = this.value;
+console.log(magasinId);
+// Vérifiez ici que c'est bien l'ID et non le nom du magasin
+
+// Vérifier que l'utilisateur a bien sélectionné un magasin
+if (magasinId) {
+
+fetch (`/article/magasin/${magasinId}`).then(response => response.json()) // Utilisez .json() ici.then(data => {
+console.log(data); // Afficher la réponse JSON dans la console
+let productList = document.getElementById("product-list");
+productList.innerHTML = ""; // Réinitialiser les articles affichés
+
+if (data.length === 0) {
+productList.innerHTML = "<p>Aucun article trouvé pour ce magasin.</p>";
+} else {
+data.forEach(article => {
+let articleElement = document.createElement("div");
+articleElement.classList.add("col-md-3");
+articleElement.innerHTML = `
+                    <div class="prod_main p-1 bg-white clearfix">
+                        <div class="product_2im clearfix position-relative">
+                            <div class="product_2imi clearfix">
+                                <div class="grid clearfix">
+                                    <figure class="effect-jazz mb-0">
+                                        <a href="/article/articles/${
+article.id
+}">
+                                            <img src="/uploads/produits/${
+article.imagePath
+}" class="w-100" alt="${
+article.nomA
+}">
+                                        </a>
+                                    </figure>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="product_2im1 position-relative clearfix">
+                            <div class="clearfix product_2im1i text-center pt-3 pb-4">
+                                <h5 class="font_14 text-uppercase">
+                                    <a class="col_dark" href="/article/articles/${
+article.id
+}">${
+article.nomA
+}</a>
+                                </h5>
+                                <h6 class="col_dark mt-2 mb-0">${
+article.prixA
+} TND</h6>
+								
+              
+							 </div>
+                        </div>
+                    </div>
+                `;
+productList.appendChild(articleElement);
+});
+}
+}
+).catch(error => console.error("Erreur lors du filtrage des articles :", error));
+
+
+}
+});
+});
+	</script>
 
 {% endblock %}

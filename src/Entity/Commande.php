@@ -31,6 +31,11 @@ class Commande
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $dateC = null;
 
+
+    #[ORM\ManyToOne(cascade: ['persist'])]
+    private ?User $user = null;
+
+
     public function __construct()
     {
         $this->article = new ArrayCollection();
@@ -46,7 +51,7 @@ class Commande
         return $this->total;
     }
 
-    public function setTotal(float $total): static
+    public function setTotal(float $total): self
     {
         $this->total = $total;
 
@@ -103,6 +108,18 @@ class Commande
     public function setDateC(\DateTimeInterface $dateC): static
     {
         $this->dateC = $dateC;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
 
         return $this;
     }

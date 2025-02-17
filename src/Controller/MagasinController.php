@@ -5,10 +5,12 @@ namespace App\Controller;
 use App\Entity\Magasin;
 use App\Form\MagasinType;
 use App\Repository\MagasinRepository;
+// use App\Repository\ArticleRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
@@ -22,44 +24,45 @@ final class MagasinController extends AbstractController
             'magasins' => $magasinRepository->findAll(),
         ]);
     }
+    
+    #[Route('/magasins/liste', name: 'liste_magasins')]
+    public function listeMagasins(MagasinRepository $magasinRepository): JsonResponse
+    {
+        $magasins = $magasinRepository->findAll();
 
-    #[Route('/new', name: 'app_magasin_new', methods: ['GET', 'POST'])]
-public function new(Request $request, EntityManagerInterface $entityManager): Response
-{
-    $magasin = new Magasin();
-    $form = $this->createForm(MagasinType::class, $magasin);
-    $form->handleRequest($request);
+        // Transformer en [{ id, nom }]
+        $magasinsArray = array_map(fn($m) => ['id' => $m->getId(), 'nom' => $m->getNomM()], $magasins);
 
-    if ($form->isSubmitted() && $form->isValid()) {
-        // Handle file upload if there is a file in the 'photo_m' field
-        /** @var UploadedFile $file */
-        $file = $form->get('photoM')->getData();
-
-        if ($file) {
-            // Generate a unique file name and move the file to the desired directory
-            $fileName = uniqid() . '.' . $file->guessExtension();
-            $file->move(
-                $this->getParameter('magasin_directory'), // Make sure this parameter is set in config/services.yaml
-                $fileName
-            );
-
-            // Set the file name to the 'photo_m' property of the Magasin entity
-            $magasin->setPhotoM($fileName);
-        }
-
-        // Persist the Magasin entity to the database
-        $entityManager->persist($magasin);
-        $entityManager->flush();
-
-        // Redirect to the index page
-        return $this->redirectToRoute('app_magasin_index', [], Response::HTTP_SEE_OTHER);
+        return $this->json($magasinsArray);
     }
 
-    return $this->render('magasin/new.html.twig', [
-        'magasin' => $magasin,
-        'form' => $form,
-    ]);
-}
+
+    #[Route('/new', name: 'app_magasin_new', methods: ['GET', 'POST'])]
+    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $magasin = new Magasin();
+        $form = $this->createForm(MagasinType::class, $magasin);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $file = $form->get('photoM')->getData();
+
+            if ($file) {
+                $filename = uniqid() . '.' . $file->guessExtension();
+                $file->move($this->getParameter('magasin_directory'), $filename);
+                $magasin->setPhotoM($filename);
+            }
+            $entityManager->persist($magasin);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_magasin_index', [], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->render('magasin/new.html.twig', [
+            'magasin' => $magasin,
+            'form' => $form,
+        ]);
+    }
 
     /* #[Route('/new', name: 'app_magasin_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
@@ -97,35 +100,16 @@ public function new(Request $request, EntityManagerInterface $entityManager): Re
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // Gestion de l'upload de fichier
-            /** @var UploadedFile $file */
             $file = $form->get('photoM')->getData();
 
             if ($file) {
-                // Générer un nom unique pour le fichier
-                $fileName = uniqid() . '.' . $file->guessExtension();
-
-                // Déplacer le fichier vers le dossier configuré
-                $file->move(
-                    $this->getParameter('magasin_directory'), // Assurez-vous que ce paramètre est défini dans services.yaml
-                    $fileName
-                );
-
-                // Supprimer l'ancienne image si nécessaire (optionnel)
-                if ($magasin->getPhotoM()) {
-                    $oldFilePath = $this->getParameter('magasin_directory') . '/' . $magasin->getPhotoM();
-                    if (file_exists($oldFilePath)) {
-                        unlink($oldFilePath);
-                    }
-                }
-
-                // Mettre à jour la propriété `photoM`
-                $magasin->setPhotoM($fileName);
+                $filename = uniqid() . '.' . $file->guessExtension();
+                $file->move($this->getParameter('magasin_directory'), $filename);
+                $magasin->setPhotoM($filename);
             }
-
-            // Sauvegarder les modifications en base de données
+            $entityManager->persist($magasin);
             $entityManager->flush();
-
+            
             return $this->redirectToRoute('app_magasin_index', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -164,4 +148,5 @@ public function new(Request $request, EntityManagerInterface $entityManager): Re
 
         return $this->redirectToRoute('app_magasin_index', [], Response::HTTP_SEE_OTHER);
     }
+   
 }
