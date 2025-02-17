@@ -31,7 +31,7 @@
                 </td>
                 <td>{{ piece_art.descP }}</td>
                 <td>
-                    <a href="{{ path('app_piece_art_edit', {'id': piece_art.id}) }}" class="btn btn-warning">Éditer</a>
+                    <a href="{{ path('app_piece_art_edit', {'id': piece_art.id}) }}" class="btn btn-gradient-primary font-weight-bold">Éditer</a>
                 </td>
             </tr>
         {% else %}
@@ -42,5 +42,4 @@
         </tbody>
     </table>
 
-    <a href="{{ path('app_piece_art_new', {'galerieId': galerie.id}) }}" class="btn btn-success">Créer une nouvelle œuvre</a>
 {% endblock %}

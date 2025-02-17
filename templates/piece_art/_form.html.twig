@@ -22,6 +22,8 @@
             <div class="mt-2">
                 <img src="{{ asset('uploads/photos/' ~ piece_art.photoP) }}" class="img-thumbnail" width="150">
             </div>
+        {% else %}
+            <img src="{{ asset('uploads/photos/default.jpg') }}"  class="img-thumbnail" style="display: none" width="150" alt="Image par défaut">
         {% endif %}
     </div>
 
@@ -37,7 +39,7 @@
     </div>
 
     <div class="mb-3 mt-4">
-        <button type="submit" class="btn btn-primary">{{ button_label|default('Valider') }}</button>
+        <button type="submit" class="btn text-white bg_pink">{{ button_label|default('Valider') }}</button>
     </div>
 
     {{ form_end(form) }}
