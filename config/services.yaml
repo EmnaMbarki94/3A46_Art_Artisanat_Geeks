@@ -16,17 +16,21 @@ parameters:
 
 
 services:
-<<<<<<< HEAD
 
     # default configuration for services in *this* file
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
-=======
+
   _defaults:
     autowire: true
     autoconfigure: true
->>>>>>> 4df36eff2bc97aa07002853c4b56d516ec638d7b
+    
+  App\Service\CartService:
+      arguments:
+          $session: '@session'
+
+
 
   # Defines the App services
   App\:

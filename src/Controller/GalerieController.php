@@ -14,7 +14,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-
 #[Route('/galerie')]
 final class GalerieController extends AbstractController{
     #[Route(name: 'app_galerie_index', methods: ['GET'])]

@@ -1,0 +1,7 @@
+ {% extends 'base.html.twig' %} 
+
+{% block body %}
+    {{ include('commande/_form.html.twig') }}
+
+     <a href="{{ path('app_commande_index') }}">back to list</a> 
+{% endblock %}

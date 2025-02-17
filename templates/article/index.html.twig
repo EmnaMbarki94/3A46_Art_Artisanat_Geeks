@@ -1,53 +1,84 @@
 {% extends 'baseBack.html.twig' %}
 
-{% block title %}Articles
-{% endblock %}
+{% block title %}Articles{% endblock %}
 
 {% block body %}
-	<h1 class="mb-4">Articles</h1>
+    <h1 class="mb-4">Articles</h1>
 
-	<table class="table table-striped">
-		<thead>
-			<tr>
-				<th>Id</th>
-				<th>NomA</th>
-				<th>PrixA</th>
-				<th>DescA</th>
-				<th>Image</th>
-				<th>Actions</th>
-			</tr>
-		</thead>
-		<tbody>
-			{% for article in articles %}
-				<tr>
-					<td>{{ article.id }}</td>
-					<td>{{ article.nomA }}</td>
-					<td>{{ article.prixA }}</td>
-					<td style="max-width: 250px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
-						{{ article.descA }}
-					</td>
-					<td>
-						{% if article.imagePath is not empty %}
-							<img src="{{ asset('uploads/produits/' ~ article.imagePath) }}" alt="Photo du produit" width="100" class="img-thumbnail">
-						{% else %}
-							<span>Aucune image</span>
-						{% endif %}
-					</td>
-					<td>
-						<a href="{{ path('app_article_show', {'id': article.id}) }}" class="btn btn-info btn-sm">Show</a>
-						<a href="{{ path('app_article_edit', {'id': article.id}) }}" class="btn btn-warning btn-sm">Edit</a>
-						{{ include('article/_delete_form.html.twig', {'article': article}) }}
-					</td>
-				</tr>
-			{% else %}
-				<tr>
-					<td colspan="6">No records found</td>
-				</tr>
-			{% endfor %}
-		</tbody>
-	</table>
+    <!-- Search Bar -->
+    <div class="mb-4">
+        <input type="text" id="searchInput" class="form-control" placeholder="Rechercher par nom, prix ou description...">
+    </div>
 
-	<div class="text-center mt-4">
-		<a href="{{ path('app_article_new') }}" class="btn btn-primary rounded-pill">Create new</a>
-	</div>
+    <table class="table table-striped" id="articlesTable">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>NomA</th>
+                <th>PrixA</th>
+                <th>DescA</th>
+                <th>Image</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for article in articles %}
+                <tr>
+                    <td>{{ article.id }}</td>
+                    <td>{{ article.nomA }}</td>
+                    <td>{{ article.prixA }}</td>
+                    <td style="max-width: 250px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                        {{ article.descA }}
+                    </td>
+                    <td>
+                        {% if article.imagePath is not empty %}
+                            <img src="{{ asset('uploads/produits/' ~ article.imagePath) }}" alt="Photo du produit" width="100" class="img-thumbnail">
+                        {% else %}
+                            <span>Aucune image</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="{{ path('app_article_show', {'id': article.id}) }}" class="btn btn-info btn-sm">Show</a>
+                        <a href="{{ path('app_article_edit', {'id': article.id}) }}" class="btn btn-warning btn-sm">Edit</a>
+                        {{ include('article/_delete_form.html.twig', {'article': article}) }}
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="6">No records found</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="text-center mt-4">
+        <a href="{{ path('app_article_new') }}" class="btn btn-primary rounded-pill">Create new</a>
+    </div>
+
+    <!-- JavaScript for Dynamic Search -->
+    <script>
+        document.getElementById('searchInput').addEventListener('input', function() {
+            let searchQuery = this.value.toLowerCase();
+            let rows = document.querySelectorAll('#articlesTable tbody tr');
+
+            rows.forEach(function(row) {
+                let columns = row.querySelectorAll('td');
+                let matchFound = false;
+
+                // Check if any column contains the search query
+                columns.forEach(function(column) {
+                    if (column.textContent.toLowerCase().includes(searchQuery)) {
+                        matchFound = true;
+                    }
+                });
+
+                // Show or hide the row based on search query match
+                if (matchFound) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+    </script>
 {% endblock %}
