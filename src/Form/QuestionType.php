@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\Question;
 use App\Entity\Quiz;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
@@ -18,6 +19,8 @@ class QuestionType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+    $user=$options['user'];
+
     $builder
     ->add('contenuQ', TextType::class, [
         'label' => 'Contenu de la question',
@@ -28,6 +31,13 @@ class QuestionType extends AbstractType
         'choice_label' => 'titreC',
         'label' => 'Quiz associé',
         'attr' => ['class' => 'form-select'],
+        'query_builder' => function (EntityRepository $er) use ($user) {
+            return $er->createQueryBuilder('q')
+                ->leftJoin('q.cours', 'c')
+                ->leftJoin('c.user', 'u')
+                ->andWhere('u.id = :userId')
+                ->setParameter('userId', $user->getId());
+            },
         
     ]);
 
@@ -72,6 +82,7 @@ $builder->addEventListener(FormEvents::SUBMIT, function (FormEvent $event) {
     {
         $resolver->setDefaults([
             'data_class' => Question::class,
+            'user'=>null,
         ]);
     }
 }

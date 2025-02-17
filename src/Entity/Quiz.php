@@ -18,7 +18,8 @@ class Quiz
     #[Assert\NotBlank(message: "La question ne peut pas être vide.")]
     private ?string $titreC = null;
 
-    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(targetEntity: Cours::class,inversedBy:'quiz')]
+    #[ORM\JoinColumn(onDelete: 'CASCADE')]
     #[Assert\NotNull(message:"tu doit choisir le cours associé")]
     private ?Cours $cours = null;
 

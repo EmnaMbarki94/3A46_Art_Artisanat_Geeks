@@ -50,12 +50,15 @@ class Cours
     private ?\DateTimeInterface $heureC = null;
 
     #[ORM\ManyToOne(inversedBy: 'cours')]
+    #[ORM\JoinColumn(onDelete: 'CASCADE')]
+    
     private ?User $user = null;
 
     #[ORM\Column(length: 255)]
     private ?string $image = "default2.png";
 
-    #[ORM\OneToOne(targetEntity: Quiz::class ,cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(targetEntity: Quiz::class,cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(onDelete: 'SET NULL')]
     private ?Quiz $quiz = null;
 
     public function getId(): ?int

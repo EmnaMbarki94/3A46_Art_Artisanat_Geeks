@@ -4,7 +4,6 @@
 
 {% block body %}
 
-       
 
 <section id="blog" class="p_4 pt-5">
 {% for c in cours %}
@@ -38,44 +37,10 @@
         </div>
     </div>
     <hr>
+    {% else %}
+        <p>no records found</p>
     {% endfor %}
 </section>
 
-    
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Nom du cours</th>
-                <th>Categorie C</th>
-                <th>Contenu du cours</th>
-                <th>Date d'ajout des cours</th>
-                <th>Heure d'ajout des cours</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for cour in cours %}
-            <tr>
-                <td>{{ cour.id }}</td>
-                <td>{{ cour.nomC }}</td>
-                <td>{{ cour.categC }}</td>
-                <td>{{ cour.contenuC }}</td>
-                <td>{{ cour.dateC ? cour.dateC|date('Y-m-d') : '' }}</td>
-                <td>{{ cour.heureC ? cour.heureC|date('H:i') : '' }}</td>
-                <td>
-                    <a href="{{ path('app_cours_show', {'id': cour.id}) }}">show</a>
-                    <a href="{{ path('app_cours_edit', {'id': cour.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="7">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
-    <a href="{{ path('app_cours_new') }}">Create new</a>
 {% endblock %}

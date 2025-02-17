@@ -25,7 +25,7 @@ class Question
     ])]
     private array $reponses = [];
 
-    #[ORM\ManyToOne(targetEntity: Quiz::class, inversedBy: 'questions', cascade: ['remove'])]
+    #[ORM\ManyToOne(targetEntity: Quiz::class, inversedBy: 'questions')]
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     
     private ?Quiz $quiz = null;

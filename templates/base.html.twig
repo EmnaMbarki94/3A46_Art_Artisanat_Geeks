@@ -63,7 +63,9 @@
                 </a>
                 <ul class="dropdown-menu drop_1" aria-labelledby="navbarDropdown">
                     <li><a class="dropdown-item" href="{{ path('app_cours_index') }}"> Cours</a></li>
+                    {% if is_granted('ROLE_ENSEIGNANT') %}
                     <li><a class="dropdown-item border-0" href="{{ path('app_cours_new') }}"> Créer un cours</a></li>
+                    {% endif %}
                 </ul>
                 </li>
                 <li class="nav-item dropdown">

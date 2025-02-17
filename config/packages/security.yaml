@@ -28,3 +28,9 @@ security:
   access_control:
     - { path: ^/admin, roles: ROLE_ADMIN }
     - { path: ^/user, roles: [ROLE_USER, ROLE_ARTISTE] }
+
+    - { path: ^/cours2, roles: ROLE_ADMIN }
+    - { path: ^/cours/new, roles: [ROLE_ENSEIGNANT,ROLE_ADMIN] }
+    - { path: ^/quiz/new, roles: [ROLE_ENSEIGNANT,ROLE_ADMIN] }
+    - { path: ^/quiz, roles: IS_AUTHENTICATED_FULLY }
+    - { path: ^/question/new, roles: [ROLE_ENSEIGNANT,ROLE_ADMIN] }
