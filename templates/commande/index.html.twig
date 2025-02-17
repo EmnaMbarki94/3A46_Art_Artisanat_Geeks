@@ -1,0 +1,65 @@
+{% extends 'baseBack.html.twig' %}
+
+{% block title %}Commandes{% endblock %}
+
+{% block body %}
+    <h1 class="mb-4">Commandes</h1>
+
+    <!-- Barre de recherche -->
+    <div class="mb-4">
+        <input type="text" id="searchInput" class="form-control" placeholder="Rechercher par total, adresse ou date...">
+    </div>
+
+    <table class="table table-striped" id="commandesTable">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Total</th>
+                <th>Adresse</th>
+                <th>Date</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for commande in commandes %}
+                <tr>
+                    <td>{{ commande.id }}</td>
+                    <td>{{ commande.total }}</td>
+                    <td>{{ commande.adresseC }}</td>
+                    <td>{{ commande.dateC ? commande.dateC|date('Y-m-d') : '' }}</td>
+                    <td>
+                        <a href="{{ path('app_commande_show', {'id': commande.id}) }}" class="btn btn-info btn-sm">Show</a>
+                        <a href="{{ path('app_commande_edit', {'id': commande.id}) }}" class="btn btn-warning btn-sm">Edit</a>
+                        {{ include('commande/_delete_form.html.twig', {'commande': commande}) }}
+
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="5">No records found</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- JavaScript pour la recherche dynamique -->
+    <script>
+        document.getElementById('searchInput').addEventListener('input', function() {
+            let searchQuery = this.value.toLowerCase();
+            let rows = document.querySelectorAll('#commandesTable tbody tr');
+
+            rows.forEach(function(row) {
+                let columns = row.querySelectorAll('td');
+                let matchFound = false;
+
+                columns.forEach(function(column) {
+                    if (column.textContent.toLowerCase().includes(searchQuery)) {
+                        matchFound = true;
+                    }
+                });
+
+                row.style.display = matchFound ? '' : 'none';
+            });
+        });
+    </script>
+{% endblock %}

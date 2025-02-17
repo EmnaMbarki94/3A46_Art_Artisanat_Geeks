@@ -21,7 +21,9 @@
 	</head>
 	<body>
 
-		<div class="container-fluid page-body-wrapper">
+
+		<div
+			class="container-fluid page-body-wrapper">
 			<!-- Navbar -->
 
 			<nav class="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
@@ -45,12 +47,12 @@
 								</div>
 							</a>
 							<div class="dropdown-menu navbar-dropdown" aria-labelledby="profileDropdown">
-								<a class="dropdown-item" href="#">
+								<a class="dropdown-item" href="{{ path('profile_user') }}">
 									<i class="mdi mdi-cached me-2 text-success"></i>
-									Activity Log
+									profile
 								</a>
 								<div class="dropdown-divider"></div>
-								<a class="dropdown-item" href="#">
+								<a class="dropdown-item" href="{{ path('app_logout') }}">
 									<i class="mdi mdi-logout me-2 text-primary"></i>
 									Signout
 								</a>
@@ -67,21 +69,9 @@
 
         
 				<ul class="nav">
-            
-						<li class="nav-item nav-profile">
-							<a href="#" class="nav-link">
-								<div class="nav-profile-image">
-									<img src="assets/images/faces/face1.jpg" alt="profile"/>
-									<span class="login-status online"></span>
-									<!--change to offline or busy as needed-->
-								</div>
-								<div class="nav-profile-text d-flex flex-column">
-									<span class="font-weight-bold mb-2">David Grey. H</span>
-									<span class="text-secondary text-small">Project Manager</span>
-								</div>
-								<i class="mdi mdi-bookmark-check text-success nav-profile-badge"></i>
-							</a>
-						</li>
+      
+
+
             <li class="nav-item">
 						<a class="nav-link" href="{{ path('admin_user') }}">
 							<span class="menu-title">Gestion des utilisateurs</span>
@@ -107,6 +97,7 @@
 					<i class="mdi mdi-reply menu-icon"></i>
 				</a>
 				</li>
+
         
 						<li class="nav-item">
 							<a class="nav-link" data-bs-toggle="collapse" href="#forms" aria-expanded="false" aria-controls="forms">
@@ -123,12 +114,12 @@
 										<a class="nav-link" href="{{ path('app_article_new') }}">Articles</a>
 										<i class="mdi mdi-file-plus menu-icon"></i>
 									</li>
-									
+
 									<li class="nav-item">
 										<a class="nav-link" href="{{ path('app_galerie_indexA') }}">Galeries</a>
 										<i class="mdi mdi-image-multiple menu-icon"></i>
 									</li>
-									
+
 									<li class="nav-item">
 										<a class="nav-link" href="{{ path('app_evenement_new') }}">Evenements</a>
 										<i class="mdi mdi-calendar-plus menu-icon"></i>
@@ -230,15 +221,6 @@
 						</div>
 					</div>
 
-					<!-- Footer -->
-					<footer class="footer">
-						<div class="d-sm-flex justify-content-center justify-content-sm-between">
-							<span class="text-muted text-center text-sm-left d-block d-sm-inline-block">
-								Copyright © 2025
-								<a href="https://www.bootstrapdash.com/" target="_blank">BootstrapDash</a>. All rights reserved.
-							</span>
-						</div>
-					</footer>
 				</div>
 				
 			</div>
@@ -256,5 +238,3 @@
 		</body>
 
 	</html>
-
-
