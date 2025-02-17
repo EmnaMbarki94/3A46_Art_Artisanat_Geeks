@@ -329,7 +329,8 @@ public function deleteUser(User $user, EntityManagerInterface $entityManager, Re
             //redirect depends on role : 
             if (in_array("ROLE_ARTISTE", $this->getUser()->getRoles())) {
                 // Rediriger vers la page Abonné
-                return $this->redirectToRoute('app_galerie');
+               
+                return $this->redirectToRoute('app_galerie_index');
             }
             if (in_array("ROLE_ADMIN", $this->getUser()->getRoles())) {
                 // Rediriger vers la page Abonné
