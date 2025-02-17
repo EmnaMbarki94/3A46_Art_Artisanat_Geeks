@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 
+
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -8,7 +9,6 @@
 			{% block title %}Bienvenue!
 			{% endblock %}
 		</title>
-
 
 		<!-- CSS Dependencies -->
 		<link rel="stylesheet" href="{{ asset('back/vendors/mdi/css/materialdesignicons.min.css') }}">
@@ -20,6 +20,7 @@
 		<link rel="shortcut icon" href="{{ asset('back/images/favicon.png') }}"/>
 	</head>
 	<body>
+
 
 		<div
 			class="container-fluid page-body-wrapper">
@@ -68,31 +69,7 @@
 
         
 				<ul class="nav">
-            
-            
-				<li class="nav-item">
-							<a class="nav-link" href="{{ path('admin_user') }}">
-								<span class="menu-title">Utilisateurs</span>
-								<i class="mdi mdi-account menu-icon"></i>
-							</a>
-						</li>
-
-            
-
-						<li class="nav-item nav-profile">
-							<a href="#" class="nav-link">
-								<div class="nav-profile-image">
-									<img src="assets/images/faces/face1.jpg" alt="profile"/>
-									<span class="login-status online"></span>
-									<!--change to offline or busy as needed-->
-								</div>
-								<div class="nav-profile-text d-flex flex-column">
-									<span class="font-weight-bold mb-2">David Grey. H</span>
-									<span class="text-secondary text-small">Project Manager</span>
-								</div>
-								<i class="mdi mdi-bookmark-check text-success nav-profile-badge"></i>
-							</a>
-						</li>
+      
 
 
             <li class="nav-item">
@@ -108,21 +85,19 @@
 						</a>
 					</li>
 					
-            <li class="nav-item">
-              <a class="nav-link" href="{{ path('app_admin2') }}">
-                <span class="menu-title">Reclamation</span>
-                <i class="mdi mdi-format-list-bulleted menu-icon"></i>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{{ path('app_reponse_index') }}">
-                <span class="menu-title">Reponse</span>
-                <i class="mdi mdi-format-list-bulleted menu-icon"></i>
-              </a>
-            </li>
-        
+				<li class="nav-item">
+				<a class="nav-link" href="{{ path('app_admin2') }}">
+					<span class="menu-title">Reclamation</span>
+					<i class="mdi mdi-comment-question menu-icon"></i>
+				</a>
+				</li>
+				<li class="nav-item">
+				<a class="nav-link" href="{{ path('app_reponse_index') }}">
+					<span class="menu-title">Reponse</span>
+					<i class="mdi mdi-reply menu-icon"></i>
+				</a>
+				</li>
 
-								
         
 						<li class="nav-item">
 							<a class="nav-link" data-bs-toggle="collapse" href="#forms" aria-expanded="false" aria-controls="forms">
@@ -195,7 +170,6 @@
 								</ul>
 							</div>
 						</li>
-
 						<li class="nav-item">
 							<a class="nav-link" data-bs-toggle="collapse" href="#auth" aria-expanded="false" aria-controls="auth">
 								<span class="menu-title">User Pages</span>

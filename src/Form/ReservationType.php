@@ -4,11 +4,13 @@ namespace App\Form;
 
 use App\Entity\Event;
 use App\Entity\Reservation;
+use App\Entity\User;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 
 class ReservationType extends AbstractType
 {
@@ -28,8 +30,34 @@ class ReservationType extends AbstractType
             ])
             ->add('relation', EntityType::class, [
                 'class' => Event::class,
-                'choice_label' => 'nom',
+                'choice_label' => 'nom',  // Affiche le nom de l'événement
+                'label' => 'Événement',
+                'required' => true,
+                'choice_attr' => function (Event $event) {
+                    return [
+                        'data-prixVIP' => $event->getPrixVIP(),
+                        'data-prixSimple' => $event->getPrixS(),
+                    ];
+                }
+            ])
+            ->add('prix', HiddenType::class, [
+                'mapped' => false,
+            ])
+            ->add('user_id', EntityType::class, [
+                'class' => User::class,
+                'choice_label' => 'firstName',  
+                'label' => 'Utilisateur',
+                'required' => true
+            ]) 
+            ->add('prix', null, [
+                'label' => 'Prix',
+                'mapped' => false,  // Ce champ ne sera pas directement lié à l'entité
+                'attr' => [
+                    'readonly' => true, // Le prix est en lecture seule
+                    'value' => '0', // Valeur initiale
+                ]
             ]);
+    
     }
 
     public function configureOptions(OptionsResolver $resolver): void

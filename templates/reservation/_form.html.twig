@@ -1,30 +1,78 @@
 {% block body %}
-    <h1>Réservation</h1>
+    <div class="container my-5">
+        <!-- Titre avec couleur personnalisée -->
+        <h1 class="text-center" style="color: #8e44ad; font-size: 2.5rem;">Réservation</h1>
 
-    {# Affichage du message flash de succès #}
-    {% for message in app.flashes('success') %}
-        <div class="alert alert-success">
-            {{ message }}
-        </div>
-    {% endfor %}
+        {# Affichage du message flash de succès #}
+        {% for message in app.flashes('success') %}
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <strong>Succès!</strong> {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
 
-    {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+        {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
 
-    {% for field in form %}
-        <div class="mb-3">
-            {{ form_label(field, null, {'label_attr': {'class': 'form-label'}}) }}
-            {{ form_widget(field, {'attr': {'class': field.vars.errors|length > 0 ? 'form-control is-invalid' : 'form-control'}}) }}
-
-            {% if field.vars.errors|length > 0 %}
-                <div class="invalid-feedback">
-                    {{ form_errors(field) }}
+        <div class="row mb-4">
+            {% for field in form %}
+                <div class="col-md-6 mb-3">
+                    <div class="form-group">
+                        {{ form_label(field, null, {'label_attr': {'class': 'form-label'}}) }}
+                        {{ form_widget(field, {'attr': {'class': field.vars.errors|length > 0 ? 'form-control is-invalid' : 'form-control form-control-lg'}}) }}
+                        
+                        {% if field.vars.errors|length > 0 %}
+                            <div class="invalid-feedback">
+                                {{ form_errors(field) }}
+                            </div>
+                        {% endif %}
+                    </div>
                 </div>
-            {% endif %}
+            {% endfor %}
+
+           
+          
         </div>
-    {% endfor %}
 
-    <button type="submit" class="btn btn-primary">{{ button_label|default('Réserver') }}</button>
+        <div class="text-center mt-4">
+            <!-- Bouton avec couleur personnalisée -->
+            <button type="submit" class="btn" style="background-color: #8e44ad; border-color: #8e44ad; color: white; font-size: 1.2rem; padding: 12px 30px;">
+                <i class="fa fa-ticket me-2"></i>{{ button_label|default('Réserver') }}
+            </button>
+        </div>
 
-    {{ form_end(form) }}
+        {{ form_end(form) }}
+    </div>
+
+   <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const etatSelect = document.querySelector('select[name="reservation[etatE]"]');
+            const prixInput = document.querySelector('input[name="reservation[prix]"]');
+            const eventSelect = document.querySelector('select[name="reservation[relation]"]');
+
+            // Fonction de mise à jour du prix
+            function updatePrice() {
+                const selectedEtat = etatSelect.value;
+                const selectedEventId = eventSelect.value;
+
+                // Récupérer l'événement sélectionné (prixVIP et prixSimple)
+                const eventOption = eventSelect.options[eventSelect.selectedIndex];
+                const prixVIP = eventOption.getAttribute('data-prixVIP');
+                const prixSimple = eventOption.getAttribute('data-prixSimple');
+
+                // Mettre à jour le prix en fonction de l'état
+                if (selectedEtat === 'VIP') {
+                    prixInput.value = prixVIP;
+                } else {
+                    prixInput.value = prixSimple;
+                }
+            }
+
+            // Attacher l'événement de mise à jour
+            etatSelect.addEventListener('change', updatePrice);
+            eventSelect.addEventListener('change', updatePrice);
+
+            updatePrice(); // Initial call to set the default price
+        });
+    </script>
 
 {% endblock %}
