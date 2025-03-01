@@ -21,6 +21,8 @@ parameters:
 services:
   App\EventSubscriber\CalendarSubscriber:
 
+
+  Dompdf\Dompdf: ~
     # default configuration for services in *this* file
   _defaults:
     autowire: true      # Automatically injects dependencies in your services.
@@ -47,6 +49,7 @@ services:
       $sid: "%twilio.sid%"
       $token: "%twilio.auth_token%"
       $twilioNumber: "%twilio.phone_number%"
+
 
   App\Service\ElevenLabsTtsService:
         arguments:

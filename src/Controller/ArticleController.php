@@ -15,6 +15,8 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
+use Knp\Component\Pager\PaginatorInterface;
+
 // use Psr\Log\LoggerInterface;
 
 
@@ -30,7 +32,7 @@ final class ArticleController extends AbstractController
         $this->cartService = $cartService;
     }
 
-    // Add item to the cart
+//////////////////////////PANIER///////////////////////////////////
     #[Route('/add-to-cart/{id}', name: 'app_add_to_cart')]
     public function addToCart(Article $article, Request $request): RedirectResponse
     {
@@ -41,7 +43,7 @@ final class ArticleController extends AbstractController
         if ($quantity < 1) {
             $quantity = 1;
         }
-
+        
         // Ajoute l'article au panier avec la quantité donnée
         $this->cartService->addToCart($article, $quantity);
 
@@ -52,32 +54,40 @@ final class ArticleController extends AbstractController
     }
 
     //update !quantity cart
-    #[Route('/article/update-quantity/{id}', name: 'app_update_quantity', methods: ['POST','GET'])]
+    #[Route('/article/update-quantity/{id}', name: 'app_update_quantity', methods: ['POST', 'GET'])]
     public function updateQuantity(Request $request, SessionInterface $session, $id): JsonResponse
     {
         $cart = $session->get('cart', []);
-    
+
         if (!isset($cart[$id])) {
             return new JsonResponse(['success' => false, 'message' => 'Produit non trouvé']);
         }
-    
-        $data = json_decode($request->getContent(), true); // Récupérer la donnée envoyée
-    
-        // Vérification de la quantité
+
+        $data = json_decode($request->getContent(), true);
+
         if (!isset($data['quantity']) || !is_numeric($data['quantity']) || $data['quantity'] < 1) {
             return new JsonResponse(['success' => false, 'message' => 'Quantité invalide']);
         }
-    
+        
         // Mise à jour de la quantité
         $cart[$id]['quantity'] = (int) $data['quantity'];
-        $session->set('cart', $cart); // Sauvegarder dans la session
+        $session->set('cart', $cart);
+
+        // Recalcul du total du panier
         $total = 0;
         foreach ($cart as $item) {
-            $total += $item['quantity'] * $item['prixA'];  // prixA est supposé être le prix de l'article
+            $total += $item['quantity'] * $item['prixA'];
         }
-        return new JsonResponse(['success' => true, 'quantity' => $cart[$id]['quantity']]);
+
+        // 🔹 Ajout de `total` dans la réponse JSON
+        return new JsonResponse([
+            'success' => true,
+            'quantity' => $cart[$id]['quantity'],
+            'total' => $total // ✅ Ajout du total ici !
+        ]);
     }
-    
+
+
     // View the cart
     #[Route('/cart', name: 'app_cart')]
     public function viewCart()
@@ -112,7 +122,7 @@ final class ArticleController extends AbstractController
     }
 
 
-    //////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////ARTICLES///////////////////////////////////////////////
     #[Route(name: 'app_article_index', methods: ['GET'])]
     public function index(ArticleRepository $articleRepository): Response
     {
@@ -120,16 +130,34 @@ final class ArticleController extends AbstractController
             'articles' => $articleRepository->findAll(),
         ]);
     }
-    #[Route('/articles', name: 'app_article_list', methods: ['GET', 'POST'])]
-    public function showArticle(ArticleRepository $articleRepository, SessionInterface $session): Response
-    {
-        $cart = $session->get('cart', []); // ✅ Récupérer le panier depuis la session
 
-        return $this->render('article/article.html.twig', [
-            'articles' => $articleRepository->findAll(),
-            'cart' => $cart, // ✅ Passer la variable cart correctement
-        ]);
-    }
+    #[Route('/articles', name: 'app_article_list', methods: ['GET', 'POST'])]
+public function showArticle(
+    ArticleRepository $articleRepository,
+    SessionInterface $session,
+    PaginatorInterface $paginator,
+    Request $request
+): Response {
+    $cart = $session->get('cart', []); //  Récupérer le panier depuis la session
+
+    // Utiliser QueryBuilder pour la pagination
+    $query = $articleRepository->findAllQuery(); // Appelle la méthode du repository
+
+    //  Paginer les résultats
+    $pagination = $paginator->paginate(
+        $query, // La requête Doctrine
+        $request->query->getInt('page', 1), // Numéro de la page (par défaut 1)
+        4 // Nombre d'articles par page
+    );
+
+    return $this->render('article/article.html.twig', [
+        'articles' => $pagination->getItems(),
+        'pagination' => $pagination,
+        'cart' => $cart, //  Passer la variable cart
+    ]);
+}
+
+
 
     #[Route('/new', name: 'app_article_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
@@ -195,7 +223,7 @@ final class ArticleController extends AbstractController
             }
             $entityManager->persist($article);
             $entityManager->flush();
-            
+
             return $this->redirectToRoute('app_article_index', [], Response::HTTP_SEE_OTHER);
 
             if ($file) {
@@ -260,6 +288,8 @@ final class ArticleController extends AbstractController
                 'nomA' => $article->getNomA(),
                 'prixA' => $article->getPrixA(),
                 'imagePath' => $article->getImagePath(),
+                'quantite' => $article->getQuantite(),
+
             ];
         }
 

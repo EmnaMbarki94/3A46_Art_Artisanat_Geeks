@@ -42,12 +42,13 @@
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        flatpickr(".datepicker", {
-            enableTime: false,
-            dateFormat: "d-m-Y",
-            theme: "dark",
-            defaultDate: "today"
-        });
-    });
+	document.addEventListener("DOMContentLoaded", function () {
+flatpickr(".datepicker", {
+enableTime: false,
+dateFormat: "d-m-Y",
+theme: "dark",
+defaultDate: "today",
+allowInput: false // Désactive la saisie manuelle
+});
+});
 </script>

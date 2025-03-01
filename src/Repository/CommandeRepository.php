@@ -15,7 +15,20 @@ class CommandeRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Commande::class);
     }
+   
+    
+    public function getOrdersCountByDay(): array
+{
+    return $this->createQueryBuilder('c')
+        ->select("SUBSTRING(c.dateC, 1, 10) as jour, COUNT(c.id) as total_commandes")
+        ->groupBy('jour')
+        ->orderBy('jour', 'ASC')
+        ->getQuery()
+        ->getResult();
+}
 
+
+    
 //    /**
 //     * @return Commande[] Returns an array of Commande objects
 //     */

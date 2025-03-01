@@ -111,7 +111,7 @@ final class MagasinController extends AbstractController
             $entityManager->persist($magasin);
             $entityManager->flush();
             
-            return $this->redirectToRoute('app_article_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_magasin_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('magasin/edit.html.twig', [

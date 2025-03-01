@@ -1,0 +1,128 @@
+{% extends 'baseBack.html.twig' %}
+
+{% block title %}Statistiques{% endblock %}
+
+{% block body %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<div class="row">
+
+    <!-- 🔹 Graphiques des Produits les plus Vendus par Magasin -->
+    {% for magasin, produits in topProductsByStore %}
+        <div class="col-lg-6 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Top Produits - {{ magasin }}</h4>
+                    
+                    <!-- Sélecteur du type de graphique -->
+                    <div class="form-group">
+                        <label for="chartType-{{ loop.index }}">Choisir le type :</label>
+                        <select class="chartType form-control" data-chart-id="chart-{{ loop.index }}">
+                            <option value="bar">Bar</option>
+                            <option value="line">Ligne</option>
+                            <option value="pie">Camembert (Pie)</option>
+                            <option value="doughnut">Doughnut</option>
+                        </select>
+                    </div>
+
+                    <canvas id="chart-{{ loop.index }}" style="height:230px"></canvas>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+
+    <!-- 🔹 Graphique du Nombre de Commandes par Jour -->
+    <div class="col-lg-6 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Nombre de Commandes par Jour</h4>
+                
+                <!-- Sélecteur du type de graphique -->
+                <div class="form-group">
+                    <label for="chartType-orders">Choisir le type :</label>
+                    <select class="chartType form-control" data-chart-id="chart-orders">
+                        <option value="bar">Bar</option>
+                        <option value="line">Ligne</option>
+                        <option value="pie">Camembert (Pie)</option>
+                        <option value="doughnut">Doughnut</option>
+                    </select>
+                </div>
+
+                <canvas id="chart-orders" style="height:150px"></canvas>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const chartInstances = {};
+
+        function getRandomColors(length) {
+            const colors = [
+                'rgba(255, 99, 132, 0.5)', 'rgba(54, 162, 235, 0.5)',
+                'rgba(255, 206, 86, 0.5)', 'rgba(75, 192, 192, 0.5)',
+                'rgba(153, 102, 255, 0.5)', 'rgba(255, 159, 64, 0.5)'
+            ];
+            return Array.from({ length }, (_, i) => colors[i % colors.length]);
+        }
+
+        function createChart(chartId, chartType, labels, data) {
+            const ctx = document.getElementById(chartId).getContext('2d');
+            return new Chart(ctx, {
+                type: chartType,
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Données',
+                        data: data,
+                        backgroundColor: getRandomColors(data.length),
+                        borderColor: getRandomColors(data.length),
+                        borderWidth: 2,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: chartType === 'pie' || chartType === 'doughnut' ? {} : { y: { beginAtZero: true } }
+                }
+            });
+        }
+
+        // 🔹 Initialisation des graphiques des magasins
+        {% for magasin, produits in topProductsByStore %}
+            window["labels{{ loop.index }}"] = {{ produits|map(item => item.produit)|json_encode()|raw }};
+            window["data{{ loop.index }}"] = {{ produits|map(item => item.total_vendu)|json_encode()|raw }};
+            chartInstances["chart-{{ loop.index }}"] = createChart("chart-{{ loop.index }}", "bar", window["labels{{ loop.index }}"], window["data{{ loop.index }}"]);
+        {% endfor %}
+
+        // 🔹 Initialisation du graphique des commandes
+        window["orderLabels"] = {{ ordersByDay|map(item => item.jour)|json_encode()|raw }};
+        window["orderData"] = {{ ordersByDay|map(item => item.total_commandes)|json_encode()|raw }};
+        chartInstances["chart-orders"] = createChart("chart-orders", "bar", window["orderLabels"], window["orderData"]);
+
+        // 🎯 Événement sur chaque select pour changer le type de graphique
+        document.querySelectorAll('.chartType').forEach(select => {
+            select.addEventListener('change', function () {
+                const chartId = this.getAttribute('data-chart-id');
+                const newType = this.value;
+
+                if (chartInstances[chartId]) {
+                    chartInstances[chartId].destroy(); // Détruit l'ancien graphique
+                }
+
+                if (chartId.includes("chart-")) {
+                    const index = chartId.split('-')[1];
+                    if (chartId === "chart-orders") {
+                        chartInstances[chartId] = createChart(chartId, newType, window["orderLabels"], window["orderData"]);
+                    } else {
+                        chartInstances[chartId] = createChart(chartId, newType, window["labels" + index], window["data" + index]);
+                    }
+                }
+            });
+        });
+    });
+</script>
+
+{% endblock %}

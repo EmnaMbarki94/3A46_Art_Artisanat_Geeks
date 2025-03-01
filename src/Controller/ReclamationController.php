@@ -23,10 +23,8 @@ use Knp\Component\Pager\PaginatorInterface;
 final class ReclamationController extends AbstractController
 {
 
-    /**
-     * @Route("/reponse/{id}/rate", name="rate_response", methods={"POST"})
-     */
-    
+
+ 
     #[Route(name: 'app_reclamation_index', methods: ['GET', 'POST'])]
     #[IsGranted('IS_AUTHENTICATED_FULLY')]
     public function index(Request $request, ReclamationRepository $reclamationRepository, EntityManagerInterface $entityManager, PaginatorInterface $paginator): Response
@@ -103,6 +101,7 @@ final class ReclamationController extends AbstractController
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $reclamation = new Reclamation();
+
         $user = $this->getUser();
         if ($user) {
             $reclamation->setUser($user);

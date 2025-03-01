@@ -1,4 +1,43 @@
-<form method="post" action="{{ path('app_magasin_delete', {'id': magasin.id}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<form id="delete-form-{{ magasin.id }}" method="post" action="{{ path('app_magasin_delete', {'id': magasin.id}) }}" style="display: inline;">
     <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ magasin.id) }}">
-    <button class="btn">Delete</button>
+    <button type="button" class="btn btn-mauve btn-sm" onclick="confirmDeleteMagasin({{ magasin.id }})">
+        <i class="fas fa-trash-alt"></i> Supprimer
+    </button>
 </form>
+<style>
+.btn-mauve {
+    background-color: #6f42c1; /* Mauve */
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 5px;
+    font-size: 14px;
+    transition: 0.3s ease-in-out;
+    margin: 2px;
+    display: inline-block; /* Pour aligner horizontalement */
+}
+
+.btn-mauve:hover {
+    background-color: #5a32a3; /* Mauve plus foncé */
+}
+</style>
+<script>
+    function confirmDeleteMagasin(magasinId) {
+        Swal.fire({
+            title: "Êtes-vous sûr ?",
+            text: "Cette action est irréversible !",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#800080",
+            cancelButtonColor: "#3085d6",
+            confirmButtonText: "Oui, supprimer",
+            cancelButtonText: "Annuler"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById("delete-form-" + magasinId).submit();
+            }
+        });
+    }
+</script>

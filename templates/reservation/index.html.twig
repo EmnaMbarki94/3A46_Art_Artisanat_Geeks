@@ -3,16 +3,21 @@
 {% block title %}Reservation index{% endblock %}
 
 {% block body %}
-    <h1>Reservation index</h1>
+    <h1 class="mb-4">Reservation index</h1>
 
-    <table class="table">
+    <!-- Barre de recherche -->
+    <div class="mb-4">
+        <input type="text" id="searchInput" class="form-control" placeholder="Rechercher par ID, Libellé, ou État...">
+    </div>
+
+    <table id="TableReservation" class="table table-striped">
         <thead>
             <tr>
                 <th>Id</th>
                 <th>Libelle</th>
                 <th>EtatE</th>
-                <th>Événement</th> <!-- Ajout de la colonne pour l'événement -->
-                <th>Actions</th> <!-- Changer le titre de la colonne d'actions -->
+                <th>Actions</th>
+
             </tr>
         </thead>
         <tbody>
@@ -27,15 +32,37 @@
                     <a href="{{ path('app_reservation_edit', {'id': reservation.id}) }}" class="btn btn-warning btn-sm">Edit</a>
                      <a href="{{ path('app_reservation_delete', {'id': reservation.id}) }}" class="btn btn- btn-sm"onsubmit="return confirm('Are you sure you want to delete this reservation?');">Supprimer</a>
                     <!-- Delete Button with Confirmation -->
-                     
                 </td>
             </tr>
         {% else %}
             <tr>
-                <td colspan="5">No records found</td>
+                <td colspan="4" class="text-center">No records found</td>
+
             </tr>
         {% endfor %}
         </tbody>
     </table>
+
+    <!-- JavaScript pour la recherche dynamique -->
+    <script>
+        document.getElementById('searchInput').addEventListener('input', function() {
+            let searchQuery = this.value.toLowerCase();
+            let rows = document.querySelectorAll('#TableReservation tbody tr');
+
+            rows.forEach(function(row) {
+                let columns = row.querySelectorAll('td');
+                let matchFound = false;
+
+                columns.forEach(function(column) {
+                    if (column.textContent.toLowerCase().includes(searchQuery)) {
+                        matchFound = true;
+                    }
+                });
+
+                row.style.display = matchFound ? '' : 'none';
+            });
+        });
+    </script>
+
 
 {% endblock %}

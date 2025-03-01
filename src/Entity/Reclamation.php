@@ -45,6 +45,7 @@ class Reclamation
         minMessage: "Le type doit contenir au moins {{ limit }} caractères."
     )]
     private ?string $typeR = null;
+
     #[ORM\ManyToOne(cascade: ['persist'])]
     private ?User $user = null;
     public function getId(): ?int
@@ -111,6 +112,7 @@ public function getUser(): ?User
     {
         return $this->user;
     }
+
 
     public function setUser(?User $user): static
     {

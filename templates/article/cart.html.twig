@@ -9,7 +9,7 @@
 			<div class="row center_o1">
 				<div class="col-md-5">
 					<div class="center_o1l">
-						<h2 class="mb-0">Shopping Cart</h2>
+						<h2 class="mb-0">Panier</h2>
 					</div>
 				</div>
 				<div class="col-md-7">
@@ -19,7 +19,7 @@
 							<span class="me-2 ms-2">
 								<i class="fa fa-caret-right"></i>
 							</span>
-							Shopping Cart
+							Panier
 						</h6>
 					</div>
 				</div>
@@ -31,11 +31,11 @@
 		<div class="container-xl">
 			<div class="cart_2 row">
 				<div class="col-md-6">
-					<h5>MY CART</h5>
+					<h5>Mon panier</h5>
 				</div>
 				<div class="col-md-6">
 					<h5 class="text-end text-uppercase">
-						<a href="{{ path('app_article_list') }}">Continue Shopping</a>
+						<a href="{{ path('app_article_list') }}">Retourner au magasin</a>
 					</h5>
 				</div>
 			</div>
@@ -66,7 +66,6 @@
 									<h6 class="font_15 mt-3">________________________________</h6>
 									<h5 class="col_pink mt-3">{{ item.prixA }}
 										TND</h5>
-									<h6 class="font_15 mt-3 mb-3">Quantite</h6>
 									{# <h5 class="col_pink mt-3">{{ item.descA }}</h5> #}
 
 								</div>
@@ -79,7 +78,7 @@
 								</form>
 
 								<h6 class="mt-2">
-									<a class="button_1" href="{{ path('app_remove_from_cart', {'id': item.id}) }}">REMOVE</a>
+									<a class="button_1" href="{{ path('app_remove_from_cart', {'id': item.id}) }}">🗑️</a>
 								</h6>
 
 							</div>
@@ -87,7 +86,7 @@
 					{% else %}
 						<div class="cart_3l1 mt-3 row ms-0 me-0 pb-0 border-0">
 							<div class="col-md-12 text-center">
-								<h5>Your cart is empty.</h5>
+								<h5>Le panier est vide.</h5>
 							</div>
 						</div>
 					{% endfor %}
@@ -101,11 +100,11 @@
 
 						<hr>
 						<h6 class="text-center mt-3">
-							<a class="button" href="{{path ('app_commande_new')}}">PROCEED TO CHECKOUT</a>
+							<a class="button" href="{{path ('app_commande_new')}}">Continuer</a>
 						</h6><br>
-						<h5 class="head_1">CLEAR</h5>
+						<h5 class="head_1">Effacer</h5>
 						<h6 class="text-center mt-3">
-							<a class="button" href="{{ path('app_clear_cart') }}">CLEAR CART</a>
+							<a class="button" href="{{ path('app_clear_cart') }}">Effacer Panier 🗑️</a>
 						</h6>
 
 						<hr>
@@ -177,12 +176,14 @@ quantity: parseInt(quantity, 10)
 
 ) // La quantité est bien envoyée dans le body
 }).then(response => response.json()).then(data => {
-if (data.success) {
-alert('Quantité mise à jour');
+console.log("Réponse API:", data); // 🔹 Vérifie si "total" est correct
+    if (data.success) {
+       
+
 
 const totalPriceElement = document.querySelector('.total-price'); // Assurez-vous d'avoir un élément avec cette classe
 if (totalPriceElement) {
-totalPriceElement.textContent = data.total + ' TND'; // Mettre à jour le total
+totalPriceElement.textContent = (data.total ?? 0) + ' TND';
 }
 } else {
 alert(data.message); // Afficher le message d'erreur

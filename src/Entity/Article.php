@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Entity;
 
 use App\Repository\ArticleRepository;
@@ -38,18 +39,27 @@ class Article
     )]
     private ?string $descA = null;
 
-    #[ORM\Column(length: 255)]    
+    #[ORM\Column(length: 255)]
     private ?string $imagePath = null;
 
 
-    
+    #[ORM\Column(type: 'integer')]
+    #[Assert\NotBlank(message: "La quantité est requise.")]
+    #[Assert\Type(type: "integer", message: "La quantité doit être un nombre entier.")]
+    #[Assert\PositiveOrZero(message: "La quantité ne peut pas être négative.")]
+    private ?int $quantite = null;
+
+
     #[ORM\ManyToOne(inversedBy: 'article')]
     private ?Commande $commande = null;
 
     #[ORM\ManyToOne]
+    #[ORM\JoinColumn(onDelete: 'CASCADE')]
     #[Assert\NotNull(message: "Veuillez sélectionner un magasin.")]
     private ?Magasin $magasin = null;
 
+
+    
     public function getId(): ?int
     {
         return $this->id;
@@ -98,10 +108,21 @@ class Article
         if ($imagePath !== null) { // Ne met à jour que si une nouvelle image est envoyée
             $this->imagePath = $imagePath;
         }
-    
+
         return $this;
     }
 
+    public function getQuantite(): ?int
+    {
+        return $this->quantite;
+    }
+
+    public function setQuantite(int $quantite): self
+    {
+        $this->quantite = $quantite;
+        return $this;
+    }
+    
     public function getMagasin(): ?Magasin
     {
         return $this->magasin;
