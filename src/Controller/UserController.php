@@ -353,7 +353,7 @@ public function deleteUser(User $user, EntityManagerInterface $entityManager, Re
                 return $this->redirectToRoute('admin_user');
             }           
             
-            return $this->redirectToRoute('app_user');
+            return $this->redirectToRoute('app_home');
         } else {
             // Ajouter un message d'erreur si le code est incorrect
             $this->addFlash('error', 'Code de vérification incorrect.');

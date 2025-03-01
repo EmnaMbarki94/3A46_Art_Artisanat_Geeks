@@ -5,10 +5,13 @@ namespace App\Form;
 use App\Entity\Event;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Image;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+
 
 class EventType extends AbstractType
 {
@@ -16,8 +19,27 @@ class EventType extends AbstractType
     {
         $builder
             ->add('nom')
-            ->add('typeE')
-            ->add('infoE')
+            ->add('typeE', ChoiceType::class, [
+                'choices' => [
+                    'Concert' => 'concert',
+                    'Conférence' => 'conference',
+                    'Spectacle' => 'spectacle',
+                    'Marché' => 'spectacle',
+
+                    
+                ],
+                'required' => false,
+                'placeholder' => 'Sélectionner une catégorie',
+            ])
+            ->add('infoE', TextareaType::class, [
+                'label' => 'Description de l\'événement',
+                'attr' => [
+                    'placeholder' => 'Entrez une description détaillée de l\'événement',
+                    'rows' => 6,
+                    'style' => 'resize: none;',  // Empêche le redimensionnement de la zone de texte
+                ],
+               
+            ])
             ->add('photoE', FileType::class, [
                 'label' => 'Photo (JPEG ou PNG)',
                 'mapped' => false,  
@@ -31,11 +53,11 @@ class EventType extends AbstractType
                     ])
                 ]
             ])
-            ->add('dateE', DateType::class, [
-                'widget' => 'single_text',
-                'html5' => true,
-                'label' => 'Date de l\'événement',
-                'required' => true, 
+            ->add('dateE', DateTimeType::class, [
+                'widget' => 'single_text', // Use a single input for both date and time
+                'html5' => true, // Use HTML5 input for both date and time
+                'label' => 'Date et Heure de l\'événement',
+                'required' => true,
             ])
             
             ->add('prixS')

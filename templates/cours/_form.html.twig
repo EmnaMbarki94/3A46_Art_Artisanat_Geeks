@@ -6,17 +6,17 @@
                 <tr>
                     <th>Titre du cours</th>
                     <td>{{ form_widget(form.nomC, {'attr': {'class': 'form-control'}}) }}</td>
-                    <td>{{ form_errors(form.nomC) }}</td>
+                    <td style="color:red">{{ form_errors(form.nomC) }}</td>
                 </tr>
                 <tr>
                     <th>Catégorie de cours</th>
                     <td>{{ form_widget(form.categC, {'attr': {'class': 'form-control'}}) }}</td>
-                    <td>{{ form_errors(form.categC) }}</td>
+                    <td style="color:red">{{ form_errors(form.categC) }}</td>
                 </tr>
                 <tr>
                     <th>Contenu du cours</th>
                     <td>{{ form_widget(form.contenuC, {'attr': {'class': 'form-control', 'rows': 5}}) }}</td>
-                    <td>{{ form_errors(form.contenuC) }}</td>
+                    <td style="color:red">{{ form_errors(form.contenuC) }}</td>
                 </tr>
                 <tr>
                     <th>Date de création du cours</th>
@@ -36,7 +36,7 @@
                         {% endif %}
                         {{ form_widget(form.image, {'attr': {'class': 'form-control', 'onchange': 'previewImage(event)'}}) }}
                     </td>
-                    <td>{{ form_errors(form.image) }}</td>
+                    <td style="color:red">{{ form_errors(form.image) }}</td>
                 </tr>
             </table>
 

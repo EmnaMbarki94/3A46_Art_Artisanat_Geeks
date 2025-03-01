@@ -15,7 +15,16 @@ class ReservationRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Reservation::class);
     }
+    public function getTopEventsByReservationCount(): array
+    {
+        $qb = $this->createQueryBuilder('r')
+            ->select('e.id AS event_id', 'e.nom AS Evenement', 'COUNT(r.id) AS reservation_count')
+            ->innerJoin('r.relation', 'e') // Assurez-vous que la relation entre Reservation et Event est correctement définie
+            ->groupBy('e.id')
+            ->orderBy('reservation_count', 'DESC');
 
+        return $qb->getQuery()->getResult();
+    }
 //    /**
 //     * @return Reservation[] Returns an array of Reservation objects
 //     */

@@ -1,0 +1,158 @@
+{% extends 'baseBack.html.twig' %}
+
+{% block title %}Statistiques des Événements{% endblock %}
+
+{% block body %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<div class="row">
+    <!-- 🔹 Graphique des Événements par Type -->
+    <div class="col-lg-6 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Événements par Type</h4>
+                <div class="form-group">
+                    <label for="chartType-events">Choisir le type :</label>
+                    <select class="chartType form-control" data-chart-id="chart-events">
+                        <option value="bar">Bar</option>
+                        <option value="line">Ligne</option>
+                        <option value="pie">Camembert (Pie)</option>
+                        <option value="doughnut">Doughnut</option>
+                    </select>
+                </div>
+                <canvas id="chart-events" style="height:250px;"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- 🔹 Graphique des Événements les Plus Réservés -->
+    <div class="col-lg-6 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Événements les Plus Réservés</h4>
+                <div class="form-group">
+                    <label for="chartType-reserved-events">Choisir le type :</label>
+                    <select class="chartType form-control" data-chart-id="chart-reserved-events">
+                        <option value="bar">Bar</option>
+                        <option value="line">Ligne</option>
+                        <option value="pie">Camembert (Pie)</option>
+                        <option value="doughnut">Doughnut</option>
+                    </select>
+                </div>
+                <canvas id="chart-reserved-events" style="height:250px;"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- 🔹 Graphique des Événements les Plus Chers -->
+    <div class="col-lg-6 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Événements les Plus Chers</h4>
+                <div class="form-group">
+                    <label for="chartType-expensive-events">Choisir le type :</label>
+                    <select class="chartType form-control" data-chart-id="chart-expensive-events">
+                        <option value="bar">Bar</option>
+                        <option value="line">Ligne</option>
+                        <option value="pie">Camembert (Pie)</option>
+                        <option value="doughnut">Doughnut</option>
+                    </select>
+                </div>
+                <canvas id="chart-expensive-events" style="height:250px;"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const chartInstances = {};
+
+        function getRandomColors(length) {
+            const colors = [
+                'rgba(255, 99, 132, 0.5)', 'rgba(54, 162, 235, 0.5)',
+                'rgba(255, 206, 86, 0.5)', 'rgba(75, 192, 192, 0.5)',
+                'rgba(153, 102, 255, 0.5)', 'rgba(255, 159, 64, 0.5)'
+            ];
+            return Array.from({ length }, (_, i) => colors[i % colors.length]);
+        }
+
+        function createChart(chartId, chartType, labels, data, label) {
+            const ctx = document.getElementById(chartId).getContext('2d');
+            return new Chart(ctx, {
+                type: chartType,
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: label,
+                        data: data,
+                        backgroundColor: getRandomColors(data.length),
+                        borderColor: getRandomColors(data.length),
+                        borderWidth: 2,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: chartType === 'pie' || chartType === 'doughnut' ? {} : { y: { beginAtZero: true } }
+                }
+            });
+        }
+
+        // Graphique des événements par type
+        chartInstances['chart-events'] = createChart(
+            'chart-events', 
+            'bar', 
+            {{ eventLabels|json_encode()|raw }}, 
+            {{ eventData|json_encode()|raw }},
+            'Événements'
+        );
+
+        // Graphique des événements les plus réservés
+        const reservedEventLabels = {{ topEventsByReservation|map(item => item.Evenement)|json_encode()|raw }};
+        const reservedEventData = {{ topEventsByReservation|map(item => item.reservation_count)|json_encode()|raw }};
+        
+        chartInstances['chart-reserved-events'] = createChart(
+            'chart-reserved-events', 
+            'bar', 
+            reservedEventLabels, 
+            reservedEventData,
+            'Réservations'
+        );
+
+        // Graphique des événements les plus chers
+        const expensiveEventLabels = {{ mostExpensiveEvents|map(item => item.nom)|json_encode()|raw }};
+        const expensiveEventData = {{ mostExpensiveEvents|map(item => item.prixS)|json_encode()|raw }};
+
+        chartInstances['chart-expensive-events'] = createChart(
+            'chart-expensive-events', 
+            'bar', 
+            expensiveEventLabels, 
+            expensiveEventData,
+            'Prix (TND)'
+        );
+
+        document.querySelectorAll('.chartType').forEach(select => {
+            select.addEventListener('change', function () {
+                const chartId = this.getAttribute('data-chart-id');
+                const newType = this.value;
+
+                if (chartInstances[chartId]) {
+                    chartInstances[chartId].destroy();
+                }
+
+                if (chartId === "chart-events") {
+                    chartInstances[chartId] = createChart(chartId, newType, {{ eventLabels|json_encode()|raw }}, {{ eventData|json_encode()|raw }}, 'Événements');
+                } else if (chartId === "chart-reserved-events") {
+                    chartInstances[chartId] = createChart(chartId, newType, reservedEventLabels, reservedEventData, 'Réservations');
+                } else if (chartId === "chart-expensive-events") {
+                    chartInstances[chartId] = createChart(chartId, newType, expensiveEventLabels, expensiveEventData, 'Prix (TND)');
+                }
+            });
+        });
+    });
+</script>
+
+{% endblock %}

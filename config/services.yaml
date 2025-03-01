@@ -19,6 +19,7 @@ parameters:
 
 
 services:
+  App\EventSubscriber\CalendarSubscriber:
 
 
   Dompdf\Dompdf: ~
@@ -26,7 +27,6 @@ services:
   _defaults:
     autowire: true      # Automatically injects dependencies in your services.
     autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
-
 
 
   App\Service\CartService:
@@ -51,3 +51,7 @@ services:
       $twilioNumber: "%twilio.phone_number%"
 
 
+  App\Service\ElevenLabsTtsService:
+        arguments:
+            $apiKey: '%env(ELEVENLABS_API_KEY)%'
+            $audioFilePath: '%kernel.project_dir%/public/uploads/audio/output.mp3'

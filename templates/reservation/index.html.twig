@@ -17,6 +17,7 @@
                 <th>Libelle</th>
                 <th>EtatE</th>
                 <th>Actions</th>
+
             </tr>
         </thead>
         <tbody>
@@ -25,13 +26,18 @@
                 <td>{{ reservation.id }}</td>
                 <td>{{ reservation.libelle }}</td>
                 <td>{{ reservation.etatE }}</td>
+                <td>{{ reservation.relation.nom }}</td> <!-- Affichage du nom de l'événement -->
                 <td>
-                    <a href="{{ path('app_reservation_show', {'id': reservation.id}) }}" class="btn btn-primary rounded-pill">Show</a>
+                    <a href="{{ path('app_reservation_show', {'id': reservation.id}) }}" type="submit"class="btn btn-info btn-sm">Details</a>
+                    <a href="{{ path('app_reservation_edit', {'id': reservation.id}) }}" class="btn btn-warning btn-sm">Edit</a>
+                     <a href="{{ path('app_reservation_delete', {'id': reservation.id}) }}" class="btn btn- btn-sm"onsubmit="return confirm('Are you sure you want to delete this reservation?');">Supprimer</a>
+                    <!-- Delete Button with Confirmation -->
                 </td>
             </tr>
         {% else %}
             <tr>
                 <td colspan="4" class="text-center">No records found</td>
+
             </tr>
         {% endfor %}
         </tbody>
@@ -57,5 +63,6 @@
             });
         });
     </script>
+
 
 {% endblock %}

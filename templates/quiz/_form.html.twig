@@ -6,12 +6,12 @@
             <tr>
                 <th>Titre du Quiz</th>
                 <td>{{ form_widget(form.titreC, {'attr': {'class': 'form-control'}}) }}</td>
-                <td>{{ form_errors(form.titreC) }}</td>
+                <td style="color:red">{{ form_errors(form.titreC) }}</td>
             </tr>
             <tr>
                 <th>Cours associé</th>
                 <td>{{ form_widget(form.cours, {'attr': {'class': 'form-select'}}) }}</td>
-                <td>{{ form_errors(form.cours) }}</td>
+                <td style="color:red">{{ form_errors(form.cours) }}</td>
             </tr>
         </table>
 

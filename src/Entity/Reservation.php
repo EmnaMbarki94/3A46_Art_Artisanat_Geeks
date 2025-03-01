@@ -25,7 +25,8 @@ class Reservation
     #[Assert\NotBlank(message: "L'état ne doit pas être vide.")]
     private ?string $etatE = null;
 
-    #[ORM\ManyToOne]
+    #[ORM\ManyToOne(targetEntity: Event::class, inversedBy: 'reservations')]
+    #[ORM\JoinColumn(nullable: false, onDelete: "CASCADE")] // CASCADE pour supprimer les réservations liées à l'événement
     private ?Event $relation = null;
 
     #[ORM\Column]

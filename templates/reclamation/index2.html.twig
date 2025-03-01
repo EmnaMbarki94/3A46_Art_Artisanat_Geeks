@@ -14,6 +14,9 @@
 	<div class="mb-3" class="search-container">
 		<input type="text" id="searchInput" class="form-control" placeholder="🔍 Rechercher une réclamation...">
 	</div>
+<a href="{{ path('statistiques_reclamations') }}" class="btn btn-primary">📊 Voir Statistiques</a>
+<a href="{{ path('app_reclamation_pdf') }}" class="btn btn-danger">📄 Exporter en PDF</a>
+
 	<div class="table-container" id="reclamationTable">
 		<table class="table table-striped" id="reclamationTable">
 			<thead>
@@ -24,11 +27,10 @@
 					<th onclick="sortTable(3)">Status 🔽</th>
 					<th onclick="sortTable(4)">Type 🔽</th>
 					<th>Actions</th>
-					<!-- Modifié pour correspondre à la structure Articles -->
 				</tr>
 			</thead>
 			<tbody>
-				{% for reclamation in reclamations %}
+				{% for reclamation in pagination %}
 					<tr>
 						<td>{{ reclamation.id }}</td>
 						<td>{{ reclamation.descR }}</td>
@@ -42,18 +44,11 @@
 								</select>
 							</form>
 						</td>
-
 						<td>{{ reclamation.typeR }}</td>
 						<td>
-							{# <a href="{{ path('app_reponse_new', {'id': reclamation.id}) }}" class="btn btn-info btn-sm">
-															✉ Répondre
-														</a> #}
-							<a href="{{ path('app_reponse_new', {'id': reclamation.id}) }}" class="btn btn-info btn-sm">
-								✉ Répondre
-							</a>
-							
-
-
+							{% if reclamation.statusR != 'Résolue' %}
+								<a href="{{ path('app_reponse_new', {'id': reclamation.id}) }}" class="btn btn-info btn-sm">✉ Répondre</a>
+							{% endif %}
 						</td>
 					</tr>
 				{% else %}
@@ -63,6 +58,11 @@
 				{% endfor %}
 			</tbody>
 		</table>
+
+		<!-- Pagination -->
+		<div class="pagination">
+			{{ knp_pagination_render(pagination) }}
+		</div>
 	</div>
 
 
@@ -73,9 +73,13 @@ let filter = this.value.toLowerCase();
 let rows = document.querySelectorAll("#reclamationTable tbody tr");
 
 rows.forEach(row => {
-let cell = row.cells[0]; // Colonne ID (Index 0)
-let text = cell.textContent || cell.innerText;
-row.style.display = text.includes(filter) ? "" : "none";
+let idCell = row.cells[0]; // Colonne ID
+let descriptionCell = row.cells[1]; // Colonne Description
+let idText = idCell.textContent || idCell.innerText;
+let descriptionText = descriptionCell.textContent || descriptionCell.innerText;
+
+// Vérifie si l'ID ou la description contient le texte de la recherche
+row.style.display = (idText.includes(filter) || descriptionText.toLowerCase().includes(filter)) ? "" : "none";
 });
 });
 

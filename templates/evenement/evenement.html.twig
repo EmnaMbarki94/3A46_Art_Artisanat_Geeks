@@ -1,61 +1,247 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Liste des Événements{% endblock %}
+{% block title %}Liste des Événements
+{% endblock %}
 
 {% block body %}
+	<section id="center" class="center_o bg_gray pt-2 pb-2">
+		<div class="container-xl">
+			<div class="row center_o1">
+				<div class="col-md-5">
+					<div class="center_o1l">
+						<h2 class="mb-0">Liste des Evenements</h2>
+					</div>
+				</div>
+				<div class="col-md-7 text-end">
+					<h6 class="mb-0">
+						<a href="{{ path('app_home') }}">Home</a>
+						<span class="me-2 ms-2">
+							<i class="fa fa-caret-right"></i>
+						</span>
+						<a href="{{ path('app_evenement_listeF') }}">Evenement</a>
+					</h6>
+				</div>
+			</div>
+		</div>
+	</section>
 
-<section id="events" class="p-4">
-    <div class="container-xl">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <h2>Événements</h2>
-            <select class="form-select w-auto">
-                <option value="default">Tri par défaut</option>
-                <option value="date">Date</option>
-            </select>
-        </div>
+	<section id="events" class="p-4">
+		<div class="container-xl">
+			<div
+				class="d-flex justify-content-between align-items-center mb-3">
+				<!-- Sort Dropdown -->
+				<div class="d-flex">
 
-        <div class="row">
-            {% for event in events %}
-                <div class="col-md-3">
-                    <div class="prod_main p-2 bg-white d-flex flex-column align-items-center text-center shadow-sm" style="min-height: 450px;">
-                        <div class="product_2im position-relative w-100" style="height: 200px; overflow: hidden;">
-                            <a href="{{ path('app_evenement_showdetail', {'id': event.id}) }}">
-                            <figure class="effect-jazz mb-0">
-                                {% if event.photoE is not empty %}
-                                    <img src="{{ asset('uploads/photosevents/' ~ event.photoE) }}" class="w-100 h-100 object-fit-cover" alt="event Image">
-                                {% else %}
-                                    <img src="{{ asset('img/default-event.jpg') }}" class="w-100 h-100 object-fit-cover" alt="Aucune image disponible">
-                                {% endif %}
-                                </figure>
-                            </a>
-                        </div>
-                        <div class="text-center pt-3 pb-4 flex-grow-1 d-flex flex-column">
-                            <h5 class="font_14 text-uppercase flex-grow-0">
-                               <a href="{{ path('app_evenement_showdetail', {'id': event.id}) }}" class="col_dark">{{ event.nom }}</a>
+					<div class="d-flex">
+						<div class="position-relative">
+							<input type="text" id="searchEvent" class="form-control bg_gray col_light me-2 custom-search" placeholder="Rechercher un événement..." onkeyup="searchEvents()">
+							<i class="fa fa-search search-icon"></i>
+						</div>
+					</div>
 
-                            </h5>
-                            <h6 class="flex-grow-0">{{ event.dateE ? event.dateE|date('d M Y') : 'Non définie' }}</h6>
-                            <p class="flex-grow-0 col_dark"><strong>Type :</strong> {{ event.typeE }}</p>
-                            <p class="text-muted flex-grow-1">{{ event.infoE|slice(0, 60) }}...</p>
-                            <div style="display: flex; justify-content: center; align-items: center;">
-                                <a href="{{ path('app_evenement_showdetail', {'id': event.id}) }}" class="btn btn-sm" style="background-color: #6a0dad; color: white; border: none; padding: 5px 10px; font-size: 14px; width: 120px; height: 40px; text-align: center; display: inline-block; line-height: 30px;">
-                                    <i class="fa fa-eye"></i> Détail
-                                </a>
-                            </div>
+					<div class="ml-auto">
+						<select id="sortEvents" name="sort" class="form-select bg_gray col_light me-2 custom-sort" onchange="filterEvents(event)">
+							<option value="default" {% if sortOption == 'default' %} selected {% endif %}>Tri par défaut</option>
+							<option value="date" {% if sortOption == 'date' %} selected {% endif %}>Tri par Date</option>
+							<option value="price" {% if sortOption == 'price' %} selected {% endif %}>Tri par Prix</option>
+						</select>
+					</div>
+
+				</div>
+			</div>
+
+			<!-- Event Cards -->
+			<div class="row" id="eventList">
+				{% for event in events %}
+					<div class="col-md-3 mb-4 event-card">
+						<div class="prod_main p-2 bg-white d-flex flex-column align-items-center text-center shadow-sm" style="min-height: 500px;">
+							<div class="product_2im position-relative w-100" style="height: 350px; overflow: hidden;">
+								<a href="{{ path('app_evenement_showdetail', {'id': event.id}) }}">
+									<figure class="effect-jazz mb-0">
+										{% if event.photoE is not empty %}
+											<img src="{{ asset('uploads/photosevents/' ~ event.photoE) }}" class="w-100 h-100 object-fit-cover" alt="event Image">
+										{% else %}
+											<img src="{{ asset('img/default-event.jpg') }}" class="w-100 h-100 object-fit-cover" alt="Aucune image disponible">
+										{% endif %}
+									</figure>
+								</a>
+							</div>
+							<div class="text-center pt-3 pb-4 flex-grow-1 d-flex flex-column">
+								<h5 class="font_14 text-uppercase flex-grow-0">
+									<a href="{{ path('app_evenement_showdetail', {'id': event.id}) }}" class="col_dark">{{ event.nom }}</a>
+								</h5>
+								<h6 class="flex-grow-0">{{ event.dateE ? event.dateE|date('d M Y') : 'Non définie' }}</h6>
+								<p class="flex-grow-0 col_dark">
+									<strong>Type :</strong>
+									{{ event.typeE }}</p>
+								<p class="text-muted flex-grow-1">{{ event.infoE|slice(0, 60) }}...</p>
+								<p class="text-dark">
+									<strong>Prix standard :</strong>
+									{{ event.prixS ? event.prixS|number_format(2, ',', ' ') : 'Non défini' }}DT</p>
+								<p class="text-dark">
+									<strong>Prix VIP:</strong>
+									{{ event.prixVIP ? event.prixVIP|number_format(2, ',', ' ') : 'Non défini' }}DT</p>
+
+								<div style="display: flex; justify-content: center; align-items: center;">
+									<a href="{{ path('app_evenement_showdetail', {'id': event.id}) }}" class="btn btn-sm custom-btn">
+										<i class="fa fa-eye"></i>
+										Détail
+									</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				{% else %}
+					<div class="col-md-12 text-center">
+						<p class="alert alert-info">Aucun événement trouvé.</p>
+					</div>
+				{% endfor %}
+				
+			</div>
+		</div>
+	</section>
+
+			<!-- Custom JavaScript for dynamic filtering -->
+<script>
+	let originalEventOrder = Array.from(document.querySelectorAll('.event-card'));
+
+		function filterEvents(event) {
+		event.preventDefault();
+		let sortOption = document.getElementById('sortEvents').value;
+		let eventList = document.getElementById('eventList');
+		let events = Array.from(document.querySelectorAll('.event-card'));
+
+		if (sortOption === 'default') {
+		events = originalEventOrder;
+		} else if (sortOption === 'date') {
+		events.sort((a, b) => {
+		let dateA = new Date(a.querySelector('h6').textContent.trim());
+		let dateB = new Date(b.querySelector('h6').textContent.trim());
+		return dateA - dateB;
+		});
+		} else if (sortOption === 'price') {
+		events.sort((a, b) => {
+		let priceA = parseFloat(a.querySelector('.text-dark').textContent.split('Prix standard :')[1] ?. replace('DT', '').replace(',', '').trim()) || 0;
+		let priceB = parseFloat(b.querySelector('.text-dark').textContent.split('Prix standard :')[1] ?. replace('DT', '').replace(',', '').trim()) || 0;
+		return priceA - priceB;
+		});
+		}
+
+		eventList.innerHTML = '';
+		events.forEach(event => eventList.appendChild(event));
+		}
+
+		function searchEvents() {
+		let searchQuery = document.getElementById('searchEvent').value.toLowerCase();
+		let eventList = document.getElementById('eventList');
+		let events = Array.from(document.querySelectorAll('.event-card'));
+
+		events.forEach(event => {
+		let name = event.querySelector('h5').textContent.toLowerCase();
+		let type = event.querySelector('p').textContent.toLowerCase();
+		let description = event.querySelector('.text-muted').textContent.toLowerCase();
+		let price = event.querySelector('.text-dark').textContent.toLowerCase();
+
+		if (name.includes(searchQuery) || type.includes(searchQuery) || description.includes(searchQuery) || price.includes(searchQuery)) {
+		event.style.display = ''; // Show event
+		} else {
+		event.style.display = 'none'; // Hide event
+		}
+		});
+		}
+</script>
+
+	<!-- Custom CSS for refined search filter and UI elements -->
+	<style>
+		/* Custom Search Input */
+		.custom-search {
+			border-radius: 25px;
+			padding: 10px 20px;
+			font-size: 14px;
+			width: 1130px; /* Augmentez cette valeur pour agrandir la barre de recherche */
+			box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+			border: 1px solid #ccc;
+			transition: all 0.3s ease;
+		}
 
 
-                    </a>
+		.custom-search:focus {
+			border-color: #6a0dad;
+			box-shadow: 0 0 8px rgba(106, 13, 173, 0.5);
+			outline: none;
+		}
 
-                        </div>
-                    </div>
-                </div>
-            {% else %}
-                <div class="col-md-12 text-center">
-                    <p class="alert alert-info">Aucun événement trouvé.</p>
-                </div>
-            {% endfor %}
-        </div>
-    </div>
-</section>
+		/* Search Icon */
+		.search-icon {
+			position: absolute;
+			top: 50%;
+			right: 15px;
+			transform: translateY(-50%);
+			color: #6a0dad;
+			font-size: 18px;
+			pointer-events: none;
+		}
+
+		/* Custom Button Style */
+		.custom-btn {
+			background-color: #6a0dad;
+			color: white;
+			border: none;
+			padding: 5px 10px;
+			font-size: 14px;
+			width: 120px;
+			height: 40px;
+			text-align: center;
+			line-height: 30px;
+			border-radius: 25px;
+			transition: background-color 0.3s ease;
+		}
+
+		.custom-btn:hover {
+			background-color: #550a8a;
+		}
+
+		/* Event Card Hover Effect */
+		.event-card:hover .prod_main {
+			transform: scale(1.05);
+			box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+			transition: all 0.3s ease;
+		}
+
+		/* Text and Title Styles */
+		#events .prod_main h5 {
+			font-size: 16px;
+			margin-bottom: 10px;
+		}
+
+		#events .prod_main p {
+			font-size: 14px;
+		}
+
+		/* Uniform Image Sizing and Styling */
+		#events .prod_main {
+			display: flex;
+			flex-direction: column;
+			justify-content: space-between;
+			height: 500px;
+			transition: all 0.3s ease;
+		}
+
+		/* Image Container */
+		#events .product_2im {
+			flex-grow: 1; /* Permet aux descriptions de s'étirer également */
+			display: flex;
+			flex-direction: column;
+			justify-content: space-between;
+			text-align: center;
+		}
+
+		/* Image Styling */
+		#events .product_2im img {
+			height: 250px; /* Ajuste selon ton design */
+			object-fit: cover; /* S'assure que l'image garde un bon ratio */
+			width: 100%; 
+		}
+	</style>
 
 {% endblock %}

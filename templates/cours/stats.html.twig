@@ -1,0 +1,25 @@
+{% extends 'baseBack.html.twig' %}
+
+{% block body %}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <h2>statistiques des cours</h2>
+    <div class="col-4">
+        <h4>Nombre totale des cours : {{coursesWithQuiz + coursesWithoutQuiz}}</h4>
+        <h4>Nombre des quiz : {{coursesWithQuiz}}</h4>
+        <canvas id="coursePieChart" width="400" height="400"></canvas>
+    </div>
+    <script>
+        var ctx = document.getElementById('coursePieChart').getContext('2d');
+        var coursePieChart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ['Cours avec Quiz', 'Cours sans Quiz'],
+                datasets: [{
+                    data: [{{ coursesWithQuiz }}, {{ coursesWithoutQuiz }}],
+                    backgroundColor: ['#36A2EB', '#FF6384']
+                }]
+            }
+        });
+    </script>
+{% endblock %}
