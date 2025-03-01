@@ -10,10 +10,13 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use App\Repository\ReservationRepository;
+
 
 #[Route('/evenement')]
 final class EvenementController extends AbstractController
 {
+
     #[Route(name: 'app_evenement_index', methods: ['GET'])]
     public function index(EventRepository $eventRepository): Response
     {
@@ -22,10 +25,27 @@ final class EvenementController extends AbstractController
         ]);
     }
     #[Route('/listeevenementF', name: 'app_evenement_listeF', methods: ['GET'])]
-    public function listeF(EventRepository $eventRepository): Response
+    public function listeF(Request $request, EventRepository $eventRepository): Response
     {
+        // Récupérer l'option de tri choisie par l'utilisateur
+        $sortOption = $request->query->get('sort', 'default'); // Valeur par défaut 'default'
+    
+        // Appliquer le tri en fonction de l'option choisie
+        if ($sortOption == 'date') {
+            // Trier par date croissante
+            $events = $eventRepository->findBy([], ['dateE' => 'ASC']);
+        } elseif ($sortOption == 'price') {
+            // Trier par prix croissant
+            $events = $eventRepository->findBy([], ['prixS' => 'ASC']);
+        } else {
+            // Trier par défaut (si aucune option de tri)
+            $events = $eventRepository->findAll();
+        }
+    
+        // Passer les événements triés et l'option de tri à la vue
         return $this->render('evenement/evenement.html.twig', [
-            'events' => $eventRepository->findAll(),
+            'events' => $events,
+            'sortOption' => $sortOption, // Passer l'option de tri à la vue pour la gestion dynamique du select
         ]);
     }
     #[Route('/new', name: 'app_evenement_new', methods: ['GET', 'POST'])]
@@ -100,11 +120,46 @@ final class EvenementController extends AbstractController
     #[Route('/{id}', name: 'app_evenement_delete', methods: ['POST'])]
     public function delete(Request $request, Event $event, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$event->getId(), $request->getPayload()->getString('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $event->getId(), $request->get('_token'))) {
+            // Supprimer l'événement (les réservations liées seront supprimées grâce à 'onDelete' CASCADE)
             $entityManager->remove($event);
             $entityManager->flush();
         }
-
+    
+        // Rediriger vers la page des événements
         return $this->redirectToRoute('app_evenement_index', [], Response::HTTP_SEE_OTHER);
-    }
+     }
+     
+     #[Route('/stats/top-events', name: 'stats_top_events')]
+     public function statistiques(ReservationRepository $reservationRepository, EventRepository $eventRepository): Response
+     {
+         // 🔹 Récupérer les événements les plus réservés
+         $topEventsByReservation = $reservationRepository->getTopEventsByReservationCount();
+         
+         // 🔹 Récupérer les événements les plus chers
+         $mostExpensiveEvents = $eventRepository->getMostExpensiveEvents();
+     
+         // 🔹 Récupérer les événements par type
+         $eventsByType = $eventRepository->getEventsCountByType();
+         
+         // Préparation des données pour les graphiques
+         $eventLabels = [];
+         $eventData = [];
+     
+         foreach ($eventsByType as $event) {
+             $eventLabels[] = $event['typeE'];
+             $eventData[] = $event['eventCount'];
+         }
+     
+         return $this->render('evenement/StatE.html.twig', [
+             'topEventsByReservation' => $topEventsByReservation,
+             'mostExpensiveEvents' => $mostExpensiveEvents, // Nouvel ajout
+             'eventLabels' => $eventLabels,
+             'eventData' => $eventData,
+         ]);
+     }
+     
+     
+
+     
 }

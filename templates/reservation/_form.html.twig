@@ -43,36 +43,37 @@
         {{ form_end(form) }}
     </div>
 
-   <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const etatSelect = document.querySelector('select[name="reservation[etatE]"]');
-            const prixInput = document.querySelector('input[name="reservation[prix]"]');
-            const eventSelect = document.querySelector('select[name="reservation[relation]"]');
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const etatSelect = document.querySelector('select[name="reservation[etatE]"]');
+        const prixInput = document.querySelector('input[name="reservation[prix]"]');
+        const eventSelect = document.querySelector('select[name="reservation[relation]"]');
 
-            // Fonction de mise à jour du prix
-            function updatePrice() {
-                const selectedEtat = etatSelect.value;
-                const selectedEventId = eventSelect.value;
+        // Fonction de mise à jour du prix
+        function updatePrice() {
+            const selectedEtat = etatSelect.value;
 
-                // Récupérer l'événement sélectionné (prixVIP et prixSimple)
-                const eventOption = eventSelect.options[eventSelect.selectedIndex];
-                const prixVIP = eventOption.getAttribute('data-prixVIP');
-                const prixSimple = eventOption.getAttribute('data-prixSimple');
+            // Récupérer l'événement sélectionné (prixVIP et prixSimple)
+            const eventOption = eventSelect.options[eventSelect.selectedIndex];
+            const prixVIP = eventOption.getAttribute('data-prixVIP');
+            const prixSimple = eventOption.getAttribute('data-prixSimple');
 
-                // Mettre à jour le prix en fonction de l'état
-                if (selectedEtat === 'VIP') {
-                    prixInput.value = prixVIP;
-                } else {
-                    prixInput.value = prixSimple;
-                }
+            // Mettre à jour le prix en fonction de l'état
+            if (selectedEtat === 'VIP') {
+                prixInput.value = prixVIP;
+            } else if (selectedEtat === 'Simple') {
+                prixInput.value = prixSimple;
             }
+        }
 
-            // Attacher l'événement de mise à jour
-            etatSelect.addEventListener('change', updatePrice);
-            eventSelect.addEventListener('change', updatePrice);
+        // Attacher l'événement de mise à jour du prix
+        etatSelect.addEventListener('change', updatePrice);
+        eventSelect.addEventListener('change', updatePrice);
 
-            updatePrice(); // Initial call to set the default price
-        });
-    </script>
+        // Appeler la fonction immédiatement pour définir le prix initial
+        updatePrice();
+    });
+</script>
+
 
 {% endblock %}

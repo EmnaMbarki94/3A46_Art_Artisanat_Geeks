@@ -1,56 +1,63 @@
 {% extends 'baseBack.html.twig' %}
 
-{% block title %}Event index{% endblock %}
+{% block title %}Event index
+{% endblock %}
 
 {% block body %}
 
-    <h1>Event index</h1>
+	<h1>Event index</h1>
 
-    <style>
-        .infoE-cell {
-            white-space: nowrap;  /* Affiche le texte sur une seule ligne */
-            overflow: hidden;     /* Cache le texte qui dépasse */
-            text-overflow: ellipsis; /* Ajoute "..." à la fin du texte tronqué */
-            max-width: 200px;     /* Largeur maximale de la cellule */
-        }
-    </style>
+	<style>
+		.infoE-cell {
+			white-space: nowrap; /* Affiche le texte sur une seule ligne */
+			overflow: hidden; /* Cache le texte qui dépasse */
+			text-overflow: ellipsis; /* Ajoute "..." à la fin du texte tronqué */
+			max-width: 200px; /* Largeur maximale de la cellule */
+		}
+	</style>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Nom</th>
-                <th>TypeE</th>
-                <th>InfoE</th>
-                <th>DateE</th>
-                <th>PhotoE</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for event in events %}
-            <tr>
-                <td>{{ event.id }}</td>
-                <td>{{ event.nom }}</td>
-                <td>{{ event.typeE }}</td>
-                <td class="infoE-cell">
-                    {{ event.infoE ? event.infoE|split('\n')[0] : '' }}
-                </td>
-                <td>{{ event.dateE ? event.dateE|date('Y-m-d') : '' }}</td>
-                <td>{{ event.photoE }}</td>
-                <td>
-                    <a href="{{ path('app_evenement_show', {'id': event.id}) }}">Show</a>
-                    <a href="{{ path('app_evenement_edit', {'id': event.id}) }}">Edit</a>
-                    <a href="{{ path('app_evenement_delete', {'id': event.id}) }}">Delete</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="7">No records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Id</th>
+				<th>Nom</th>
+				<th>TypeE</th>
+				<th>InfoE</th>
+				<th>DateE</th>
+				<th>PhotoE</th>
+				<th>Actions</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for event in events %}
+				<tr>
+					<td>{{ event.id }}</td>
+					<td>{{ event.nom }}</td>
+					<td>{{ event.typeE }}</td>
+					<td class="infoE-cell">
+						{{ event.infoE ? event.infoE|split('\n')[0] : '' }}
+					</td>
+					<td>{{ event.dateE ? event.dateE|date('Y-m-d') : '' }}</td>
+					<td>
+						{% if event.photoE is not empty %}
+							<img src="{{ asset('uploads/photosevents/' ~ event.photoE) }}" class="w-25 h-25 object-fit-cover" alt="event Image">
+						{% else %}
+							<span>Aucune image</span>
+						{% endif %}
+					</td>
+					<td>
+						<a href="{{ path('app_evenement_show', {'id': event.id}) }}">Show</a>
+						<a href="{{ path('app_evenement_edit', {'id': event.id}) }}">Edit</a>
+						<a href="{{ path('app_evenement_delete', {'id': event.id}) }}">Delete</a>
+					</td>
+				</tr>
+			{% else %}
+				<tr>
+					<td colspan="7">No records found</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
 
-    <a href="{{ path('app_evenement_new') }}">Create new</a>
+	<a href="{{ path('app_evenement_new') }}">Create new</a>
 {% endblock %}

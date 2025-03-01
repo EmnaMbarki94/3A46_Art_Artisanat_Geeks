@@ -1,0 +1,155 @@
+{% extends 'base.html.twig' %}
+
+{% block javascripts %}
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+{% endblock %}
+
+{% block body %}
+<!-- Modal Bootstrap pour afficher les détails de l'événement -->
+<div class="modal fade" id="eventModal" tabindex="-1" aria-labelledby="modal-title" aria-hidden="true">
+    <div class="modal-dialog modal-lg"> <!-- Change pour un modal plus large -->
+        <div class="modal-content rounded-0 shadow-lg"> <!-- Bordure carrée et ombre -->
+            <div class="modal-header bg-mauve text-white">
+                <h5 class="modal-title" id="modal-title"></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <p id="modal-date" class="fw-bold"></p>
+                </div>
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <p id="modal-type" class="text-muted"></p> 
+                </div>
+                <p id="modal-description" class="text-muted"></p> <!-- Description en gris clair -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-mauve" data-bs-dismiss="modal">Fermer</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Div pour le calendrier -->
+<div id="calendar-holder"></div>
+
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded', function () {
+    const calendarEl = document.getElementById('calendar-holder');
+
+    const calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth',
+        height: 550,
+        aspectRatio: 1.5,
+        eventSources: [
+            {
+                url: "{{ path('fc_load_events') }}", // Charge les événements via Symfony
+                method: "POST",
+                extraParams: {
+                    filters: JSON.stringify({})
+                },
+                failure: () => {
+                    console.error('Erreur lors du chargement des événements.');
+                },
+            },
+        ],
+        headerToolbar: {
+            start: 'prev,next today',
+            center: 'title',
+            end: 'dayGridMonth,timeGridWeek,timeGridDay'
+        },
+        timeZone: 'UTC',
+
+        // Capture le clic sur un événement
+        eventClick: function (info) {
+            const event = info.event.extendedProps; // Assurez-vous de récupérer l'objet 'event' correctement
+
+            // Vérifiez si l'objet 'event' contient les propriétés
+            console.log(event);  // Pour vous assurer que l'événement est correctement récupéré
+
+            // Remplir la modal avec les infos de l'événement
+            document.getElementById('modal-title').innerText = info.event.title;
+            document.getElementById('modal-date').innerText = "📅 Date : " + event.date;
+            document.getElementById('modal-type').innerText = "🎟 Type : " + event.type;
+            document.getElementById('modal-description').innerText = "📝 Description : " + event.description;
+
+            // Vérifier si l'image est définie et l'afficher, sinon afficher une image par défaut
+
+            // Afficher la modal Bootstrap
+            new bootstrap.Modal(document.getElementById('eventModal')).show();
+        }
+    });
+
+    calendar.render();
+});
+</script>
+
+<!-- Styles personnalisés -->
+<style>
+    /* Définir une couleur mauve personnalisée */
+    .bg-mauve {
+        background-color: #9b59b6; /* Mauve clair */
+    }
+
+    .btn-mauve {
+        background-color: #9b59b6;
+        border-color: #9b59b6;
+        color: white;
+    }
+
+    .btn-mauve:hover {
+        background-color: #8e44ad; /* Une teinte plus foncée de mauve au survol */
+        border-color: #8e44ad;
+    }
+
+    /* Titre du modal en mauve */
+    .modal-header.bg-mauve {
+        background-color: #9b59b6;
+        color: white;
+    }
+
+    /* Badge pour le type d'événement en fond foncé et texte blanc */
+    .badge.bg-dark {
+        background-color: #343a40;
+        color: white;
+    }
+
+    /* Texte du bouton de fermeture */
+    .btn-close {
+        color: white;
+    }
+
+    /* Ajout d'ombres et d'arrondis pour l'image dans le modal */
+    .modal-body img {
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Créer un cadre carré pour le modal */
+     .modal-dialog {
+        width: 80%; /* Largeur de 80% de l'écran */
+        height: 80%; /* Hauteur de 80% de l'écran */
+        max-width: 100%; /* Pas de limite de largeur */
+        max-height: 100%; /* Pas de limite de hauteur */
+        margin: auto; /* Centrer automatiquement */
+        display: flex;
+        justify-content: center; /* Centrer horizontalement */
+        align-items: center; /* Centrer verticalement */
+    }
+
+    .modal-content {
+        width: 50%; /* Prendre toute la largeur du modal-dialog */
+        height: 70%; /* Prendre toute la hauteur du modal-dialog */
+        border-radius: 0; /* Pas de bord arrondi */
+        display: flex;
+        flex-direction: column;
+    }
+
+    .modal-body {
+        flex-grow: 1; /* Permet à la zone du corps du modal de prendre plus d'espace */
+        overflow: auto; /* Gérer l'overflow si nécessaire */
+    }
+</style>
+
+
+{% endblock %}
