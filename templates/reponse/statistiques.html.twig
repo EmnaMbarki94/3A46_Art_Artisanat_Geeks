@@ -1,0 +1,80 @@
+{% extends 'baseBack.html.twig' %}
+
+{% block title %}Statistiques des Réclamations{% endblock %}
+
+{% block body %}
+    <div class="container mt-5 text-center">
+        <h1 class="mb-4">Statistiques des Réclamations</h1>
+        
+        <!-- Sélecteur de type de graphique -->
+        <div class="mb-4 d-flex justify-content-center align-items-center gap-3">
+            <label for="chartType" class="fw-bold">Type de graphique :</label>
+            <div class="dropdown">
+                <button class="btn btn-primary dropdown-toggle px-4 py-2" type="button" id="chartDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    Sélectionner un type
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="chartDropdown">
+                    <li><a class="dropdown-item" href="#" data-value="doughnut">Anneau</a></li>
+                    <li><a class="dropdown-item" href="#" data-value="bar">Barres</a></li>
+                    <li><a class="dropdown-item" href="#" data-value="line">Ligne</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Graphique -->
+        <div class="d-flex justify-content-center">
+            <div style="width: 90%; max-width: 900px; padding: 30px; background: #ffffff; border-radius: 15px; box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);">
+                <canvas id="myChart" style="max-height: 500px;"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var ctx = document.getElementById('myChart').getContext('2d');
+            var chartType = 'doughnut';
+            
+            var chartData = {
+                labels: ['Site Web', 'Cours', 'Artiste', 'Événement'],
+                datasets: [{
+                    label: 'Nombre de réclamations',
+                    data: [
+                        {{ statistiques['site_web'] }},
+                        {{ statistiques['cours'] }},
+                        {{ statistiques['artiste'] }},
+                        {{ statistiques['evenement'] }}
+                    ],
+                    backgroundColor: ['#FFD700', '#87CEFA', '#90EE90', '#FFB6C1'],
+                    borderColor: ['#FFC107', '#00BFFF', '#32CD32', '#FF69B4'],
+                    borderWidth: 1,
+                    hoverOffset: 6
+                }]
+            };
+
+            var chartOptions = {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'top' },
+                    tooltip: { enabled: true }
+                },
+                animation: {
+                    animateScale: true,
+                    animateRotate: true
+                }
+            };
+
+            var myChart = new Chart(ctx, { type: chartType, data: chartData, options: chartOptions });
+
+            document.querySelectorAll('.dropdown-item').forEach(item => {
+                item.addEventListener('click', function () {
+                    chartType = this.getAttribute('data-value');
+                    document.getElementById('chartDropdown').textContent = this.textContent;
+                    myChart.destroy();
+                    myChart = new Chart(ctx, { type: chartType, data: chartData, options: chartOptions });
+                });
+            });
+        });
+    </script>
+{% endblock %}

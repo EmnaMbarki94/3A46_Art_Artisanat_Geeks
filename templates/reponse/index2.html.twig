@@ -1,0 +1,70 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}View Reponses{% endblock %}
+
+{% block body %}
+ <h2 class="text-center mb-4">Reponse de la reclamation</h2>
+
+<section id="reclamation-view" class="p-5 d-flex justify-content-center align-items-center">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card p-4">
+                    <table class="table table-bordered table-striped">
+                        <tbody>
+                            
+                            <tr>
+                                <th>Reponse</th>
+                                <td>{{ reponse.descRep }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
+{# {% extends 'base.html.twig' %}
+
+{% block title %}Voir la réponse{% endblock %}
+
+{% block body %}
+<h2 class="text-center mb-4">Réponse de la réclamation</h2>
+
+<section id="reclamation-view" class="p-5 d-flex justify-content-center align-items-center">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card p-4">
+                    <table class="table table-bordered table-striped">
+                        <tbody>
+                             <tr>
+                                <th>Réponse</th>
+                                <td>{{ reponse.descRep }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <!-- Formulaire de notation -->
+                    <form method="post" action="{{ path('rate_response', {'id': reponse.id}) }}">
+                        <div class="mb-3">
+                            <label for="rating" class="form-label">Notez cette réponse</label>
+                            <select id="rating" name="rating" class="form-select" required>
+                                <option value="1">1 - Très mauvais</option>
+                                <option value="2">2 - Mauvais</option>
+                                <option value="3">3 - Moyenne</option>
+                                <option value="4">4 - Bon</option>
+                                <option value="5">5 - Excellent</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Soumettre la note</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %} #}

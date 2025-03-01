@@ -1,0 +1,97 @@
+<div class="modal-body" id="reponseContent">
+    <div>
+        <p>{{ reponse.descRep }}</p>
+
+        <!-- Affichage de la notation -->
+        <div>
+            <span>Notez cette réponse :</span>
+            <div class="rating">
+                <input type="radio" id="star5" name="rating" value="5" {% if reponse.rating == 5 %}checked{% endif %}>
+                <label for="star5">&#9733;</label>
+                <input type="radio" id="star4" name="rating" value="4" {% if reponse.rating == 4 %}checked{% endif %}>
+                <label for="star4">&#9733;</label>
+                <input type="radio" id="star3" name="rating" value="3" {% if reponse.rating == 3 %}checked{% endif %}>
+                <label for="star3">&#9733;</label>
+                <input type="radio" id="star2" name="rating" value="2" {% if reponse.rating == 2 %}checked{% endif %}>
+                <label for="star2">&#9733;</label>
+                <input type="radio" id="star1" name="rating" value="1" {% if reponse.rating == 1 %}checked{% endif %}>
+                <label for="star1">&#9733;</label>
+            </div>
+
+            <!-- Affichage de la note actuelle -->
+            {% if reponse.rating is not null %}
+                <p class="current-rating">Note actuelle : {{ reponse.rating }}</p>
+            {% endif %}
+
+            <!-- Formulaire de soumission de la note -->
+            <button class="btn btn-primary" id="submitRating">Soumettre ma note</button>
+
+            <!-- Message de remerciement caché, qui sera affiché après la soumission -->
+            <div id="thankYouMessage" style="display:none; margin-top: 10px; color: green;">
+                <p>Merci pour votre évaluation !</p>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+document.querySelector("#submitRating").addEventListener("click", function () {
+    console.log("Bouton 'Soumettre ma note' cliqué.");
+
+    const rating = document.querySelector('input[name="rating"]:checked')?.value;
+
+    if (!rating) {
+        alert("Veuillez sélectionner une note.");
+        console.log("Aucune note sélectionnée.");
+        return;
+    }
+
+    const reclamationId = new URLSearchParams(window.location.search).get("id");
+
+    console.log("Réclamation ID:", reclamationId);  // Log de l'ID de la réclamation
+    console.log("Note sélectionnée:", rating);      // Log de la note sélectionnée
+
+    const url = `/reclamation/${reclamationId}/reponse/rating`;
+    console.log("URL de la requête:", url);
+
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: `rating=${rating}`,
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log("Réponse du serveur:", data);
+        if (data.success) {
+            // Afficher un message de remerciement
+            const messageDiv = document.createElement('div');
+            messageDiv.style.marginTop = '10px';
+            messageDiv.style.color = 'green';
+            messageDiv.innerHTML = "<p>Merci pour votre évaluation !</p>";
+
+            // Ajouter le message au modal
+            const modalBody = document.querySelector('#reponseModal .modal-body');
+            modalBody.appendChild(messageDiv);
+
+            // Mettre à jour la note affichée
+            const currentRatingText = document.querySelector("#reponseContent .current-rating");
+            if (currentRatingText) {
+                currentRatingText.textContent = `Note actuelle : ${rating}`;
+            }
+
+            // Fermer automatiquement le modal après 2 secondes (ou dès qu'on souhaite)
+            const modal = new bootstrap.Modal(document.getElementById('reponseModal'));
+            setTimeout(() => {
+                modal.hide();
+            }, 2000);
+        } else {
+            alert(data.error);
+        }
+    })
+    .catch(error => {
+        console.error("Erreur lors de l'envoi de la note :", error);
+        alert("Une erreur s'est produite. Veuillez réessayer.");
+    });
+});
+</script>
