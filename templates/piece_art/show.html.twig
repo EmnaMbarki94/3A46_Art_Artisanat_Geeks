@@ -3,36 +3,156 @@
 {% block title %}PieceArt{% endblock %}
 
 {% block body %}
-    <h1>PieceArt</h1>
+    <div class="container">
+        {% for message in app.session.flashBag.get('success') %}
+            <div class="alert alert-success">{{ message }}</div>
+        {% endfor %}
+        {% for message in app.session.flashBag.get('error') %}
+            <div class="alert alert-danger">{{ message }}</div>
+        {% endfor %}
+    </div>
+    <div class="container mt-4">
+        <h1 class="text-center">{{ piece_art.nomP }}</h1>
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ piece_art.id }}</td>
-            </tr>
-            <tr>
-                <th>NomP</th>
-                <td>{{ piece_art.nomP }}</td>
-            </tr>
-            <tr>
-                <th>DateCrea</th>
-                <td>{{ piece_art.dateCrea ? piece_art.dateCrea|date('Y-m-d') : '' }}</td>
-            </tr>
-            <tr>
-                <th>PhotoP</th>
-                <td>{{ piece_art.photoP }}</td>
-            </tr>
-            <tr>
-                <th>DescP</th>
-                <td>{{ piece_art.descP }}</td>
-            </tr>
-        </tbody>
-    </table>
+        <div class="artwork-details row mt-4">
+            <div class="col-md-6">
+                <p class="artwork-date"><strong>Date de création:</strong> {{ piece_art.dateCrea ? piece_art.dateCrea|date('Y-m-d') : 'N/A' }}</p>
+                <p class="artwork-description"><strong>Description:</strong><br>{{ piece_art.descP |raw }}</p>
+            </div>
+            <div class="col-md-6 text-center">
+                <strong>La pièce d'art:</strong><br>
+                <img src="{{ asset('uploads/photos/' ~ piece_art.photoP) }}" alt="{{ piece_art.nomP }}" class="img-fluid" style="max-width: 100%; height: auto;"/>
+            </div>
+        </div>
 
-    <a href="{{ path('app_piece_art_index') }}">back to list</a>
+        <hr class="my-4">
 
-    <a href="{{ path('app_piece_art_edit', {'id': piece_art.id}) }}">edit</a>
+        <h3>Comments</h3>
+        <div class="comments-container mb-3 p-3 bg-light rounded" id="comments-list">
+            {% for comment in piece_art.comments %}
+                <div class="comment mb-3 p-3 bg-light rounded">
+                    <small class="text-muted">Posted by {{ comment.user.firstName }} {{ comment.user.lastName }} on {{ comment.creationDate|date('Y-m-d H:i') }}</small>
+                    {% if app.user and app.user.id == comment.user.id %}
+                        {% include 'comment/_delete_form.html.twig' with {'comment': comment} %}
+                    {% endif %}
+                    <p style="color: black">{{ comment.content|raw }}</p>
+                    <hr>
+                </div>
+            {% else %}
+                <p>No comments yet.</p>
+            {% endfor %}
+        </div>
 
-    {{ include('piece_art/_delete_form.html.twig') }}
+        <div id="comment-form-container">
+            {{ include('comment/_form.html.twig', { form: form }) }}
+        </div>
+        <div id="comment-message" class="alert alert-success" style="display:none;"></div>
+
+        <div class="action-buttons text-center mt-3">
+            <a href="{{ path('app_galerie_show', {'id': galerie.id}) }}" class="btn btn-secondary">Back to List</a>
+        </div>
+    </div>
+
+    <style>
+        .artwork-details {
+            margin-bottom: 20px;
+        }
+
+        .comment {
+            background-color: #f8f9fa;
+            border-radius: 5px;
+            padding: 15px;
+        }
+
+        .action-buttons {
+            margin-top: 20px;
+        }
+        .comments-container {
+            max-height: 300px; 
+            overflow-y: auto;  /* Enable vertical scrolling */
+            border: 1px solid #e0e0e0; /* Optional border */
+            padding: 10px; /* Padding around comments */
+            background-color: #f8f9fa; 
+            border-radius: 5px; 
+        }
+        .artwork-date,
+        .artwork-description {
+            font-size: 1.2rem; /* Increase font size */
+            line-height: 1.5; /* Improve line spacing */
+        }
+
+    </style>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+    $(document).ready(function() {
+        $('#comment-form').on('submit', function(event) {
+            event.preventDefault(); // Prevent the default form submission
+
+            $.ajax({
+                type: 'POST',
+                url: $(this).attr('action'), // Form action URL
+                data: $(this).serialize(), // Serialize the form data
+                success: function(response) {
+                    if (response.success) {
+                        $('#comment-message').text(response.success).show();
+                        $('#comments-list').append(
+                            '<div class="comment mb-3 p-3 bg-light rounded" id="comment-' + response.comment.id + '">' +
+                            '<small class="text-muted">Posted by ' + response.comment.user.fullName + ' on ' + response.comment.creationDate + '</small>' +
+                            (response.comment.user.id === {{ app.user.id }} ? 
+                                '<form method="post" action="' + response.comment.deleteUrl + '" onsubmit="return confirm(\'Are you sure you want to delete this item?\');" style="display:inline;" class="delete-comment-form" data-comment-id="' + response.comment.id + '">' +
+                                '<input type="hidden" name="_token" value="' + response.comment.csrfToken + '">' +
+                                '<div class="d-flex justify-content-end">' +
+                                '<button type="submit" class="btn text-white bg_pink">Delete</button>' +
+                                '</div>' +
+                                '</form>' 
+                            : '') +
+                            '<p style="color: black">' + response.comment.content + '</p>' +
+                            '<hr>' +
+                            '</div>'
+                        );
+                        setTimeout(function() {
+                            $('#comment-message').fadeOut();
+                        }, 5000);
+                        $('#comment-form')[0].reset(); // Reset the form
+                    }
+                },
+                error: function(xhr) {
+                    if (xhr.status === 401) {
+                        alert(xhr.responseJSON.error); // Unauthorized error
+                    } else {
+                        alert('An error occurred. Please try again.'); // General error message
+                    }
+                }
+            });
+        });
+
+        // Use event delegation for delete comment forms
+        $(document).on('submit', '.delete-comment-form', function(event) {
+            event.preventDefault(); // Prevent the default form submission
+
+            const form = $(this);
+            const commentId = form.data('comment-id'); // Get the comment ID
+
+            $.ajax({
+                type: 'POST',
+                url: form.attr('action'), // Form action URL
+                success: function(response) {
+                    if (response.success) {
+                        // Remove the comment from the DOM
+                        form.closest('.comment').remove();
+                        $('#comment-message').text(response.success).show(); // Show success message
+                        setTimeout(function() {
+                            $('#comment-message').fadeOut();
+                        }, 5000);
+                    }
+                },
+                error: function(xhr) {
+                    alert('An error occurred while deleting the comment. Please try again.'); // Handle errors
+                }
+            });
+        });
+
+    });
+    </script>
 {% endblock %}

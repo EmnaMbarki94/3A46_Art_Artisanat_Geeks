@@ -6,7 +6,20 @@
 
     <h1>Liste des galeries</h1>
 
-    <table class="table">
+    <div class="mb-4">
+        <input type="text" id="searchInput" class="form-control" placeholder="Rechercher une galerie...">
+    </div>
+
+    <div class="mb-4">
+        <select id="sortSelect" class="form-control" onchange="sortTable()">
+            <option value="">Trier par...</option>
+            <option value="id">Id</option>
+            <option value="nomG">Nom</option>
+            <option value="typeG">Type</option>
+        </select>
+    </div>
+
+    <table id="tableGalerie" class="table">
         <thead>
             <tr>
                 <th>Id</th>
@@ -29,7 +42,9 @@
                         Pas de photo
                     {% endif %}
                 </td>
-                <td>{{ galerie.descG }}</td>
+                <td style="height: 100px; overflow-y: auto; max-height: 100px; white-space: normal;">
+                    {{ galerie.descG |raw }}
+                </td>
                 <td>{{ galerie.typeG }}</td>
                 <td>
                     <a href="{{ path('app_galerie_show', {'id': galerie.id}) }}" class="btn btn-gradient-primary font-weight-bold">Afficher</a>
@@ -48,5 +63,64 @@
         {% endfor %}
         </tbody>
     </table>
+
+    <script>
+        document.getElementById('searchInput').addEventListener('input', function() {
+            let searchQuery = this.value.toLowerCase();
+            let rows = document.querySelectorAll('#tableGalerie tbody tr');
+            
+            rows.forEach(function(row) {
+                let columns = row.querySelectorAll('td');
+                let matchFound = false;
+
+                // Check if any column contains the search query
+                columns.forEach(function(column) {
+                    if (column.textContent.toLowerCase().includes(searchQuery)) {
+                        matchFound = true;
+                    }
+                });
+
+                // Show or hide the row based on search query match
+                if (matchFound) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+
+        function sortTable() {
+            const table = document.getElementById("tableGalerie");
+            const rows = Array.from(table.rows).slice(1); // Get all rows except the header
+            const sortSelect = document.getElementById("sortSelect");
+            const sortBy = sortSelect.value;
+
+            // Sort rows based on the selected column
+            rows.sort((a, b) => {
+                let aText, bText;
+                switch (sortBy) {
+                    case "id":
+                        aText = parseInt(a.cells[0].textContent);
+                        bText = parseInt(b.cells[0].textContent);
+                        return aText - bText; // Sort numerically
+                    case "nomG":
+                        aText = a.cells[1].textContent.toLowerCase();
+                        bText = b.cells[1].textContent.toLowerCase();
+                        return aText.localeCompare(bText); // Sort alphabetically
+                    case "typeG":
+                        aText = a.cells[4].textContent.toLowerCase();
+                        bText = b.cells[4].textContent.toLowerCase();
+                        return aText.localeCompare(bText); // Sort alphabetically
+                    default:
+                        return 0;
+                }
+            });
+
+            // Re-attach sorted rows to the table body
+            const tbody = table.querySelector('tbody');
+            tbody.innerHTML = ''; // Clear existing rows
+            rows.forEach(row => tbody.appendChild(row)); // Append sorted rows
+        }
+    </script>
 
 {% endblock %}

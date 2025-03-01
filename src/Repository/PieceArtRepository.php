@@ -16,6 +16,20 @@ class PieceArtRepository extends ServiceEntityRepository
         parent::__construct($registry, PieceArt::class);
     }
 
+    // src/Repository/PieceArtRepository.php
+    public function countRecentArtPieces(int $days): int
+    {
+        $dateThreshold = new \DateTime();
+        $dateThreshold->modify('-' . $days . ' days');
+
+        return (int) $this->createQueryBuilder('p')
+            ->select('COUNT(p.id)') // Use COUNT to ensure a single result
+            ->andWhere('p.dateCrea >= :dateThreshold')
+            ->setParameter('dateThreshold', $dateThreshold)
+            ->getQuery()
+            ->getSingleScalarResult(); 
+    }
+
 //    /**
 //     * @return PieceArt[] Returns an array of PieceArt objects
 //     */
