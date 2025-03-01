@@ -17,7 +17,7 @@
 						<span class="me-2 ms-2">
 							<i class="fa fa-caret-right"></i>
 						</span>
-						Checkout
+						Commande
 					</h6>
 				</div>
 			</div>
@@ -32,37 +32,54 @@
 			<!-- Formulaire de Commande -->
 			<div class="col-lg-8">
 				<div class="p-4 border rounded" style="background: #111;">
-					<h4 class="mb-3" style="color: white;">Checkout</h4>
+					<h4 class="mb-3" style="color: white;">Commande</h4>
 
 					{{ form_start(form) }}
+					<!-- Affichage de l'utilisateur connecté -->
+					<div class="row">
+						<div class="col-md-12">
+							{{ form_row(form.user, {
+								'attr': {
+									'class': 'form-control',
+									'style': 'background: #333; color: white; border: none;'
+								}
+							}) }}
+						</div>
+					</div>
+
 
 					<!-- Adresse et Date -->
 					<div class="row">
-						<div class="col-md-6">
+						<div
+							class="col-md-6">
 							{# <label class="form-label fw-bold text-white">Adresse</label> #}
 							{{ form_row(form.adresseC, {'attr': {'class': 'form-control', 'style': 'background: #333; color: white; border: none;'}}) }}
 						</div>
-						<div class="col-md-6">
+						<div
+							class="col-md-6">
 							{# <label class="form-label fw-bold text-white">Date de la commande</label> #}
 							{{ form_row(form.dateC, {
-                                'attr': {
-                                'class': 'form-control datepicker',
-                                'style': 'background: #333; color: white; border: none;'
-                            }
-                        }) }}
+								'attr': {
+									'class': 'form-control datepicker',
+									'style': 'background: #333; color: white; border: none;',
+									'autocomplete': 'off'
+								}
+							}) }}
+
 						</div>
 					</div>
+
 
 					<!-- Total -->
 					<div class="mt-3">
 						<label class="form-label fw-bold text-white">Total</label>
 						<input type="text" class="form-control" value="{{ total +8 }} TND" readonly style="background: #666; color: white; border: none;">
-					
-                    </div>
+
+					</div>
 
 					<!-- Bouton -->
 					<div class="mt-4">
-						<button type="submit" class="btn w-100" style="background: purple; color: white; padding: 10px; border-radius: 5px; font-weight: bold;">
+						<button type="submit" class="btn w-100" style="background: purple; color: white; padding: 10px; border-radius: 5px; font-weight: bold; ">
 							CONFIRMER LA COMMANDE
 						</button>
 					</div>
@@ -71,62 +88,81 @@
 				</div>
 			</div>
 
+
+
 			<!-- Récapitulatif du Panier -->
-<div class="col-lg-4">
-    <div class="p-4 border rounded" style="background: #111;">
-        <h5 class="text-white">DÉTAILS DE LA COMMANDE</h5>
-        <hr style="border-color: white;">
+			<div class="col-lg-4">
+				<div class="p-4 border rounded" style="background: #111;">
+					<h5 class="text-white">DÉTAILS DE LA COMMANDE</h5>
+					<hr
+					style="border-color: white;">
 
-        <!-- Sous-total (Montant de la commande) -->
-        <div class="d-flex justify-content-between">
-            <span class="fw-bold text-white">Sous-total :</span>
-            <span style="color: gray;">{{ total }} TND</span>
-        </div>
+					<!-- Sous-total (Montant de la commande) -->
+					<div class="d-flex justify-content-between">
+						<span class="fw-bold text-white">Sous-total :</span>
+						<span style="color: gray;">{{ total }}
+							TND</span>
+					</div>
 
-        <!-- Frais de Livraison (Fixe : 8 TND) -->
-        <div class="d-flex justify-content-between mt-2">
-            <span class="fw-bold text-white">Livraison :</span>
-            <span style="color: gray;">8 TND</span>
-        </div>
+					<!-- Frais de Livraison (Fixe : 8 TND) -->
+					<div class="d-flex justify-content-between mt-2">
+						<span class="fw-bold text-white">Livraison :</span>
+						<span style="color: gray;">8 TND</span>
+					</div>
 
-        <hr style="border-color: white;">
+					<hr
+					style="border-color: white;">
 
-        <!-- Total Final -->
-        <div class="d-flex justify-content-between">
-            <span class="fw-bold text-white">Total :</span>
-            <span class="fw-bold" style="color: white;">{{ total + 8 }} TND</span>
-        </div>
+					<!-- Total Final -->
+					<div class="d-flex justify-content-between">
+						<span class="fw-bold text-white">Total :</span>
+						<span class="fw-bold" style="color: white;">{{ total + 8 }}
+							TND</span>
+					</div>
+{# 
+					<h5 class="mt-4 text-white">MÉTHODES DE PAIEMENT</h5>
+					<hr style="border-color: white;">
 
-        <h5 class="mt-4 text-white">MÉTHODES DE PAIEMENT</h5>
-        <hr style="border-color: white;">
+					<div class="form-check text-white">
+						<input type="radio" class="form-check-input" id="payment1" name="payment">
+						<label class="form-check-label" for="payment1">Paiement par chèque</label>
+					</div>
+					<div class="form-check mt-2 text-white">
+						<input type="radio" class="form-check-input" id="payment2" name="payment">
+						<label class="form-check-label" for="payment2">Paiement à la livraison</label>
+					</div> #}
 
-        <div class="form-check text-white">
-            <input type="radio" class="form-check-input" id="payment1" name="payment">
-            <label class="form-check-label" for="payment1">Check Payments</label>
-        </div>
-        <div class="form-check mt-2 text-white">
-            <input type="radio" class="form-check-input" id="payment2" name="payment">
-            <label class="form-check-label" for="payment2">Cash On Delivery</label>
-        </div>
-        <div class="form-check mt-2 text-white">
-            <input type="radio" class="form-check-input" id="payment3" name="payment">
-            <label class="form-check-label" for="payment3">PayPal</label>
-        </div>
+					
 
-        
-    </div>
-</div>
+				</div> 
+			</div>
 
 		</div>
 	</div>
 </section>
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        flatpickr(".datepicker", {
-            enableTime: false, // Désactiver la sélection de l'heure
-            dateFormat: "d-m-Y", // Format plus lisible (ex: 16-02-2025)
-            theme: "dark", // Thème sombre pour s'accorder avec le design
-            defaultDate: "today" // Sélectionne la date du jour par défaut
-        });
+	document.addEventListener("DOMContentLoaded", function () {
+flatpickr(".datepicker", {
+enableTime: false,
+dateFormat: "d-m-Y",
+theme: "dark",
+defaultDate: "today",
+allowInput: false // Désactive la saisie manuelle
+});
+});
+document.querySelector('form').addEventListener('submit', function (event) {
+    event.preventDefault();
+    fetch(this.action, {
+        method: 'POST',
+        body: new FormData(this)
+    })
+    .then(response => response.json())
+    .then(data => {
+        window.location.href = data.redirect_url;
+        setTimeout(() => {
+            window.open(data.pdf_url, '_blank');
+        }, 2000); // Attendre 2 secondes pour éviter tout conflit
     });
+});
+
 </script>

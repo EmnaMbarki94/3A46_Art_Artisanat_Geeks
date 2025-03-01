@@ -25,6 +25,9 @@ class Reclamation
 
     #[ORM\Column(length: 255)]
     private ?string $typeR = null;
+    
+    #[ORM\ManyToOne(cascade: ['persist'])]
+    private ?User $user = null;
 
     public function getId(): ?int
     {
@@ -82,5 +85,16 @@ class Reclamation
 {
     return (string) $this->id; // Ou un autre champ pertinent, comme $this->titre
 }
+public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
+
+        return $this;
+    }
 
 }

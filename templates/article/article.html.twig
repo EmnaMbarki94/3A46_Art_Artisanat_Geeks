@@ -7,20 +7,22 @@
 
 	<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz@9..144&display=swap" rel="stylesheet">
 	<link href="{{ asset('front/css/product.css') }}" rel="stylesheet">
+
 	<style>
 		#product-list {
 			display: flex;
 			flex-wrap: wrap;
-			gap: 15px; /* Ajuste l'espacement entre les articles */
-			justify-content: start; /* Ou 'center' si tu veux centrer */
+			gap: 20px; /* Espacement horizontal et vertical */
+			justify-content: start;
 		}
-
-	
 
 		#product-list .col-md-3 {
-			flex: 1 1 calc(25% - 15px); /* 4 articles par ligne */
-			max-width: calc(25% - 15px); /* Ajuste la largeur */
+			flex: 1 1 calc(25% - 20px); /* 4 articles par ligne */
+			max-width: calc(25% - 20px); /* Ajuste la largeur */
+			margin-bottom: 20px; /* Espace entre les lignes */
 		}
+
+
 		/* Assurer que toutes les cartes ont la même hauteur et largeur */
 		.prod_main {
 			height: 100%; /* Prend toute la hauteur disponible */
@@ -159,6 +161,89 @@
 				transform: scale(1);
 			}
 		}
+
+		/*stock*/
+
+		.badge {
+			padding: 5px 10px;
+			border-radius: 5px;
+			font-size: 14px;
+			font-weight: bold;
+		}
+
+		.bg-success {
+			background-color: #28a745;
+			color: white;
+		}
+
+		.bg-danger {
+			background-color: #dc3545;
+			color: white;
+		}
+
+		/* Appliquer un filtre gris sur les images des articles en rupture de stock */
+		.out-of-stock {
+			filter: grayscale(100%) brightness(70%);
+			opacity: 0.7;
+		}
+
+		/* Empêcher le clic sur les liens des articles en rupture de stock */
+		.disabled-link {
+			pointer-events: none;
+			cursor: not-allowed;
+		}
+
+		/* Ajouter une superposition avec un texte "Rupture de stock" */
+		.out-of-stock-overlay {
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			background: rgba(0, 0, 0, 0.6);
+			color: white;
+			padding: 10px 20px;
+			font-size: 16px;
+			font-weight: bold;
+			border-radius: 5px;
+		}
+		
+		.pagination {
+    display: flex;
+    list-style: none;
+    padding: 0;
+}
+
+.pagination li {
+    margin: 0 4px;
+}
+
+.pagination a,
+.pagination span {
+    padding: 6px 12px;
+    text-decoration: none;
+    color: #800080; /* Mauve */
+    border: 1px solid #800080;
+    border-radius: 4px;
+    transition: 0.3s;
+}
+
+.pagination a:hover {
+    background-color: #800080;
+    color: white;
+}
+
+.pagination .active span {
+    background-color: #800080;
+    color: white;
+    border: 1px solid #800080;
+}
+
+.pagination .disabled span {
+    color: #ccc;
+    border: 1px solid #ccc;
+}
+
+
 	</style>
 	<!-- Section Articles -->
 
@@ -215,61 +300,62 @@
 				</div>
 			</div>
 			<div class="row product_2 mt-4" id="product-list">
-			<h2 class="text-white text-center mb-4">Liste des Articles</h2>
-			<div class="row">
-				{% for article in articles %}
-					<div class="col-md-3">
-						<div class="prod_main p-1 bg-white clearfix">
-							<div class="product_2im clearfix position-relative">
-								<div class="product_2imi clearfix">
-									<div class="grid clearfix">
-										<figure class="effect-jazz mb-0">
-											<a href="{{ path('article_detail', {'id': article.id}) }}">
-												<img src="{{ asset('uploads/produits/' ~ article.imagePath) }}" class="w-100" alt="{{ article.nomA }}">
-											</a>
-										</figure>
-									</div>
-								</div>
-								<div class="product_2imi1 position-absolute clearfix w-100 top-0 text-center">
-									<ul class="mb-0">
-										<li class="d-inline-block">
-											<a class="bg_pink text-white d-block" href="{{ path('article_detail', {'id': article.id}) }}">
-												<i class="fa fa-shopping-cart"></i>
-											</a>
-										</li>
+    <h2 class="text-white text-center mb-4">Liste des Articles</h2>
+    <div class="row">
+        {% for article in articles %}
+            <div class="col-md-3">
+                <div class="prod_main p-1 bg-white clearfix">
+                    <div class="product_2im clearfix position-relative">
+                        <div class="product_2imi clearfix">
+                            <div class="grid clearfix">
+                                <figure class="effect-jazz mb-0 position-relative">
+                                    <a href="{{ path('article_detail', {'id': article.id}) }}" class="{% if article.quantite == 0 %}disabled-link{% endif %}">
+                                        <img src="{{ asset('uploads/produits/' ~ article.imagePath) }}" class="w-100 {% if article.quantite == 0 %}out-of-stock{% endif %}" alt="{{ article.nomA }}">
+                                    </a>
+                                    {% if article.quantite == 0 %}
+                                        <div class="out-of-stock-overlay">Rupture de stock</div>
+                                    {% endif %}
+                                </figure>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="product_2im1 position-relative clearfix">
+                        <div class="clearfix product_2im1i text-center pt-3 pb-4">
+                            <h5 class="font_14 text-uppercase">
+                                <a class="col_dark" href="{{ path('article_detail', {'id': article.id}) }}">{{ article.nomA }}</a>
+                            </h5>
+                            <h6 class="col_dark mt-2 mb-0">{{ article.prixA }} TND</h6>
+                            {% if article.quantite > 0 %}
+                                <span class="badge bg-success">En stock</span>
+                            {% else %}
+                                <span class="badge bg-danger">Rupture de stock</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <div class="col-md-12 text-center">
+                <p class="alert alert-info">Aucun article trouvé.</p>
+            </div>
+        {% endfor %}
+		        
+    </div> <!-- Fin de la div .row contenant les articles -->
+		<div class="pagination-container d-flex justify-content-center mt-4">
+		{{ knp_pagination_render(pagination) }}
+	</div>
 
-									</ul>
-								</div>
-							</div>
-							<div class="product_2im1 position-relative clearfix">
-								<div class="clearfix product_2im1i text-center pt-3 pb-4">
-									<h5 class="font_14 text-uppercase">
-										<a class="col_dark" href="{{ path('article_detail', {'id': article.id}) }}">{{ article.nomA }}</a>
-									</h5>
-									<span class="font_12 col_yell">
-										<i class="fa fa-star"></i>
-										<i class="fa fa-star"></i>
-										<i class="fa fa-star"></i>
-										<i class="fa fa-star-half-o"></i>
-										<i class="fa fa-star-o"></i>
-									</span>
-									<h6 class="col_dark mt-2 mb-0">{{ article.prixA }}
-										TND</h6>
-								</div>
-							</div>
-						</div>
-					</div>
-				{% else %}
-					<div class="col-md-12 text-center">
-						<p class="alert alert-info">Aucun article trouvé.</p>
-					</div>
-				{% endfor %}
-			</div>
-		</div>
-	</section>
 
-	<script>
-		document.addEventListener("DOMContentLoaded", function () { // Charger les magasins dans le select
+
+
+    
+
+</div>
+
+		</section>
+
+		<script>
+			document.addEventListener("DOMContentLoaded", function () { // Charger les magasins dans le select
 fetch("/magasin/magasins/liste").then(response => response.json()).then(data => {
 console.log("Données reçues du backend :", data); // ✅ Voir exactement ce que le backend envoie
 let select = document.getElementById("magasins");
@@ -291,8 +377,9 @@ console.log(magasinId);
 // Vérifier que l'utilisateur a bien sélectionné un magasin
 if (magasinId) {
 
-fetch (`/article/magasin/${magasinId}`).then(response => response.json()) // Utilisez .json() ici.then(data => {
+fetch (`/article/magasin/${magasinId}`).then(response => response.json()).then(data => {
 console.log(data); // Afficher la réponse JSON dans la console
+
 let productList = document.getElementById("product-list");
 productList.innerHTML = ""; // Réinitialiser les articles affichés
 
@@ -300,55 +387,62 @@ if (data.length === 0) {
 productList.innerHTML = "<p>Aucun article trouvé pour ce magasin.</p>";
 } else {
 data.forEach(article => {
-let articleElement = document.createElement("div");
-articleElement.classList.add("col-md-3");
-articleElement.innerHTML = `
-                    <div class="prod_main p-1 bg-white clearfix">
-                        <div class="product_2im clearfix position-relative">
-                            <div class="product_2imi clearfix">
-                                <div class="grid clearfix">
-                                    <figure class="effect-jazz mb-0">
-                                        <a href="/article/articles/${
-article.id
-}">
-                                            <img src="/uploads/produits/${
-article.imagePath
-}" class="w-100" alt="${
-article.nomA
-}">
-                                        </a>
-                                    </figure>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="product_2im1 position-relative clearfix">
-                            <div class="clearfix product_2im1i text-center pt-3 pb-4">
-                                <h5 class="font_14 text-uppercase">
-                                    <a class="col_dark" href="/article/articles/${
-article.id
-}">${
-article.nomA
-}</a>
-                                </h5>
-                                <h6 class="col_dark mt-2 mb-0">${
-article.prixA
-} TND</h6>
-								
-              
-							 </div>
-                        </div>
+    let quantite = Number(article.quantite);
+    let articleElement = document.createElement("div");
+    articleElement.classList.add("col-md-3");
+    articleElement.innerHTML = `
+        <div class="prod_main p-1 bg-white clearfix">
+            <div class="product_2im clearfix position-relative">
+                <div class="product_2imi clearfix">
+                    <div class="grid clearfix">
+                        <figure class="effect-jazz mb-0 position-relative">
+                            <a href="/article/articles/${article.id}" class="${quantite === 0 ? 'disabled-link' : ''}">
+                                <img src="/uploads/produits/${article.imagePath}" 
+                                    class="w-100 ${quantite === 0 ? 'out-of-stock' : ''}" 
+                                    alt="${article.nomA}">
+                            </a>
+                            ${quantite === 0 ? '<div class="out-of-stock-overlay">Rupture de stock</div>' : ''}
+                        </figure>
                     </div>
-                `;
-productList.appendChild(articleElement);
+                </div>
+            </div>
+            <div class="product_2im1 position-relative clearfix">
+                <div class="clearfix product_2im1i text-center pt-3 pb-4">
+                    <h5 class="font_14 text-uppercase">
+                        <a class="col_dark" href="/article/articles/${article.id}">${article.nomA}</a>
+                    </h5>
+                    <h6 class="col_dark mt-2 mb-0">${article.prixA} TND</h6>
+                    
+                    <span class="badge ${quantite > 0 ? 'bg-success' : 'bg-danger'}">
+                        ${quantite > 0 ? 'En stock' : 'Rupture de stock'}
+                    </span>
+
+                    
+                </div>
+            </div>
+        </div>
+    `;
+    productList.appendChild(articleElement);
 });
+
+
 }
-}
-).catch(error => console.error("Erreur lors du filtrage des articles :", error));
+}).catch(error => console.error("Erreur lors du filtrage des articles :", error));
 
 
 }
 });
 });
-	</script>
+		</script>
+<script>
+    window.onload = function() {
+        window.location.href = "{{ path('telecharger_facture') }}";
+    };
+</script>
+{% for message in app.flashes('pdf_url') %}
+    <script>
+        window.location.href = "{{ message }}";
+    </script>
+{% endfor %}
 
-{% endblock %}
+	{% endblock %}

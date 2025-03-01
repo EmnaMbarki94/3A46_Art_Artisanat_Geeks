@@ -24,7 +24,7 @@ class EventType extends AbstractType
                 'required' => false, 
                 'constraints' => [
                     new Image([  
-                        'maxSize' => '2M',  // Taille max de 2 Mo
+                        // 'maxSize' => '2M',  // Taille max de 2 Mo
                         'mimeTypes' => ['image/jpeg', 'image/png'], // Accepte seulement JPEG et PNG
                         'mimeTypesMessage' => 'Seuls les formats JPEG et PNG sont acceptés.',
                         'maxSizeMessage' => 'L\'image ne doit pas dépasser 2 Mo.',

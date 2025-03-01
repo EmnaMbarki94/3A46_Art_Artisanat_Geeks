@@ -4,18 +4,34 @@
 
 {% block body %}
 
-    <h1>Event index</h1>
+    <h1 class="mb-4">Event index</h1>
 
     <style>
         .infoE-cell {
-            white-space: nowrap;  /* Affiche le texte sur une seule ligne */
-            overflow: hidden;     /* Cache le texte qui dépasse */
-            text-overflow: ellipsis; /* Ajoute "..." à la fin du texte tronqué */
-            max-width: 200px;     /* Largeur maximale de la cellule */
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 200px;
+        }
+
+        /* Style personnalisé pour les boutons mauves */
+        .btn-purple {
+            background-color: #6f42c1; /* Mauve Bootstrap */
+            color: white;
+            border: none;
+        }
+
+        .btn-purple:hover {
+            background-color: #5a32a3; /* Teinte plus foncée au survol */
         }
     </style>
 
-    <table class="table">
+    <!-- Barre de recherche -->
+    <div class="mb-4">
+        <input type="text" id="searchInput" class="form-control" placeholder="Rechercher par ID, Nom ou TypeE...">
+    </div>
+
+    <table id="eventTable" class="table table-striped">
         <thead>
             <tr>
                 <th>Id</th>
@@ -37,20 +53,44 @@
                     {{ event.infoE ? event.infoE|split('\n')[0] : '' }}
                 </td>
                 <td>{{ event.dateE ? event.dateE|date('Y-m-d') : '' }}</td>
-                <td>{{ event.photoE }}</td>
                 <td>
-                    <a href="{{ path('app_evenement_show', {'id': event.id}) }}">Show</a>
-                    <a href="{{ path('app_evenement_edit', {'id': event.id}) }}">Edit</a>
-                    <a href="{{ path('app_evenement_delete', {'id': event.id}) }}">Delete</a>
+                    <img src="{{ asset('uploads/photosevents/' ~ event.photoE) }}" alt="Event Image" class="img-thumbnail" width="100">
+                </td>
+                <td>
+                    <a href="{{ path('app_evenement_show', {'id': event.id}) }}" class="btn btn-purple btn-sm">Show</a>
+                    <a href="{{ path('app_evenement_edit', {'id': event.id}) }}" class="btn btn-purple btn-sm">Edit</a>
+                    <a href="{{ path('app_evenement_delete', {'id': event.id}) }}" class="btn btn-purple btn-sm">Delete</a>
                 </td>
             </tr>
         {% else %}
             <tr>
-                <td colspan="7">No records found</td>
+                <td colspan="7" class="text-center">No records found</td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 
-    <a href="{{ path('app_evenement_new') }}">Create new</a>
+    <a href="{{ path('app_evenement_new') }}" class="btn btn-purple rounded-pill">Create new</a>
+
+    <!-- JavaScript pour la recherche dynamique -->
+    <script>
+        document.getElementById('searchInput').addEventListener('input', function() {
+            let searchQuery = this.value.toLowerCase();
+            let rows = document.querySelectorAll('#eventTable tbody tr');
+
+            rows.forEach(function(row) {
+                let columns = row.querySelectorAll('td');
+                let matchFound = false;
+
+                columns.forEach(function(column) {
+                    if (column.textContent.toLowerCase().includes(searchQuery)) {
+                        matchFound = true;
+                    }
+                });
+
+                row.style.display = matchFound ? '' : 'none';
+            });
+        });
+    </script>
+
 {% endblock %}

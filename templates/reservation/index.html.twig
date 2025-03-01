@@ -3,15 +3,20 @@
 {% block title %}Reservation index{% endblock %}
 
 {% block body %}
-    <h1>Reservation index</h1>
+    <h1 class="mb-4">Reservation index</h1>
 
-    <table class="table">
+    <!-- Barre de recherche -->
+    <div class="mb-4">
+        <input type="text" id="searchInput" class="form-control" placeholder="Rechercher par ID, Libellé, ou État...">
+    </div>
+
+    <table id="TableReservation" class="table table-striped">
         <thead>
             <tr>
                 <th>Id</th>
                 <th>Libelle</th>
                 <th>EtatE</th>
-                <th>actions</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -21,16 +26,36 @@
                 <td>{{ reservation.libelle }}</td>
                 <td>{{ reservation.etatE }}</td>
                 <td>
-                    <a href="{{ path('app_reservation_show', {'id': reservation.id}) }}">show</a>
+                    <a href="{{ path('app_reservation_show', {'id': reservation.id}) }}" class="btn btn-primary rounded-pill">Show</a>
                 </td>
             </tr>
         {% else %}
             <tr>
-                <td colspan="5">no records found</td>
+                <td colspan="4" class="text-center">No records found</td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 
-    
+    <!-- JavaScript pour la recherche dynamique -->
+    <script>
+        document.getElementById('searchInput').addEventListener('input', function() {
+            let searchQuery = this.value.toLowerCase();
+            let rows = document.querySelectorAll('#TableReservation tbody tr');
+
+            rows.forEach(function(row) {
+                let columns = row.querySelectorAll('td');
+                let matchFound = false;
+
+                columns.forEach(function(column) {
+                    if (column.textContent.toLowerCase().includes(searchQuery)) {
+                        matchFound = true;
+                    }
+                });
+
+                row.style.display = matchFound ? '' : 'none';
+            });
+        });
+    </script>
+
 {% endblock %}

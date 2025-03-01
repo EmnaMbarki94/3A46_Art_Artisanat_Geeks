@@ -10,15 +10,21 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
+
 
 #[Route('/reclamation')]
 final class ReclamationController extends AbstractController
 {
     #[Route(name: 'app_reclamation_index', methods: ['GET'])]
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
     public function index(ReclamationRepository $reclamationRepository): Response
     {
+        $user = $this->getUser();
+        $reclamations = $reclamationRepository->findBy(['user' => $user]);
+
         return $this->render('reclamation/index.html.twig', [
-            'reclamations' => $reclamationRepository->findAll(),
+            'reclamations' => $reclamations,
         ]);
     }
 
@@ -31,9 +37,15 @@ final class ReclamationController extends AbstractController
     }
 
     #[Route('/new', name: 'app_reclamation_new', methods: ['GET', 'POST'])]
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $reclamation = new Reclamation();
+        $user = $this->getUser(); // ou $security->getUser();
+        if ($user) {
+            $reclamation->setUser($user); // Lier la commande à l'utilisateur
+        }
+
         $form = $this->createForm(ReclamationType::class, $reclamation);
         $form->handleRequest($request);
 
@@ -59,6 +71,7 @@ final class ReclamationController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_reclamation_edit', methods: ['GET', 'POST'])]
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
     public function edit(Request $request, Reclamation $reclamation, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(ReclamationType::class, $reclamation);

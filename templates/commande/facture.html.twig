@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="fr">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Facture - Commande</title>
+		{# <img src="{{asset ('assets\front\img\logoArtis.png')}}" alt="Logo du site" style="max-width: 120px; display: block; margin: 0 auto 10px border: 2px solid red;"> #}
+		<div class="logo-container">
+			<img src="{{ asset('uploads/magasin/' ~ 'logoArtis.jpg') }}" >
+		</div>
+
+		<h1 style="text-align: center; color: #4b0082;">Artis | Galerie d'art</h1> 
+
+		<style>
+			body {
+				font-family: 'Arial', sans-serif;
+				background-color: #f8f4fc;
+				margin: 0;
+				padding: 0;
+			}
+			.navbar {
+				background-color: #4b0082;
+				color: white;
+				padding: 15px 20px;
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+			}
+			.navbar h1 {
+				color: #ffd700;
+				font-size: 24px;
+			}
+			.container {
+				width: 80%;
+				max-width: 800px;
+				margin: 40px auto;
+				background: white;
+				padding: 25px;
+				box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+				border-radius: 10px;
+				border: 1px solid #ddd;
+			}
+			.header {
+				text-align: center;
+				border-bottom: 2px solid #4b0082;
+				padding-bottom: 10px;
+				margin-bottom: 20px;
+			}
+			h2 {
+				color: #4b0082;
+				margin-bottom: 5px;
+			}
+			h3 {
+				color: #333;
+				font-size: 18px;
+			}
+			.order-info {
+				text-align: center;
+				font-size: 16px;
+				color: #555;
+				margin-bottom: 15px;
+			}
+			table {
+				width: 100%;
+				border-collapse: collapse;
+				margin-top: 15px;
+			}
+			th,
+			td {
+				border: 1px solid #ddd;
+				padding: 12px;
+				text-align: center;
+			}
+			th {
+				background-color: #4b0082;
+				color: white;
+			}
+			tr:nth-child(even) {
+				background-color: #f4eaf7;
+			}
+			tr:nth-child(odd) {
+				background-color: #ffffff;
+			}
+			.total {
+				text-align: right;
+				font-weight: bold;
+				font-size: 20px;
+				margin-top: 20px;
+				padding-right: 10px;
+			}
+			.btn-container {
+				text-align: center;
+				margin-top: 20px;
+			}
+			.btn {
+				display: inline-block;
+				padding: 12px 20px;
+				background-color: #4b0082;
+				color: white;
+				text-decoration: none;
+				font-weight: bold;
+				border-radius: 6px;
+				transition: background 0.3s;
+			}
+			.btn:hover {
+				background-color: #3a0066;
+			}
+
+			.logo-container {
+				text-align: left;
+				padding: 10px 20px;
+			}
+			.logo-container img {
+				max-width: 80px; /* Taille réduite */
+				height: auto;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="container">
+			<div class="header">
+				<h2>Facture</h2>
+				<h3>Commande #{{ commande.id }}</h3>
+			</div>
+
+			<p>
+				<strong>Client:</strong>
+				{{ commande.user.lastName }}
+				{{ commande.user.firstName }}</p>
+			<p>
+				<strong>Email:</strong>
+				{{ commande.user.email }}</p>
+			<p>
+				<strong>Date:</strong>
+				{{ commande.dateC|date('d/m/Y') }}</p>
+			<p>
+				<strong>Adresse:</strong>
+				{{ commande.adresseC }}
+			</p>
+
+			<table>
+			<thead>
+				<tr>
+					<th>Article</th>
+					<th>Prix Unitaire</th>
+					<th>Quantité</th>
+					<th>Total</th>
+				</tr>
+			</thead>
+			<tbody>
+				{# {{ dump(commande.ligneCommandes) }} #}
+				{% set totalGeneral = 0 %}
+				{% for ligne in commande.ligneCommandes %}
+					{% set totalLigne = ligne.article.prixA * ligne.quantite %}
+					{% set totalGeneral = totalGeneral + totalLigne %}
+					<tr>
+						<td>{{ ligne.article.nomA }}</td>
+						<td>{{ ligne.article.prixA|number_format(2, ',', ' ') }} TND</td>
+						<td>{{ ligne.quantite }}</td>
+						<td>{{ totalLigne|number_format(2, ',', ' ') }} TND</td>
+					</tr>
+				{% endfor %}
+			<tr>
+				<td colspan="3"><strong>Sous-total</strong></td>
+				<td><strong>{{ totalGeneral|number_format(2, ',', ' ') }} TND</strong></td>
+			</tr>
+			<tr>
+				<td colspan="3"><strong>Livraison</strong></td>
+				<td><strong>8,00 TND</strong></td>
+			</tr>
+			<tr>
+				<td colspan="3"><strong>Total Général</strong></td>
+				<td><strong>{{ (totalGeneral + 8)|number_format(2, ',', ' ') }} TND</strong></td>
+			</tr>
+
+			</tbody>
+		</table>
+
+
+			<p class="total">
+				<strong>Total:</strong>
+				{{ commande.total|number_format(2, ',', ' ') }}
+				TND</p>
+
+	
+		</div>
+
+	</body>
+</html>

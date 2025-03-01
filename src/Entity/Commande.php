@@ -22,11 +22,10 @@ class Commande
     #[ORM\Column(length: 255)]
     private ?string $adresseC = null;
 
-    /**
-     * @var Collection<int, Article>
-     */
-    #[ORM\OneToMany(targetEntity: Article::class, mappedBy: 'commande')]
-    private Collection $article;
+    #[ORM\OneToMany(mappedBy: 'commande', targetEntity: LigneCommande::class, cascade: ['persist', 'remove'], fetch: 'EAGER')]
+    private Collection $ligneCommandes;
+    
+    
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $dateC = null;
@@ -35,11 +34,16 @@ class Commande
     #[ORM\ManyToOne(cascade: ['persist'])]
     private ?User $user = null;
 
-
     public function __construct()
     {
-        $this->article = new ArrayCollection();
+        $this->ligneCommandes = new ArrayCollection(); // ✅ Initialisation ici
     }
+
+    public function getLigneCommandes(): Collection
+    {
+        return $this->ligneCommandes;
+    }
+    
 
     public function getId(): ?int
     {
@@ -70,35 +74,35 @@ class Commande
         return $this;
     }
 
-    /**
-     * @return Collection<int, Article>
-     */
-    public function getArticle(): Collection
-    {
-        return $this->article;
-    }
+    // /**
+    //  * @return Collection<int, Article>
+    //  */
+    // public function getArticle(): Collection
+    // {
+    //     return $this->article;
+    // }
 
-    public function addArticle(Article $article): static
-    {
-        if (!$this->article->contains($article)) {
-            $this->article->add($article);
-            $article->setCommande($this);
-        }
+    // public function addArticle(Article $article): static
+    // {
+    //     if (!$this->article->contains($article)) {
+    //         $this->article->add($article);
+    //         $article->setCommande($this);
+    //     }
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
-    public function removeArticle(Article $article): static
-    {
-        if ($this->article->removeElement($article)) {
-            // set the owning side to null (unless already changed)
-            if ($article->getCommande() === $this) {
-                $article->setCommande(null);
-            }
-        }
+    // public function removeArticle(Article $article): static
+    // {
+    //     if ($this->article->removeElement($article)) {
+    //         // set the owning side to null (unless already changed)
+    //         if ($article->getCommande() === $this) {
+    //             $article->setCommande(null);
+    //         }
+    //     }
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
     public function getDateC(): ?\DateTimeInterface
     {

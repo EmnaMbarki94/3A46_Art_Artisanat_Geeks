@@ -3,7 +3,7 @@
 {% block title %}Articles{% endblock %}
 
 {% block body %}
-    <h1 class="mb-4">Articles</h1>
+    <h1 class="mb-4">Liste des articles</h1>
 
     <!-- Search Bar -->
     <div class="mb-4">
@@ -14,9 +14,10 @@
         <thead>
             <tr>
                 <th>Id</th>
-                <th>NomA</th>
-                <th>PrixA</th>
-                <th>DescA</th>
+                <th>Nom</th>
+                <th>Prix</th>
+                <th>Quantité</th>
+                <th>Description</th>
                 <th>Image</th>
                 <th>Actions</th>
             </tr>
@@ -27,6 +28,7 @@
                     <td>{{ article.id }}</td>
                     <td>{{ article.nomA }}</td>
                     <td>{{ article.prixA }}</td>
+                    <td>{{ article.Quantite }}</td>
                     <td style="max-width: 250px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
                         {{ article.descA }}
                     </td>
@@ -38,9 +40,11 @@
                         {% endif %}
                     </td>
                     <td>
-                        <a href="{{ path('app_article_show', {'id': article.id}) }}" class="btn btn-info btn-sm">Show</a>
-                        <a href="{{ path('app_article_edit', {'id': article.id}) }}" class="btn btn-warning btn-sm">Edit</a>
+                        <a href="{{ path('app_article_show', {'id': article.id}) }}" class="btn btn-purple btn-sm">Voir</a>
+                        <a href="{{ path('app_article_edit', {'id': article.id}) }}" class="btn btn-purple btn-sm">Modifier</a>
                         {{ include('article/_delete_form.html.twig', {'article': article}) }}
+
+                        
                     </td>
                 </tr>
             {% else %}
@@ -81,4 +85,23 @@
             });
         });
     </script>
+    <style>
+        .infoE-cell {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 200px;
+        }
+
+        /* Style personnalisé pour les boutons mauves */
+        .btn-purple {
+            background-color: #6f42c1; /* Mauve Bootstrap */
+            color: white;
+            border: none;
+        }
+
+        .btn-purple:hover {
+            background-color: #5a32a3; /* Teinte plus foncée au survol */
+        }
+    </style>
 {% endblock %}
