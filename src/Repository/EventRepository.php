@@ -15,6 +15,28 @@ class EventRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Event::class);
     }
+    public function getEventsCountByType(): array
+    {
+        return $this->createQueryBuilder('e')
+            ->select('e.typeE, COUNT(e.id) as eventCount')
+            ->groupBy('e.typeE')
+            ->orderBy('eventCount', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
+    public function getMostExpensiveEvents(): array
+    {
+        return $this->createQueryBuilder('e')
+            ->select('e.nom, e.prixS')
+            ->orderBy('e.prixS', 'DESC') // Trie par prix décroissant
+            ->setMaxResults(5) // Limite aux 5 événements les plus chers (modifiable)
+            ->getQuery()
+            ->getResult();
+    }
+    
+
+
+
 
 //    /**
 //     * @return Event[] Returns an array of Event objects

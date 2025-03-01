@@ -167,6 +167,26 @@ final class HomeController extends AbstractController
             'piece_arts' => $piece_arts,
         ]);
     }
+    #[Route('/admin/statG', name: 'app_galerie_statistics', methods: ['GET'])]
+    public function statistics(GalerieRepository $galerieRepository, PieceArtRepository $pieceArtRepository): Response
+    {
+        // Get the total number of galleries
+        $totalGalleries = $galerieRepository->count([]);
 
+        // Get the total number of art pieces
+        $totalPieces = $pieceArtRepository->count([]);
 
+        // Prepare data for the chart
+        $recentArtPieces = $pieceArtRepository->countRecentArtPieces(3);
+
+        $data = [
+            'galleries' => $totalGalleries,
+            'pieces' => $totalPieces,
+            'recentArtPieces' => $recentArtPieces,
+        ];
+
+        return $this->render('galerie/statG.html.twig', [
+            'data' => json_encode($data),
+        ]);
+    }
 }

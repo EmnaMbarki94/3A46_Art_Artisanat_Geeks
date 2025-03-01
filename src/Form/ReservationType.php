@@ -30,9 +30,14 @@ class ReservationType extends AbstractType
             ])
             ->add('relation', EntityType::class, [
                 'class' => Event::class,
-                'choice_label' => 'nom',  // Affiche le nom de l'événement
                 'label' => 'Événement',
+                'choice_label' => 'nom', // Affiche le nom de l'événement
+                'data' => $options['relation'], // Associe l'événement sélectionné à partir de la réservation
                 'required' => true,
+                'disabled' => true,  // Désactive le champ pour éviter toute modification
+                'attr' => [
+                    'readonly' => true,  // Le rendre en lecture seule pour empêcher la modification via l'interface
+                ],
                 'choice_attr' => function (Event $event) {
                     return [
                         'data-prixVIP' => $event->getPrixVIP(),
@@ -40,22 +45,19 @@ class ReservationType extends AbstractType
                     ];
                 }
             ])
-            ->add('prix', HiddenType::class, [
-                'mapped' => false,
+            ->add('prix', null, [
+                'label' => 'Prix',
+                'mapped' => false,  // Ce champ ne sera pas directement lié à l'entité
+                'attr' => [
+                    'readonly' => true, // Le prix est en lecture seule
+                    'value' => '0', 
+                ]
             ])
             ->add('user_id', EntityType::class, [
                 'class' => User::class,
                 'choice_label' => 'firstName',  
                 'label' => 'Utilisateur',
                 'required' => true
-            ]) 
-            ->add('prix', null, [
-                'label' => 'Prix',
-                'mapped' => false,  // Ce champ ne sera pas directement lié à l'entité
-                'attr' => [
-                    'readonly' => true, // Le prix est en lecture seule
-                    'value' => '0', // Valeur initiale
-                ]
             ]);
     
     }
@@ -64,6 +66,7 @@ class ReservationType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Reservation::class,
+            'relation' => null,
         ]);
     }
 }

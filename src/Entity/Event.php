@@ -18,7 +18,7 @@ class Event
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank(message: "Le nom de l'événement ne peut pas être vide.")]
     #[Assert\Length(min: 3, max: 255, minMessage: "Le nom doit comporter au moins 3 caractères.", maxMessage: "Le nom ne peut pas dépasser 255 caractères.")]
-    #[Assert\Regex(pattern: "/^[a-zA-ZéèàêôïùÉÈÀÊÔÏÙ]+$/", message: "Le nom ne doit contenir que des lettres.")]
+    #[Assert\Regex(pattern: "/^[a-zA-ZéèàêôïùÉÈÀÊÔÏÙ\s!.,?'\"-]+$/", message: "Le nom ne doit contenir que des lettres, des espaces et des symboles autorisés.")]
     private ?string $nom = null;
 
     #[ORM\Column(length: 255)]
@@ -26,9 +26,9 @@ class Event
     #[Assert\Regex(pattern: "/^[a-zA-ZéèàêôïùÉÈÀÊÔÏÙ]+$/", message: "Le type ne doit contenir que des lettres.")]
     private ?string $typeE = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column]
     #[Assert\NotBlank(message: "Les informations sur l'événement ne peuvent pas être vides.")]
-    #[Assert\Length(min: 10, max: 255, minMessage: "Les informations doivent comporter au moins 10 caractères.", maxMessage: "Les informations ne peuvent pas dépasser 255 caractères.")]
+    #[Assert\Length(min: 10, max: 10000, minMessage: "Les informations doivent comporter au moins 10 caractères.", maxMessage: "Les informations ne peuvent pas dépasser 255 caractères.")]
     private ?string $infoE = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)] // Change en DATETIME pour inclure l'heure
