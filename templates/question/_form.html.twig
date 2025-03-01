@@ -7,7 +7,7 @@
             <tr>
                 <th>La question </th>
                 <td>{{ form_widget(form.contenuQ, {'attr': {'class': 'form-control'}}) }}</td>
-                <td>{{ form_errors(form.contenuQ) }}</td>
+                <td style="color:red">{{ form_errors(form.contenuQ) }}</td>
             </tr>
             <tr>
                 <th>Réponses</th>
@@ -21,7 +21,7 @@
             <tr>
                 <th>Quiz associé</th>
                 <td>{{ form_widget(form.quiz, {'attr': {'class': 'form-select'}}) }}</td>
-                <td>{{ form_errors(form.quiz) }}</td>
+                <td style="color:red">{{ form_errors(form.quiz) }}</td>
             </tr>
         </table>
         <button class="btn">{{ button_label|default('Sauvegarder') }}</button>

@@ -27,6 +27,8 @@
         "@fullcalendar/daygrid": "^6.1.15",
         "@fullcalendar/interaction": "^6.1.15",
         "@fullcalendar/timegrid": "^6.1.15",
-        "fullcalendar": "^6.1.15"
+        "fullcalendar": "^6.1.15",
+        "stimulus": "^3.2.2",
+        "tom-select": "^2.4.3"
     }
 }

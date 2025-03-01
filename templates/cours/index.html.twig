@@ -4,8 +4,27 @@
 
 {% block body %}
 
+    <section id="center" class="center_o bg_gray pt-2 pb-2">
+        <div class="container-xl">
+        <div class="row center_o1">
+        <div class="col-md-5">
+            <div class="center_o1l">
+            <h2 class="mb-0">Cours</h2>
+            </div>
+        </div>
+        <div class="col-md-7">
+            <div class="center_o1r text-end">
+            <h6 class="mb-0"><a href="{{ path('app_home') }}">Home</a> <span class="me-2 ms-2"><i class="fa fa-caret-right"></i></span> Cours</h6>
+            </div>
+        </div>
+        </div>
+        </div>
+    </section>
 
 <section id="blog" class="p_4 pt-5">
+    <div class="m-5">
+        <input type="text" id="searchInput" class="form-control" placeholder="Rechercher un cours">
+    </div>
 {% for c in cours %}
     <div class="container-xl">
         <div class="blog_1 row">
@@ -34,13 +53,57 @@
                     </div>
                 </div>
             </div>
+            <hr>
         </div>
     </div>
-    <hr>
+
     {% else %}
         <p>no records found</p>
     {% endfor %}
+    <div class="d-flex justify-content-center">
+        <div class="pagination">
+            {{ knp_pagination_render(cours) }}
+        </div>
+    </div>
 </section>
+<script>
+        document.getElementById("searchInput").addEventListener("keyup", function() {
+        let filter = this.value.toLowerCase();
+        let rows = document.querySelectorAll(".blog_1");
+        
+        rows.forEach(row => {
+            let courseName = row.querySelector("h5 a").textContent.toLowerCase();
+            row.style.display = courseName.includes(filter) ? "" : "none";
+            });
+        });
+    </script>
+    <style>
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
 
+        .pagination .page-item {
+            margin: 0 5px;
+        }
+
+        .pagination .page-item.active .page-link {
+            background-color: #007bff;
+            border-color: #007bff;
+            color: white;
+        }
+
+        .pagination .page-link {
+            color: #007bff;
+            border: 1px solid #dee2e6;
+            padding: 5px 10px;
+            border-radius: 4px;
+        }
+
+        .pagination .page-link:hover {
+            background-color: #e9ecef;
+        }
+</style>
 
 {% endblock %}

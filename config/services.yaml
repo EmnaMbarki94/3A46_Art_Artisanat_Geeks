@@ -47,3 +47,8 @@ services:
       $sid: "%twilio.sid%"
       $token: "%twilio.auth_token%"
       $twilioNumber: "%twilio.phone_number%"
+
+  App\Service\ElevenLabsTtsService:
+        arguments:
+            $apiKey: '%env(ELEVENLABS_API_KEY)%'
+            $audioFilePath: '%kernel.project_dir%/public/uploads/audio/output.mp3'

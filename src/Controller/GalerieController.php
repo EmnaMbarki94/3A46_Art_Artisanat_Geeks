@@ -12,15 +12,31 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 #[Route('/galerie')]
 final class GalerieController extends AbstractController{
     #[Route(name: 'app_galerie_index', methods: ['GET'])]
-    public function index(GalerieRepository $galerieRepository): Response
+    public function index(Request $request, GalerieRepository $galerieRepository, PaginatorInterface $paginator): Response
     {
+        $searchTerm = $request->query->get('query');
+
+        // Use the repository to get a query builder for the search term
+        $queryBuilder = $galerieRepository->findBySearchTermQueryBuilder($searchTerm);
+
+        // Paginate the results of the query
+        $pagination = $paginator->paginate(
+            $queryBuilder, // Query to paginate
+            $request->query->getInt('page', 1), // Current page number
+            3 // Number of items per page
+        );
+
         return $this->render('galerie/galerie.html.twig', [
-            'galeries' => $galerieRepository->findAll(),
+            'galeries' => $pagination->getItems(), // Pass the paginated items
+            'pagination' => $pagination, 
+            'search_term' => $searchTerm,
         ]);
     }
 

@@ -1,0 +1,106 @@
+{% extends 'baseBack.html.twig' %}
+
+{% block title %}Comment index{% endblock %}
+
+{% block body %}
+    <h1>Comment index</h1>
+
+    <div class="mb-4">
+        <input type="text" id="searchInput" class="form-control" placeholder="Rechercher un commentaire...">
+    </div>
+
+    <div class="mb-4">
+        <select id="sortSelect" class="form-control" onchange="sortTable()">
+            <option value="">Trier par...</option>
+            <option value="id">ID</option>
+            <option value="content">Contenu</option>
+            <option value="creationDate">Date de Création</option>
+        </select>
+    </div>
+
+    <table class="table" id="tableComments">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Content</th>
+                <th>CreationDate</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for comment in piece_art.comments %}
+            <tr>
+                <td>{{ comment.id }}</td>
+                <td>{{ comment.content }}</td>
+                <td>{{ comment.creationDate ? comment.creationDate|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    <a href="{{ path('app_comment_show', {'id': comment.id}) }}">Show</a>
+                    <a href="{{ path('app_comment_edit', {'id': comment.id}) }}">Edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">Aucun enregistrement trouvé</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    
+    <a href="{{ path('app_piece_art_index', {'galerieId': piece_art.galerie.id}) }}" class="btn btn-secondary">Retour à la Liste des Œuvres</a>
+
+    <script>
+        document.getElementById('searchInput').addEventListener('input', function() {
+            let searchQuery = this.value.toLowerCase();
+            let rows = document.querySelectorAll('#tableComments tbody tr');
+            
+            rows.forEach(function(row) {
+                let columns = row.querySelectorAll('td');
+                let matchFound = false;
+
+                // Check if any column contains the search query
+                columns.forEach(function(column) {
+                    if (column.textContent.toLowerCase().includes(searchQuery)) {
+                        matchFound = true;
+                    }
+                });
+
+                // Show or hide the row based on search query match
+                row.style.display = matchFound ? '' : 'none';
+            });
+        });
+
+        function sortTable() {
+            const table = document.getElementById("tableComments");
+            const rows = Array.from(table.rows).slice(1); // Get all rows except the header
+            const sortSelect = document.getElementById("sortSelect");
+            const sortBy = sortSelect.value;
+
+            // Sort rows based on the selected column
+            rows.sort((a, b) => {
+                let aText, bText;
+                switch (sortBy) {
+                    case "id":
+                        aText = parseInt(a.cells[0].textContent);
+                        bText = parseInt(b.cells[0].textContent);
+                        return aText - bText; // Sort numerically
+                    case "content":
+                        aText = a.cells[1].textContent.toLowerCase();
+                        bText = b.cells[1].textContent.toLowerCase();
+                        return aText.localeCompare(bText); // Sort alphabetically
+                    case "creationDate":
+                        aText = new Date(a.cells[2].textContent);
+                        bText = new Date(b.cells[2].textContent);
+                        return aText - bText; // Sort by date
+                    default:
+                        return 0;
+                }
+            });
+
+            // Re-attach sorted rows to the table body
+            const tbody = table.querySelector('tbody');
+            tbody.innerHTML = ''; // Clear existing rows
+            rows.forEach(row => tbody.appendChild(row)); // Append sorted rows
+        }
+    </script>
+
+{% endblock %}

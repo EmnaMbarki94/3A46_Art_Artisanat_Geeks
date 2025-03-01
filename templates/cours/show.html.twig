@@ -3,6 +3,7 @@
 {% block title %}Cours{% endblock %}
 
 {% block body %}
+
     <section id="center" class="center_o bg_gray pt-2 pb-2">
         <div class="container-xl">
         <div class="row center_o1">
@@ -51,6 +52,11 @@
 		</div>
 	   </div>
      </div>
+     
+     <button id="tts-button" class="button p-1">Écouter le cours</button>
+     <audio id="tts-audio" src="{{ asset('uploads/audio/output.mp3') }}"></audio>
+     {#<audio id="tts-audio"></audio>#}
+     <a href="{{ path('cours_download_pdf', {'id': cour.id}) }}" class="button p-1">Télécharger le cours en PDF</a>
     </div>
    </div>
  </div>
@@ -64,7 +70,7 @@
         {% endif %}
     {% else %}
         <p>No quiz available for this course.</p>
-        {#{% if is_granted('ROLE_ENSEIGNANT') or is_granted('ROLE_ENSEIGNANT') %}#}
+        
         {% if is_granted('ROLE_ENSEIGNANT') %}
         <a class="button" href="{{ path('app_quiz_new', {'id':  cour.id}) }}">creer un quiz pour ce cours</a>
         {% endif %}
