@@ -4,122 +4,230 @@
 {% endblock %}
 
 {% block body %}
-	<br>
-	<br>
-	<br>
-	<br>
+	<br><br><br><br>
 	<div class="container mt-4">
-		<div class="card border-0 shadow-sm" style="background-color: #f8f9fa;">
-			<div class="card-header text-white text-center" style="background-color: #5a3d6a;">
-				<h4 class="mb-0 fw-semibold">Liste des Réclamations</h4>
-			</div>
+    <div class="card border-0 shadow-sm" style="background-color: #f8f9fa;">
+        <div class="card-header text-white text-center" style="background-color: #5a3d6a;">
+            <h4 class="mb-0 fw-semibold">Liste des Réclamations</h4>
+        </div>
 
-			<div class="card-body">
-				<div class="table-responsive">
-					<table class="table table-bordered text-center align-middle" style="color: #2c2c2c;">
-						<thead style="background-color: #7e5898; color: white;">
-							<tr>
-								<th>ID</th>
-								<th>Description</th>
-								<th>Date</th>
-								<th>Status</th>
-								<th>Type</th>
-								<th>Actions</th>
-							</tr>
-						</thead>
-						<tbody>
-							{% for reclamation in reclamations %}
-								<tr style="background-color: white;">
-									<td class="fw-bold">{{ reclamation.id }}</td>
-									<td>{{ reclamation.descR }}</td>
-									<td>{{ reclamation.dateR ? reclamation.dateR|date('Y-m-d') : '-' }}</td>
-									<td>
-										{% if reclamation.statusR == 'En attente' %}
-											<span class="badge bg-warning text-dark">En attente</span>
-										{% elseif reclamation.statusR == 'En cours' %}
-											<span class="badge bg-primary">En cours</span>
-										{% elseif reclamation.statusR == 'Résolue' %}
-											<span class="badge bg-success">Résolue</span>
-										{% else %}
-											<span class="badge bg-secondary">{{ reclamation.statusR }}</span>
-										{% endif %}
-									</td>
-									<td>{{ reclamation.typeR }}</td>
-									<td>
-										<a href="{{ path('app_reclamation_show', {'id': reclamation.id}) }}" class="btn btn-outline-dark btn-sm">
-											Voir
-										</a>
-										<a href="{{ path('app_reclamation_edit', {'id': reclamation.id}) }}" class="btn btn-outline-primary btn-sm" style="border-color: #7e5898; color: #7e5898;">
-											Modifier
-										</a>
-									</td>
-								</tr>
-							{% else %}
-								<tr>
-									<td colspan="6" class="text-center text-muted py-4">Aucune réclamation trouvée</td>
-								</tr>
-							{% endfor %}
-						</tbody>
-					</table>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered text-center align-middle" style="color: #2c2c2c;">
+                    <thead style="background-color: #7e5898; color: white;">
+                        <tr>
+                            <th>ID</th>
+                            <th>Description</th>
+                            <th>Date</th>
+                            <th>Status</th>
+                            <th>Type</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for reclamation in pagination %}
+                            <tr style="background-color: white;">
+                                <td class="fw-bold">{{ reclamation.id }}</td>
+                                <td>{{ reclamation.descR|raw }}</td>
+                                <td>{{ reclamation.dateR ? reclamation.dateR|date('Y-m-d') : '-' }}</td>
+                                <td>
+                                    {% if reclamation.statusR == 'En attente' %}
+                                        <span class="badge bg-warning text-dark">En attente</span>
+                                    {% elseif reclamation.statusR == 'En cours' %}
+                                        <span class="badge bg-primary">En cours</span>
+                                    {% elseif reclamation.statusR == 'Résolue' %}
+                                        <span class="badge bg-success">Résolue</span>
+                                    {% else %}
+                                        <span class="badge bg-secondary">{{ reclamation.statusR }}</span>
+                                    {% endif %}
+                                </td>
+                                <td>{{ reclamation.typeR }}</td>
+                                <td>
+                                    <a href="{{ path('app_reclamation_show', {'id': reclamation.id}) }}" class="btn btn-outline-dark btn-sm">Voir</a>
+
+                                    {% if reclamation.statusR != 'Résolue' %}
+                                        <button type="button" class="btn btn-warning btn-edit" data-bs-toggle="modal" data-bs-target="#editReclamationModal" data-id="{{ reclamation.id }}">
+                                            Modifier
+                                        </button>
+                                    {% endif %}
+
+                                    {% if reclamation.statusR == 'Résolue' %}
+                                        <a href="{{ path('app_reclamation_reponse', {'id': reclamation.id}) }}" class="btn btn-outline-success btn-sm">Réponse</a>
+                                    {% endif %}
+                                {# {% if reclamation.statusR == 'Résolue' %}
+    <button type="button" class="btn btn-outline-success btn-sm btn-reponse" data-bs-toggle="modal" data-bs-target="#reponseModal" data-id="{{ reclamation.id }}">
+        Réponse
+    </button>
+{% endif %} #}
+</td>
+                            </tr>
+                        {% else %}
+                            <tr>
+                                <td colspan="6" class="text-center text-muted py-4">Aucune réclamation trouvée</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination -->
+            <div class="pagination">
+                {{ knp_pagination_render(pagination) }}
+            </div>
+        </div>
+    </div>
+</div>
+
+
+	<!-- Bouton pour ouvrir le popup -->
+	<button type="button" class="btn text-white px-4" style="background-color: #7e5898;" data-bs-toggle="modal" data-bs-target="#reclamationModal">
+		Nouvelle réclamation
+	</button>
+
+	<!-- Modal Bootstrap -->
+	<div class="modal fade" id="reclamationModal" tabindex="-1" aria-labelledby="reclamationModalLabel" aria-hidden="true">
+		<div
+			class="modal-dialog modal-xl custom-modal">
+			{# Ajout de modal-xl et d'une classe personnalisée #}
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="reclamationModalLabel">Créer une nouvelle réclamation</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 				</div>
-			</div>
-
-			<div class="card-footer text-center" style="background-color: #f8f9fa;">
-				<a href="{{ path('app_reclamation_new') }}" class="btn text-white px-4" style="background-color: #7e5898;">
-					Nouvelle réclamation
-				</a>
+				<div class="modal-body">
+					{{ include('reclamation/_form.html.twig', {'form': form}) }}
+				</div>
 			</div>
 		</div>
 	</div>
-{% endblock %}
+
+	<style>
 
 
-{# <section class="container mt-5 pt-5">
-		    <div class="row justify-content-center pt-5">
-		        <div class="col-md-10">
-		            <div class="card shadow-lg rounded">
-		                <div class="card-header text-center bg-primary text-white">
-		                    <h2>Liste des Réclamations</h2>
-		                </div>
-		                <div class="card-body">
-		                    <table class="table table-hover table-bordered text-center">
-		                        <thead class="table-dark">
-		                            <tr>
-		                                <th>ID</th>
-		                                <th>Description</th>
-		                                <th>Date de soumission</th>
-		                                <th>Status</th>
-		                                <th>Type</th>
-		                                <th>Actions</th>
-		                            </tr>
-		                        </thead>
-		                        <tbody>
-		                        {% for reclamation in reclamations %}
-		                            <tr>
-		                                <td>{{ reclamation.id }}</td>
-		                                <td>{{ reclamation.descR }}</td>
-		                                <td>{{ reclamation.dateR ? reclamation.dateR|date('Y-m-d') : '' }}</td>
-		                                <td>{{ reclamation.statusR }}</td>
-		                                <td>{{ reclamation.typeR }}</td>
-		                                <td>
-		                                    <a href="{{ path('app_reclamation_show', {'id': reclamation.id}) }}" class="btn btn-info btn-sm">Voir</a>
-		                                    <a href="{{ path('app_reclamation_edit', {'id': reclamation.id}) }}" class="btn btn-warning btn-sm">Modifier</a>
-		                                </td>
-		                            </tr>
-		                        {% else %}
-		                            <tr>
-		                                <td colspan="6" class="text-center text-muted">Aucune réclamation trouvée</td>
-		                            </tr>
-		                        {% endfor %}
-		                        </tbody>
-		                    </table>
-		                </div>
-		                <div class="card-footer text-center">
-		                    <a href="{{ path('app_reclamation_new') }}" class="btn btn-success">Créer une nouvelle réclamation</a>
-		                </div>
-		            </div>
-		        </div>
-		    </div>
-		</section> #}
+		.custom-modal {
+			max-width: 60vw; /* Augmente la largeur du modal */
+			width: 50vw; /* Largeur à 90% de l'écran */
+		}
 
-{# {% endblock %} #}
+		.custom-modal .modal-content {
+			height: 80vh; /* Hauteur à 80% de l'écran */
+			overflow-y: auto; /* Permet le défilement si nécessaire */
+		}
+	</style>
+	<!-- Modal Bootstrap pour la modification -->
+	<div class="modal fade" id="editReclamationModal" tabindex="-1" aria-labelledby="editReclamationModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-xl custom-modal">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="editReclamationModalLabel">Modifier la réclamation</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<div
+						id="editFormContainer"><!-- Le formulaire sera chargé ici dynamiquement -->
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+<!-- Modal Bootstrap pour afficher la réponse -->
+{# <div class="modal fade" id="reponseModal" tabindex="-1" aria-labelledby="reponseModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="reponseModalLabel">Réponse à la Réclamation</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="reponseContent">
+                Chargement...
+            </div>
+        </div>
+    </div>
+</div> #}
+	{# <script src="{{ asset('js/upload-adapter.js') }}"></script> #}
+
+
+	{# <script src="{{ asset('ckeditor5/ckeditor5.js') }}"></script> #}
+	{# <script src="https://cdn.ckeditor.com/ckeditor5/36.0.1/classic/ckeditor.js"></script> #}
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const creationForm = document.querySelector("#reclamationModal form");
+    if (creationForm) {
+        creationForm.addEventListener("submit", function (event) {
+            event.preventDefault();
+            handleFormSubmit(creationForm, "{{ path('app_reclamation_new') }}", "#reclamationModal");
+        });
+    }
+
+    // Gestion de la modification d'une réclamation
+    document.querySelectorAll(".btn-edit").forEach(button => {
+        button.addEventListener("click", function () {
+            const reclamationId = this.getAttribute("data-id");
+
+            fetch(`/reclamation/${reclamationId}/edit`, {
+                headers: {
+                    "X-Requested-With": "XMLHttpRequest"
+                }
+            }).then(response => response.json()).then(data => {
+                if (data.form) {
+                    document.querySelector("#editFormContainer").innerHTML = data.form;
+                    const editForm = document.querySelector("#editFormContainer form");
+                    if (editForm) {
+                        editForm.addEventListener("submit", function (event) {
+                            event.preventDefault();
+                            handleFormSubmit(editForm, `/reclamation/${reclamationId}/edit`, "#editReclamationModal");
+                        });
+                    }
+                } else {
+                    console.error("Aucune donnée reçue pour le formulaire.");
+                }
+            }).catch(error => console.error("Erreur lors du chargement du formulaire :", error));
+        });
+    });
+// document.querySelectorAll(".btn-reponse").forEach(button => {
+//      button.addEventListener("click", function () {
+//          const reclamationId = this.getAttribute("data-id");
+//          // Réinitialiser le contenu précédent
+//          document.querySelector("#reponseContent").innerHTML = "";
+
+//          fetch(`/reclamation/${reclamationId}/reponse`, {
+//              headers: { "X-Requested-With": "XMLHttpRequest" }
+//          })
+//          .then(response => response.text())
+//          .then(data => {
+//              document.querySelector("#reponseContent").innerHTML = data;
+//          })
+//          .catch(error => console.error("Erreur lors du chargement de la réponse :", error));
+//      });
+//  });
+
+    // Fonction générique pour soumettre un formulaire
+    function handleFormSubmit(form, url, modalId) {
+        const formData = new FormData(form);
+
+        fetch(url, {
+            method: "POST",
+            body: formData,
+            headers: {
+                "X-Requested-With": "XMLHttpRequest"
+            }
+        }).then(response => response.json()).then(data => {
+            console.log("Réponse AJAX :", data);
+            if (data.success) {
+                const successMessage = document.createElement("div");
+                successMessage.className = "alert alert-success";
+                successMessage.innerText = "Opération réussie !";
+                document.body.prepend(successMessage);
+
+                setTimeout(() => {
+                    successMessage.remove();
+                    location.href = data.redirect; // Redirige vers la liste
+                }, 3000);
+            } else {
+                document.querySelector(`${modalId} .modal-body`).innerHTML = data.form;
+            }
+        }).catch(error => console.error("Erreur :", error));
+    }
+});
+
+</script>{% endblock %}

@@ -1,29 +1,42 @@
-{{ form_start(form, {'attr': {'class': 'row g-3'}}) }}
+{{ form_start(form, {'attr': {'class': 'row g-3', 'novalidate': 'novalidate', 'data-turbo': 'false'}}) }}
 
-    <div class="col-md-6">
-        {{ form_label(form.descR, 'Description', {'label_attr': {'class': 'form-label'}}) }}
-        {{ form_widget(form.descR, {'attr': {'class': 'form-control'}}) }}
+<div class="col-md-6">
+    {{ form_label(form.descR, 'Description', {'label_attr': {'class': 'form-label'}}) }}
+    {{ form_widget(form.descR, {'attr': {'class': 'form-control', 'id': 'reclamation_descR'}}) }}
+    <div class="text-danger">
+        {% for error in form.descR.vars.errors %}
+            {{ error.message }}
+        {% endfor %}
     </div>
+</div>
 
-    <div class="col-md-6">
-        {{ form_label(form.dateR, 'Date de soumission', {'label_attr': {'class': 'form-label'}}) }}
-        {{ form_widget(form.dateR, {'attr': {'class': 'form-control'}}) }}
+<div class="col-md-6">
+    {{ form_label(form.dateR, 'Date de soumission', {'label_attr': {'class': 'form-label'}}) }}
+    {{ form_widget(form.dateR, {'attr': {'class': 'form-control'}}) }}
+    <div class="text-danger">
+        {% for error in form.dateR.vars.errors %}
+            {{ error.message }}
+        {% endfor %}
     </div>
+</div>
 
-    {# Status affiché mais non modifiable par l'utilisateur #}
-    <div class="col-md-6">
-        <label class="form-label">Status de la réclamation</label>
-        <input type="text" class="form-control" value="En attente" disabled>
-    </div>
+<div class="col-md-6">
+    <label class="form-label">Status de la réclamation</label>
+    <input type="text" class="form-control" value="En attente" disabled>
+</div>
 
-    <div class="col-md-6">
-        {{ form_label(form.typeR, 'Type de la réclamation', {'label_attr': {'class': 'form-label'}}) }}
-        {{ form_widget(form.typeR, {'attr': {'class': 'form-control'}}) }}
+<div class="col-md-6">
+    {{ form_label(form.typeR, 'Type de la réclamation', {'label_attr': {'class': 'form-label'}}) }}
+    {{ form_widget(form.typeR, {'attr': {'class': 'form-select'}}) }}
+    <div class="text-danger">
+        {% for error in form.typeR.vars.errors %}
+            {{ error.message }}
+        {% endfor %}
     </div>
+</div>
 
-    <div class="col-12 text-center">
-        <button type="submit" class="btn btn-primary w-100">Envoyer</button>
-    </div>
+<div class="col-12 text-center">
+    <button type="submit" class="btn btn-primary w-100">Envoyer</button>
+</div>
 
 {{ form_end(form) }}
-

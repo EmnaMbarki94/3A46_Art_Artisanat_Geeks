@@ -5,119 +5,58 @@
 
 {% block body %}
 
-<br>
-<br>
-<br>
-<br>
-<h1 class="mb-4">Liste Des Reponses</h1>
+	<br>
+	<br>
+	<br>
+	<br>
+	<h1 class="mb-4">Liste Des Reponses</h1>
 
-<div class="mb-3" class="search-container">
+	<div class="mb-3" class="search-container">
 
-	<input type="text" id="searchInput" class="form-control" placeholder="🔍 Rechercher une réponse...">
-</div>
-<div class="table-container" id="reclamationTable">
-<table class="table table-striped" id="reponseTable">
-	<thead >
-		<tr>
-			<th onclick="sortTable(0)">ID 🔽</th>
-			<th onclick="sortTable(1)">Description 🔽</th>
-			<th onclick="sortTable(2)">Date 🔽</th>
-			<th>Actions</th>
-		</tr>
-	</thead>
-	<tbody>
-		{% for reponse in reponses %}
-			<tr>
-				<td>{{ reponse.id }}</td>
-				<td>{{ reponse.descRep }}</td>
-				<td>
-					<span class="badge bg-secondary">
-						{{ reponse.dateRep ? reponse.dateRep|date('Y-m-d') : '-' }}
-					</span>
-				</td>
-				<td>
-					<a href="{{ path('app_reponse_show', {'id': reponse.id}) }}" class="btn btn-info btn-sm">
-						👁 Afficher
-					</a>
-					<a href="{{ path('app_reponse_edit', {'id': reponse.id}) }}" class="btn btn-warning btn-sm">
-						✏ Modifier
-					</a>
-				</td>
-			</tr>
-		{% else %}
-			<tr>
-				<td colspan="4" class="text-center text-muted">🚫 Aucune réponse trouvée</td>
-			</tr>
-		{% endfor %}
-	</tbody>
-</table>
-</div>
+		<input type="text" id="searchInput" class="form-control" placeholder="🔍 Rechercher une réponse...">
+	</div>
+	<div class="table-container" id="reclamationTable">
+    <table class="table table-striped" id="reponseTable">
+        <thead>
+            <tr>
+                <th onclick="sortTable(0)">ID 🔽</th>
+                <th onclick="sortTable(1)">Description 🔽</th>
+                <th onclick="sortTable(2)">Date 🔽</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for reponse in pagination.items %}
+                <tr>
+                    <td>{{ reponse.id }}</td>
+                    <td>{{ reponse.descRep }}</td>
+                    <td>
+                        <span class="badge bg-secondary">
+                            {{ reponse.dateRep ? reponse.dateRep|date('Y-m-d') : '-' }}
+                        </span>
+                    </td>
+                    <td>
+                        <a href="{{ path('app_reponse_show', {'id': reponse.id}) }}" class="btn btn-info btn-sm">
+                            👁 Afficher
+                        </a>
+                        <a href="{{ path('app_reponse_edit', {'id': reponse.id}) }}" class="btn btn-warning btn-sm">
+                            ✏ Modifier
+                        </a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="4" class="text-center text-muted">🚫 Aucune réponse trouvée</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 
-{# {% block content %}
-  
-  <div class="main-panel">
-    <div class="content-wrapper">
-      <section class="container mt-5">
-        <div class="row justify-content-center">
-            <div class="col-md-12">
-                <div class="card shadow-lg rounded">
-                    <div class="card-header text-center bg-primary text-white">
-                        <h2>📝 Liste des Réponses</h2>
-                    </div>
-                    <div class="card-body">
-
-                        <!-- 🔍 Barre de recherche -->
-                        <div class="mb-3">
-                            <input type="text" id="searchInput" class="form-control" placeholder="🔍 Rechercher une réponse...">
-                        </div>
-
-                        <div class="table-responsive">
-                            <table class="table table-hover table-bordered text-center" id="reponseTable">
-                                <thead class="table-dark">
-                                    <tr>
-                                        <th onclick="sortTable(0)">ID 🔽</th>
-                                        <th onclick="sortTable(1)">Description 🔽</th>
-                                        <th onclick="sortTable(2)">Date 🔽</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                {% for reponse in reponses %}
-                                    <tr>
-                                        <td>{{ reponse.id }}</td>
-                                        <td>{{ reponse.descRep }}</td>
-                                        <td>
-                                            <span class="badge bg-secondary">
-                                                {{ reponse.dateRep ? reponse.dateRep|date('Y-m-d') : '-' }}
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <a href="{{ path('app_reponse_show', {'id': reponse.id}) }}" class="btn btn-info btn-sm">
-                                                👁 Afficher
-                                            </a>
-                                            <a href="{{ path('app_reponse_edit', {'id': reponse.id}) }}" class="btn btn-warning btn-sm">
-                                                ✏ Modifier
-                                            </a>
-                                        </td>
-                                    </tr>
-                                {% else %}
-                                    <tr>
-                                        <td colspan="4" class="text-center text-muted">🚫 Aucune réponse trouvée</td>
-                                    </tr>
-                                {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                    
-                </div>
-            </div>
-        </div>
-      </section>
+    {# Pagination controls #}
+    <div class="pagination">
+        {{ knp_pagination_render(pagination) }}
     </div>
-  </div> #}
-
+</div>
 
 	<!-- ✅ Script pour la recherche (Uniquement sur l'ID) -->
 	<script>
