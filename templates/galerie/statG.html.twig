@@ -1,0 +1,101 @@
+{% extends 'baseBack.html.twig' %}
+
+{% block body %}
+    <h1>Statistiques sur les galeries et les oeuvres d'art</h1>
+    
+    <label for="chartType">Choisissez le type de graphique :</label>
+    <select id="chartType">
+        <option value="bar">Barres</option>
+        <option value="pie">Secteurs</option>
+        <option value="line">Lignes</option>
+    </select>
+    
+    <canvas id="statisticsChart"></canvas>
+
+    <style>
+        #statisticsChart {
+            max-width: 70%;
+        }
+    </style>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const ctx = document.getElementById('statisticsChart').getContext('2d');
+        const data = {{ data|raw }};
+        
+        let statisticsChart = new Chart(ctx, {
+            type: 'bar', // Default chart type
+            data: {
+                labels: ['Nombre total des galeries', 'Nombre total d\'oeuvres', 'Galeries actives'],
+                datasets: [{
+                    label: 'Total',
+                    data: [data.galleries, data.pieces, data.recentArtPieces],
+                    backgroundColor: [
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(255, 159, 64, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(75, 192, 192, 1)', 
+                        'rgba(153, 102, 255, 1)', 
+                        'rgba(255, 159, 64, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Statistiques sur les galeries et les oeuvres d\'art'
+                    }
+                }
+            }
+        });
+
+        // Update chart type based on dropdown selection
+        document.getElementById('chartType').addEventListener('change', function() {
+            const selectedType = this.value;
+            statisticsChart.destroy(); // Destroy the old chart instance
+            statisticsChart = new Chart(ctx, {
+                type: selectedType, // Use the selected chart type
+                data: {
+                    labels: ['Nombre total des galeries', 'Nombre total d\'oeuvres', 'Galeries actives'],
+                    datasets: [{
+                        label: 'Total',
+                        data: [data.galleries, data.pieces, data.recentArtPieces],
+                        backgroundColor: [
+                            'rgba(75, 192, 192, 0.2)',
+                            'rgba(153, 102, 255, 0.2)',
+                            'rgba(255, 159, 64, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgba(75, 192, 192, 1)', 
+                            'rgba(153, 102, 255, 1)', 
+                            'rgba(255, 159, 64, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            text: 'Statistiques sur les galeries et les oeuvres d\'art'
+                        }
+                        
+                    }
+                }
+            });
+        });
+        
+    </script>
+{% endblock %}
