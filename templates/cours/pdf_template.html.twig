@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ cours.nomC }}</title>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.5; margin: 20px; }
+        h1 { color: #333; }
+        .categorie { font-size: 18px; color: #666; margin-bottom: 10px; }
+        .contenu { margin-top: 16px; }
+        img { max-width: 100%; height: auto; }
+    </style>
+</head>
+<body>
+    <h1>{{ cours.nomC }}</h1>
+    <p class="categorie"><strong>Catégorie :</strong> {{ cours.categC }}</p>
+    {% if cours.image %}
+        <img src="{{ asset('uploads/cours/' ~ cours.image) }}" >
+    {% endif %}
+    <div class="contenu">
+        {{ cours.contenuC | nl2br }}
+    </div>
+</body>
+</html>

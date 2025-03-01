@@ -3,24 +3,31 @@
 {% block title %}QuizAttempt{% endblock %}
 
 {% block body %}
-    <h1>QuizAttempt</h1>
-
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ quiz_attempt.id }}</td>
-            </tr>
-            <tr>
-                <th>Note</th>
-                <td>{{ quiz_attempt.note }}</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <a href="{{ path('app_quiz_attempt_index') }}">back to list</a>
-
-    <a href="{{ path('app_quiz_attempt_edit', {'id': quiz_attempt.id}) }}">edit</a>
-
-    {{ include('quiz_attempt/_delete_form.html.twig') }}
+    <style>
+        .blurred {
+            filter: blur(8px);
+            cursor: pointer;
+        }
+    </style>
+    <h1>Résultats du quiz</h1>
+    <h4 id="scoreDisplay" class="blurred" onclick="revealScore()">Vous avez obtenu : {{ quiz_attempt.note }} sur {{ n }}. </h4>
+    
+    <a href="{{ path('app_quiz_show', {'id': quiz_attempt.quiz.id}) }}" class="button"> Réessayer le quiz </a>
+    
+     <script>
+        function revealScore() {
+            let nb = {{ n }};
+            let score = {{ quiz_attempt.note }} / nb;
+            let scoreDisplay = document.getElementById("scoreDisplay");
+            scoreDisplay.classList.remove("blurred");
+            if (score >= 0.7) {
+                confetti({
+                    particleCount: 150,
+                    spread: 100,
+                    origin: { y: 0.6 },
+                });
+            }
+            scoreDisplay.onclick = null;
+        }
+    </script>
 {% endblock %}

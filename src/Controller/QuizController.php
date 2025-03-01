@@ -4,7 +4,9 @@ namespace App\Controller;
 
 use App\Entity\Quiz;
 use App\Entity\Cours;
+use App\Entity\User;
 use App\Entity\Question;
+use App\Entity\QuizAttempt;
 use App\Form\QuizType;
 use App\Repository\QuizRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -113,5 +115,45 @@ final class QuizController extends AbstractController
         }
 
         return $this->redirectToRoute('app_cours_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+
+    #[Route('/quiz/{id}/submit', name: 'quiz_submit', methods: ['POST'])]
+    public function submitQuiz(Request $request, Quiz $quiz, EntityManagerInterface $entityManager): Response
+    {
+        $questions=$entityManager->getRepository(Question::class)->findBy(['quiz'=>$quiz]);
+        $submittedAnswers = $request->request->all();
+        $score = $this->calculateScore($quiz, $submittedAnswers,$entityManager);
+        
+        $quizAttempt = new QuizAttempt();
+        $quizAttempt->setUser($this->getUser());
+        $quizAttempt->setQuiz($quiz);
+        $quizAttempt->setNote($score);
+
+        $entityManager->persist($quizAttempt);
+
+        $user = $this->getUser();
+        $currentPoints = $user->getPoint();
+        $user->setPoint($currentPoints + $score);
+        $entityManager->persist($user);
+
+        
+        $entityManager->flush();
+
+        return $this->redirectToRoute('app_quiz_attempt_show', ['id' => $quizAttempt->getId(),'n'=>count($questions)]);
+    }
+
+    private function calculateScore(Quiz $quiz, array $submittedAnswers,EntityManagerInterface $entityManager): int
+    {
+        $score = 0;
+        foreach ($entityManager->getRepository(Question::class)->findBy(['quiz'=>$quiz]) as $question) {
+            $questionId = $question->getId();
+            $correctAnswer = $question->getReponses()[0];
+            
+            if (isset($submittedAnswers['question_' . $questionId]) && $submittedAnswers['question_' . $questionId] === $correctAnswer) {
+                $score++;
+            }
+        }
+        return $score;
     }
 }

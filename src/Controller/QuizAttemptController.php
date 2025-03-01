@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\QuizAttempt;
+use App\Entity\Quiz;
+use App\Entity\Question;
 use App\Form\QuizAttemptType;
 use App\Repository\QuizAttemptRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -44,10 +46,13 @@ final class QuizAttemptController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_quiz_attempt_show', methods: ['GET'])]
-    public function show(QuizAttempt $quizAttempt): Response
-    {
+    public function show(QuizAttempt $quizAttempt,Request $request,EntityManagerInterface $entityManager): Response
+    {   
+        $n = $request->query->get('n');
+
         return $this->render('quiz_attempt/show.html.twig', [
             'quiz_attempt' => $quizAttempt,
+            'n' => $n,
         ]);
     }
 
