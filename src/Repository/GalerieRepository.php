@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Galerie;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\ORM\QueryBuilder;
 
 /**
  * @extends ServiceEntityRepository<Galerie>
@@ -16,6 +17,26 @@ class GalerieRepository extends ServiceEntityRepository
         parent::__construct($registry, Galerie::class);
     }
 
+    public function findBySearchTerm(string $searchTerm): array
+    {
+        return $this->createQueryBuilder('g')
+            ->where('g.nomG LIKE :query')
+            ->setParameter('query', '%' . $searchTerm . '%')
+            ->setMaxResults(5) // Limit the number of suggestions
+            ->getQuery()
+            ->getArrayResult(); // Return as an array
+    }
+    public function findBySearchTermQueryBuilder(?string $searchTerm): QueryBuilder
+    {
+        $qb = $this->createQueryBuilder('g');
+
+        if ($searchTerm) {
+            $qb->where('g.nomG LIKE :searchTerm')
+               ->setParameter('searchTerm', '%' . $searchTerm . '%');
+        }
+
+        return $qb;
+    }
 
 //    /**
 //     * @return Galerie[] Returns an array of Galerie objects

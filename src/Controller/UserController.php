@@ -351,7 +351,8 @@ public function deleteUser(User $user, EntityManagerInterface $entityManager, Re
             if (in_array("ROLE_ADMIN", $this->getUser()->getRoles())) {
                 // Rediriger vers la page Abonné
                 return $this->redirectToRoute('admin_user');
-            }
+            }           
+            
             return $this->redirectToRoute('app_home');
         } else {
             // Ajouter un message d'erreur si le code est incorrect

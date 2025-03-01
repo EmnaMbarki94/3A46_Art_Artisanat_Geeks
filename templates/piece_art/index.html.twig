@@ -5,7 +5,20 @@
 {% block body %}
     <h1>Liste des Œuvres d'Art</h1>
 
-    <table class="table">
+    <div class="mb-4">
+        <input type="text" id="searchInput" class="form-control" placeholder="Rechercher une œuvre d'art...">
+    </div>
+
+    <div class="mb-4">
+        <select id="sortSelect" class="form-control" onchange="sortTable()">
+            <option value="">Trier par...</option>
+            <option value="id">ID</option>
+            <option value="nomP">Nom</option>
+            <option value="dateCrea">Date de Création</option>
+        </select>
+    </div>
+
+    <table class="table" id="tablePieceArt">
         <thead>
             <tr>
                 <th>ID</th>
@@ -29,9 +42,10 @@
                         Pas de photo
                     {% endif %}
                 </td>
-                <td>{{ piece_art.descP }}</td>
+                <td>{{ piece_art.descP |raw }}</td>
                 <td>
                     <a href="{{ path('app_piece_art_edit', {'id': piece_art.id}) }}" class="btn btn-gradient-primary font-weight-bold">Éditer</a>
+                    <a href="{{ path('app_piece_comment', {'id': piece_art.id}) }}" class="btn btn-gradient-primary font-weight-bold">Voir Commentaires</a>
                 </td>
             </tr>
         {% else %}
@@ -41,5 +55,62 @@
         {% endfor %}
         </tbody>
     </table>
+    
+    <a href="{{ path('app_galerie_indexA') }}" class="btn btn-secondary mb-3">Retour à la Liste des Galeries</a>
+
+    <script>
+        document.getElementById('searchInput').addEventListener('input', function() {
+            let searchQuery = this.value.toLowerCase();
+            let rows = document.querySelectorAll('#tablePieceArt tbody tr');
+            
+            rows.forEach(function(row) {
+                let columns = row.querySelectorAll('td');
+                let matchFound = false;
+
+                // Check if any column contains the search query
+                columns.forEach(function(column) {
+                    if (column.textContent.toLowerCase().includes(searchQuery)) {
+                        matchFound = true;
+                    }
+                });
+
+                // Show or hide the row based on search query match
+                row.style.display = matchFound ? '' : 'none';
+            });
+        });
+
+        function sortTable() {
+            const table = document.getElementById("tablePieceArt");
+            const rows = Array.from(table.rows).slice(1); // Get all rows except the header
+            const sortSelect = document.getElementById("sortSelect");
+            const sortBy = sortSelect.value;
+
+            // Sort rows based on the selected column
+            rows.sort((a, b) => {
+                let aText, bText;
+                switch (sortBy) {
+                    case "id":
+                        aText = parseInt(a.cells[0].textContent);
+                        bText = parseInt(b.cells[0].textContent);
+                        return aText - bText; // Sort numerically
+                    case "nomP":
+                        aText = a.cells[1].textContent.toLowerCase();
+                        bText = b.cells[1].textContent.toLowerCase();
+                        return aText.localeCompare(bText); // Sort alphabetically
+                    case "dateCrea":
+                        aText = new Date(a.cells[2].textContent);
+                        bText = new Date(b.cells[2].textContent);
+                        return aText - bText; // Sort by date
+                    default:
+                        return 0;
+                }
+            });
+
+            // Re-attach sorted rows to the table body
+            const tbody = table.querySelector('tbody');
+            tbody.innerHTML = ''; // Clear existing rows
+            rows.forEach(row => tbody.appendChild(row)); // Append sorted rows
+        }
+    </script>
 
 {% endblock %}

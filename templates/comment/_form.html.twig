@@ -1,0 +1,30 @@
+{# templates/comment/_form.html.twig #}
+
+<div class="comment-form">
+    {{ form_start(form, {'attr': {'id': 'comment-form', 'class': 'form-inline'}}) }}
+        {{ form_widget(form.content, {'attr': {'class': 'form-control', 'placeholder': 'Write your comment...'}}) }}
+        <button type="submit" class="btn1 text-white bg_pink">Enregistrer</button>
+    {{ form_end(form) }}
+</div>
+
+<style>
+    .comment-form {
+        margin-top: 20px;
+        display: flex;
+        align-items: flex; 
+    }
+
+    .form-control {
+        border-radius: 20px; 
+        flex-grow: 1; /* Allow the input to grow */
+        max-width: 200px;
+        margin-right: 10px; 
+    }
+
+    .btn1 {
+        border-radius: 20px; /* Ensure rounded corners for the button */
+        white-space: nowrap; /* Prevent button text from wrapping */
+        height: 38px; /* Match the height of the input */
+    }
+</style>
+
