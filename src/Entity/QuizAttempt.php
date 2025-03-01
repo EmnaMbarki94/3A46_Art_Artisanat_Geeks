@@ -17,9 +17,11 @@ class QuizAttempt
     private ?float $note = null;
 
     #[ORM\ManyToOne]
+    #[ORM\JoinColumn(onDelete: 'CASCADE')]
     private ?Quiz $quiz = null;
 
     #[ORM\ManyToOne(inversedBy: 'quizAttempts')]
+    #[ORM\JoinColumn(onDelete: 'CASCADE')]
     private ?User $user = null;
 
     public function getId(): ?int
@@ -32,10 +34,9 @@ class QuizAttempt
         return $this->note;
     }
 
-    public function setNote(float $note): static
+    public function setNote(float $note): self
     {
         $this->note = $note;
-
         return $this;
     }
 
