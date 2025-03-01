@@ -2,12 +2,12 @@
 
 {% block content %}
 	<h1>Register</h1>
-	{{ form_start(form) }}
+	{{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
 	{% for field in form %}
 		{% if 'hidden' not in field.vars.block_prefixes %}
 			<div class="form-group">
 				{{ form_label(field) }}
-				{{ form_widget(field, {'attr': {'class': 'form-control form-control-lg',                   'required': false}}) }}
+				{{ form_widget(field, {'attr': {'class': 'form-control form-control-lg',    'required': false}}) }}
 				{{ form_errors(field) }}
 			</div>
 		{% else %}
