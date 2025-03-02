@@ -23,8 +23,10 @@ use Knp\Component\Pager\PaginatorInterface;
 final class ReclamationController extends AbstractController
 {
 
-
- 
+    /**
+     * @Route("/reponse/{id}/rate", name="rate_response", methods={"POST"})
+     */
+    
     #[Route(name: 'app_reclamation_index', methods: ['GET', 'POST'])]
     #[IsGranted('IS_AUTHENTICATED_FULLY')]
     public function index(Request $request, ReclamationRepository $reclamationRepository, EntityManagerInterface $entityManager, PaginatorInterface $paginator): Response
@@ -101,7 +103,6 @@ final class ReclamationController extends AbstractController
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $reclamation = new Reclamation();
-
         $user = $this->getUser();
         if ($user) {
             $reclamation->setUser($user);
@@ -157,18 +158,50 @@ final class ReclamationController extends AbstractController
 
 
 
-    #[Route('/{id}/edit', name: 'app_reclamation_edit', methods: ['GET', 'POST'])]
-    #[IsGranted('IS_AUTHENTICATED_FULLY')]
-    public function edit(Request $request, Reclamation $reclamation, EntityManagerInterface $entityManager): Response
-    {
-        $form = $this->createForm(ReclamationType::class, $reclamation);
-        $form->handleRequest($request);
+    // #[Route('/{id}/edit', name: 'app_reclamation_edit', methods: ['GET', 'POST'])]
+    // #[IsGranted('IS_AUTHENTICATED_FULLY')]
+    // public function edit(Request $request, Reclamation $reclamation, EntityManagerInterface $entityManager): Response
+    // {
+    //     $form = $this->createForm(ReclamationType::class, $reclamation);
+    //     $form->handleRequest($request);
 
-        if ($request->isXmlHttpRequest()) {
+    //     if ($request->isXmlHttpRequest()) {
+    //         if ($form->isSubmitted() && $form->isValid()) {
+    //             $entityManager->flush();
+
+    //             return new JsonResponse(['success' => true]); // ✅ Indiquer que la mise à jour est OK
+    //         }
+
+    //         return new JsonResponse([
+    //             'success' => false,
+    //             'form' => $this->renderView('reclamation/_form.html.twig', [
+    //                 'form' => $form->createView(),
+    //             ])
+    //         ]);
+    //     }
+
+    //     if ($form->isSubmitted() && $form->isValid()) {
+    //         $entityManager->flush();
+    //         return $this->redirectToRoute('app_reclamation_index', [], Response::HTTP_SEE_OTHER);
+    //     }
+
+    //     return $this->render('reclamation/edit.html.twig', [
+    //         'reclamation' => $reclamation,
+    //         'form' => $form,
+    //     ]);
+    // }
+    #[Route('/{id}/edit', name: 'app_reclamation_edit', methods: ['GET', 'POST'])]
+#[IsGranted('IS_AUTHENTICATED_FULLY')]
+public function edit(Request $request, Reclamation $reclamation, EntityManagerInterface $entityManager): Response
+{
+    $form = $this->createForm(ReclamationType::class, $reclamation);
+    $form->handleRequest($request);
+
+    if ($request->isXmlHttpRequest()) {
+        if ($request->isMethod('POST')) {
             if ($form->isSubmitted() && $form->isValid()) {
                 $entityManager->flush();
-
-                return new JsonResponse(['success' => true]); // ✅ Indiquer que la mise à jour est OK
+                return new JsonResponse(['success' => true]);
             }
 
             return new JsonResponse([
@@ -179,16 +212,25 @@ final class ReclamationController extends AbstractController
             ]);
         }
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->flush();
-            return $this->redirectToRoute('app_reclamation_index', [], Response::HTTP_SEE_OTHER);
-        }
-
-        return $this->render('reclamation/edit.html.twig', [
-            'reclamation' => $reclamation,
-            'form' => $form,
+        // Renvoie le formulaire à afficher
+        return new JsonResponse([
+            'form' => $this->renderView('reclamation/_form.html.twig', [
+                'form' => $form->createView(),
+            ])
         ]);
     }
+
+    if ($form->isSubmitted() && $form->isValid()) {
+        $entityManager->flush();
+        return $this->redirectToRoute('app_reclamation_index');
+    }
+
+    return $this->render('reclamation/edit.html.twig', [
+        'reclamation' => $reclamation,
+        'form' => $form,
+    ]);
+}
+
 
     #[Route('/{id}', name: 'app_reclamation_delete', methods: ['POST'])]
     public function delete(Request $request, Reclamation $reclamation, EntityManagerInterface $entityManager): Response

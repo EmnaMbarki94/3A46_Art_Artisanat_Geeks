@@ -102,7 +102,9 @@
 	</div>
 
 	<style>
-
+.custom-modal label {
+        color: black !important;
+    }
 
 		.custom-modal {
 			max-width: 60vw; /* Augmente la largeur du modal */
@@ -160,30 +162,54 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // Gestion de la modification d'une réclamation
-    document.querySelectorAll(".btn-edit").forEach(button => {
-        button.addEventListener("click", function () {
-            const reclamationId = this.getAttribute("data-id");
+   document.querySelectorAll(".btn-edit").forEach(button => {
+    button.addEventListener("click", function () {
+        const reclamationId = this.getAttribute("data-id");
+        console.log("Requête pour l'ID :", reclamationId); // Debugging
 
-            fetch(`/reclamation/${reclamationId}/edit`, {
-                headers: {
-                    "X-Requested-With": "XMLHttpRequest"
+        fetch(`/reclamation/${reclamationId}/edit`, {
+            headers: { "X-Requested-With": "XMLHttpRequest" }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.form) {
+                document.querySelector("#editFormContainer").innerHTML = data.form;
+                
+                const editForm = document.querySelector("#editFormContainer form");
+                if (editForm) {
+                    editForm.addEventListener("submit", function (event) {
+                        event.preventDefault();
+                        submitEditForm(editForm, reclamationId);
+                    });
                 }
-            }).then(response => response.json()).then(data => {
-                if (data.form) {
-                    document.querySelector("#editFormContainer").innerHTML = data.form;
-                    const editForm = document.querySelector("#editFormContainer form");
-                    if (editForm) {
-                        editForm.addEventListener("submit", function (event) {
-                            event.preventDefault();
-                            handleFormSubmit(editForm, `/reclamation/${reclamationId}/edit`, "#editReclamationModal");
-                        });
-                    }
-                } else {
-                    console.error("Aucune donnée reçue pour le formulaire.");
-                }
-            }).catch(error => console.error("Erreur lors du chargement du formulaire :", error));
-        });
+            } else {
+                console.error("Erreur : Formulaire non chargé.");
+            }
+        })
+        .catch(error => console.error("Erreur lors du chargement du formulaire :", error));
     });
+});
+
+function submitEditForm(form, reclamationId) {
+    const formData = new FormData(form);
+
+    fetch(`/reclamation/${reclamationId}/edit`, {
+        method: "POST",
+        headers: { "X-Requested-With": "XMLHttpRequest" },
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert("Réclamation mise à jour avec succès !");
+            location.reload(); // Recharge la page pour afficher la mise à jour
+        } else {
+            document.querySelector("#editFormContainer").innerHTML = data.form;
+        }
+    })
+    .catch(error => console.error("Erreur lors de la soumission du formulaire :", error));
+}
+
 // document.querySelectorAll(".btn-reponse").forEach(button => {
 //      button.addEventListener("click", function () {
 //          const reclamationId = this.getAttribute("data-id");

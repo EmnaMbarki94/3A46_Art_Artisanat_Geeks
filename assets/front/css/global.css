@@ -22,7 +22,7 @@ body{
     
     a{
     text-decoration:none;
-    color:#3a224b;
+    color:#ddd;
      }
     a:hover{
     text-decoration:none;
@@ -596,12 +596,4 @@ body{
     @media (min-width:1201px) and (max-width:1255px) {
     
      }
-     .form-label {
-        display: block;
-        visibility: visible;
-        color: #000; /* Assurez-vous que le texte est visible */
-    }
-    .modal-title{
-        color: #000;
-    }
     

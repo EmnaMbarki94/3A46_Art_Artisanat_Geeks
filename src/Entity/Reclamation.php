@@ -29,10 +29,15 @@ class Reclamation
     // #[ORM\Column(type: Types::DATE_MUTABLE)]
     
     // private ?\DateTimeInterface $dateR = null;
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)] // Change en DATETIME pour inclure l'heure
-    #[Assert\NotBlank(message: "La date de la réclamation ne peut pas être vide.")]
-    #[Assert\Type("\DateTimeInterface", message: "Veuillez entrer une date valide.")]
-    #[Assert\GreaterThan("today", message: "La date de la reclamation doit être dans le futur.")]
+    // #[ORM\Column(type: Types::DATETIME_MUTABLE)] // Change en DATETIME pour inclure l'heure
+    // #[Assert\NotBlank(message: "La date de la réclamation ne peut pas être vide.")]
+    // #[Assert\Type("\DateTimeInterface", message: "Veuillez entrer une date valide.")]
+    // #[Assert\GreaterThan("today", message: "La date de la reclamation doit être dans le futur.")]
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+#[Assert\NotBlank(message: "La date de la réclamation ne peut pas être vide.")]
+#[Assert\Type("\DateTimeInterface", message: "Veuillez entrer une date valide.")]
+#[Assert\GreaterThanOrEqual("today", message: "La date de la réclamation doit être aujourd'hui ou dans le futur.")]
+
     private ?\DateTimeInterface $dateR = null;
     #[ORM\Column(length: 255)]
     private ?string $statusR = 'En attente';
@@ -45,7 +50,6 @@ class Reclamation
         minMessage: "Le type doit contenir au moins {{ limit }} caractères."
     )]
     private ?string $typeR = null;
-
     #[ORM\ManyToOne(cascade: ['persist'])]
     private ?User $user = null;
     public function getId(): ?int
@@ -112,7 +116,6 @@ public function getUser(): ?User
     {
         return $this->user;
     }
-
 
     public function setUser(?User $user): static
     {

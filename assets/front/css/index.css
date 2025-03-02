@@ -54,7 +54,8 @@ Licence: <a href="https://www.templateonweb.com/license">Website Template Licenc
      }
      
     #folio {
-    background-image: url(../img/4.jpg);
+    //background-image: url(../img/475504349_1163220278524041_408656745998953173_n.jpg);
+    background-color :black;
     
     background-position: center;
     }

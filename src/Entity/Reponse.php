@@ -25,8 +25,12 @@ class Reponse
         minMessage: "La description doit contenir au moins {{ limit }} caractères."
     )]
     private ?string $descRep = null;
-
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Assert\NotBlank(message: "La date de la reponse ne peut pas être vide.")]
+    #[Assert\Type("\DateTimeInterface", message: "Veuillez entrer une date valide.")]
+    #[Assert\GreaterThanOrEqual("today", message: "La date de la reponse doit être aujourd'hui ou dans le futur.")]
+    
+    // #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $dateRep = null;
 
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]

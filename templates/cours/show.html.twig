@@ -91,4 +91,52 @@
     
 
     <a href="{{ path('app_cours_index') }}">back to list</a></br>
+    <script>
+    if (!window.ttsButton || !window.ttsAudio) {
+        window.ttsButton = document.getElementById('tts-button');
+        window.ttsAudio = document.getElementById('tts-audio');
+    }
+
+    function loadAudio() {
+        const cacheBuster = `?t=${new Date().getTime()}`;
+        ttsAudio.src = '../uploads/audio/output.mp3' + cacheBuster;
+        ttsAudio.load();
+
+        ttsButton.innerHTML = 'Écouter le cours';
+    }
+
+    ttsButton.addEventListener('click', () => {
+        if (ttsAudio.paused) {
+            ttsAudio.play();
+            ttsButton.innerHTML = 'Pause';
+        } else {
+            ttsAudio.pause();
+            ttsButton.innerHTML = 'Écouter le cours';
+        }
+    });
+
+    ttsAudio.addEventListener('ended', () => {
+        ttsButton.innerHTML = 'Écouter le cours';
+    });
+
+    ttsAudio.addEventListener('waiting', () => {
+        ttsButton.innerHTML = 'Chargement...';
+    });
+
+    ttsAudio.addEventListener('canplay', () => {
+        if (!ttsAudio.paused) {
+            ttsButton.innerHTML = 'Pause';
+        }
+    });
+
+    ttsAudio.addEventListener('error', () => {
+        ttsButton.innerHTML = 'Erreur de chargement';
+        console.error('Erreur lors du chargement de l\'audio.');
+    });
+
+    document.addEventListener('turbo:load', () => {
+        loadAudio();
+    });
+    
+</script>
 {% endblock %}
